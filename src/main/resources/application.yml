@@ -11,6 +11,15 @@ spring:
         properties:
             hibernate:
                 format_sql: true
+server:
+    error:
+      path: /error
+      include-exception: false
+      include-stacktrace: never
+      whitelabel:
+          enabled: false
+      include-binding-errors: never
+    port: 8080
 logging:
     level:
         root: INFO
@@ -42,5 +51,3 @@ spring:
         user:
             name: admin
             password: 1234
-server:
-    port: 8080
