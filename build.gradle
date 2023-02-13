@@ -38,9 +38,14 @@ dependencies {
     /*===============================  Add implementaions ===============================*/
     implementation("org.apache.tomcat.embed:tomcat-embed-jasper")
     implementation("javax.servlet:jstl")
+    implementation("org.mapstruct:mapstruct:1.5.3.Final")
 
 
     /*===========================  End of add Implementaions ===========================*/
+
+    /*===============================  Add annotation ===============================*/
+    annotationProcessor("org.mapstruct:mapstruct-processor:1.5.3.Final")
+    /*===============================  End of annotation ===============================*/
 }
 
 tasks.named('test') {
