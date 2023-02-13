@@ -1,4 +1,4 @@
-package com.example.sioscms;
+package com.project.sioscms;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
