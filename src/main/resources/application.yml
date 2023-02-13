@@ -38,9 +38,9 @@ spring:
         active: local
     datasource:
         driver-class-name: org.postgresql.Driver
-        url: jdbc:postgresql://localhost:5432/testdb
-        username: testdb
-        password: testdb1234!@
+        url: jdbc:postgresql://localhost:5432/sioscmsdb
+        username: sioscms
+        password: 1q2w3e4r
     jpa:
         hibernate:
             ddl-auto: update

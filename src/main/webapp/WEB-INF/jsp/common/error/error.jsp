@@ -1,19 +1,6 @@
-<%@page import="javax.servlet.http.HttpSession"%>
-<%@page import="java.lang.*"%>
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" errorPage="/cmmn/error.jsp" trimDirectiveWhitespaces="true"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%
-    try {
-        String ip = (String)session.getAttribute("_targetUrl_");
-        String[] ipArr = ip.split("/");
-        if(ipArr[3] != null){
-            pageContext.setAttribute("siteId", ipArr[3]);
-        }
-    } catch (Exception e) {
-        // TODO: handle exception
-    }
-%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
