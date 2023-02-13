@@ -1,0 +1,46 @@
+spring:
+    profiles:
+        active: local
+    mvc:
+        view:
+            prefix: /WEB-INF/jsp/
+            suffix: .jsp
+    jpa:
+        show-sql: true
+        database: postgresql
+        properties:
+            hibernate:
+                format_sql: true
+logging:
+    level:
+        root: INFO
+        com.example.demo.controller: DEBUG
+        org:
+            hibernate:
+                SQL: DEBUG
+                type:
+                    descriptor:
+                        sql:
+                            BasicBinder: TRACE
+
+---
+spring:
+    profiles:
+        active: local
+    datasource:
+        driver-class-name: org.postgresql.Driver
+        url: jdbc:postgresql://localhost:5432/testdb
+        username: testdb
+        password: testdb1234!@
+    jpa:
+        hibernate:
+            ddl-auto: update
+    devtools:
+        livereload:
+            enabled: true
+    security:
+        user:
+            name: admin
+            password: 1234
+server:
+    port: 8080
