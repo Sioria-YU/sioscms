@@ -14,7 +14,7 @@ public class WebMvcErrorPageController implements ErrorController {
 
     @RequestMapping(value = {"/common/error", "/error"})
     public String setError() {
-        LOGGER.info("error page 연결 - 잘못된 URL");
+//        LOGGER.info("error page 연결 - 잘못된 URL");
         //json error 데이터를 보낼 경우 아래 소스 수정하여 적용
 //        Response res = new Response();
 //        Header header = new Header();

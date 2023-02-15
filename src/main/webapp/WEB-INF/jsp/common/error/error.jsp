@@ -11,32 +11,7 @@
 
     <title>SIOSCMS</title>
 
-    <link rel="stylesheet" href="/smvf/static/sobang/css/normalize.css">
-    <link rel="stylesheet" href="/smvf/static/sobang/css/common.css">
-    <link rel="stylesheet" href="/smvf/static/sobang/css/jquery-ui.css">
-    <link rel="stylesheet" href="/smvf/static/sobang/css/swiper.min.css">
-    <link rel="stylesheet" href="/smvf/static/sobang/css/style.css">
-    <link rel="stylesheet" href="/smvf/static/sobang/css/res_style.css">
-
-    <script src="/smvf/static/sobang/js/jquery-3.3.1.min.js"></script>
-    <script src="/smvf/static/sobang/js/jquery-ui.min.js"></script>
-    <script src="/smvf/static/sobang/js/jquery.ui.touch-punch.min.js"></script>
-    <script src="/smvf/static/sobang/js/swiper.min.js"></script>
-    <script src="/smvf/static/sobang/js/gnb.js"></script>
-    <script src="/smvf/static/sobang/js/app.js"></script>
     <style type="text/css">
-
-        .errorHome{
-            display: inline-block;
-            padding: 0 20px;
-            line-height: 35px;
-            background-color: #003067;
-            border-radius: 5px;
-            color: #fff;
-            text-align: center;
-            font-size: 16px;
-            font-weight: 600;
-        }
 
         .errorBack{
             display: inline-block;
