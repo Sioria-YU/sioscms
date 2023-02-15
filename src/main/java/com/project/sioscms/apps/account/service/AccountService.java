@@ -15,11 +15,11 @@ public class AccountService {
 
     public final AccountRepository accountRepository;
 
-    public ResponseEntity<AccountDto.Response> getAccount(long id){
+    public AccountDto.Response findUser(long id){
 
         Account user = (Account) accountRepository.findById(id).orElseThrow(NullPointerException::new);
 
-        return ResponseEntity.ok(user.toResponse());
+        return user.toResponse();
     }
 
 }
