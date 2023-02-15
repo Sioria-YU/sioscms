@@ -6,7 +6,7 @@
 </head>
 <body>
 <div class="container">
-    <form class="form-signin" method="post" action="/cms/auth/login-proc">
+    <form class="form-signin" method="post" action="/login-process">
         <h2 class="form-signin-heading">로그인 페이지</h2>
         <div class="alert alert-success" role="alert">You have been signed out</div>
         <p>

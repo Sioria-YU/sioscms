@@ -1,6 +1,8 @@
 package com.project.sioscms.apps.cms.auth.controller;
 
+import com.project.sioscms.apps.cms.auth.domain.dto.MemberLoginDto;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -12,9 +14,12 @@ public class CmsAuthController {
         return "cms/auth/login";
     }
 
-    @RequestMapping("/login-proc")
-    public String loginProc(){
+    /*@PostMapping("/login-proc")
+    public String loginProc(MemberLoginDto dto){
+        System.out.println("MemberLoginDto.userId ::: " + dto.getUserId());
+        System.out.println("MemberLoginDto.userPw ::: " + dto.getUserPw());
+
 
         return "cms/auth/login";
-    }
+    }*/
 }

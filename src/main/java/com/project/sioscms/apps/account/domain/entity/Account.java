@@ -18,6 +18,11 @@ import javax.validation.constraints.Size;
 @Setter
 public class Account extends CommonEntityWhidIdAndDate {
 
+    public enum Role_Type {
+        ADMIN, //관리자 0
+        USER, //사용자 1
+    }
+
     @NotNull
     @Column(unique=true)
     @Comment("유저 아이디")
@@ -57,6 +62,10 @@ public class Account extends CommonEntityWhidIdAndDate {
 
     @Comment("유저 삭제여부")
     private Boolean isDelete;
+
+    @NotNull
+    @Column(nullable = false)
+    private Role_Type role;
 
     @Column(length = 1)
     @Size(max = 1)

@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -20,6 +22,10 @@ public class AccountService {
         Account user = (Account) accountRepository.findById(id).orElseThrow(NullPointerException::new);
 
         return user.toResponse();
+    }
+
+    public Optional<Account> findByUserId(String userId){
+        return accountRepository.findByUserId(userId);
     }
 
 }
