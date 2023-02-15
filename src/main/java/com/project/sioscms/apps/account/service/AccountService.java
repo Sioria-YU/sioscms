@@ -13,10 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AccountService {
 
-    private final AccountRepository accountRepository;
+    public final AccountRepository accountRepository;
 
-
-    @Transactional
     public ResponseEntity<AccountDto.Response> getAccount(long id){
 
         Account user = (Account) accountRepository.findById(id).orElseThrow(NullPointerException::new);

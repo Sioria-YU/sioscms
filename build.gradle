@@ -39,6 +39,7 @@ dependencies {
     implementation("org.apache.tomcat.embed:tomcat-embed-jasper")
     implementation("javax.servlet:jstl")
     implementation("org.mapstruct:mapstruct:1.5.3.Final")
+    implementation("javax.validation:validation-api:2.0.1.Final")
 
 
     /*===========================  End of add Implementaions ===========================*/
