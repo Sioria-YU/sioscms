@@ -3,19 +3,27 @@ package com.project.sioscms.apps.account.service;
 import com.project.sioscms.apps.account.domain.dto.AccountDto;
 import com.project.sioscms.apps.account.domain.entity.Account;
 import com.project.sioscms.apps.account.domain.repository.AccountRepository;
+import com.project.sioscms.apps.account.mapper.AccountMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class AccountService {
 
     public final AccountRepository accountRepository;
+
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public AccountDto.Response findUser(long id){
 
@@ -26,6 +34,31 @@ public class AccountService {
 
     public Optional<Account> findByUserId(String userId){
         return accountRepository.findByUserId(userId);
+    }
+
+    @Transactional
+    public Account saveUser(AccountDto.Request dto){
+
+        if(dto.getUserPassword() != null){
+            dto.setUserPassword(passwordEncoder.encode(dto.getUserPassword()));
+        }
+
+        Account account = AccountMapper.mapper.toEntity(dto);
+
+        if(account != null){
+            accountRepository.save(account);
+
+            //// TODO: 2023/02/16  JPA Auditing 설정해서 자동으로 들어가게 해야함
+            account.setCreatedBy(account.getId());
+            account.setUpdatedBy(account.getId());
+            account.setCreatedOn(LocalDateTime.now());
+            account.setUpdatedOn(LocalDateTime.now());
+            account.setState("T");
+            return account;
+        }else{
+            log.error("회원가입 데이터 오류 발생!!!");
+            return null;
+        }
     }
 
 }

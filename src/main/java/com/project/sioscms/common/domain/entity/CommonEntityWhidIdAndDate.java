@@ -7,21 +7,21 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 public class CommonEntityWhidIdAndDate {
 
     @Comment("고유번호")
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     @Comment("등록자 pk")
@@ -34,9 +34,11 @@ public class CommonEntityWhidIdAndDate {
 
     @Comment("등록일시")
     @CreatedDate
+    @Convert(converter = Jsr310JpaConverters.LocalDateTimeConverter.class)
     LocalDateTime createdOn = LocalDateTime.now();
 
     @Comment("수정일시")
     @LastModifiedDate
+    @Convert(converter = Jsr310JpaConverters.LocalDateTimeConverter.class)
     LocalDateTime updatedOn = LocalDateTime.now();
 }

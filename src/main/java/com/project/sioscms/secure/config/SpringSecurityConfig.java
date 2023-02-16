@@ -21,7 +21,7 @@ public class SpringSecurityConfig {
                 .csrf().disable()
                 .cors().disable()  //cors 인증 비활성화
                 .authorizeHttpRequests(request -> request
-                        .antMatchers("/", "/main", "/static/**", "/login/**", "/join/**", "/cms/auth/**").permitAll() //권한 적용 예외 경로 설정
+                        .antMatchers("/", "/main", "/static/**", "/login/**", "/**/member/join/**", "/cms/auth/**").permitAll() //권한 적용 예외 경로 설정
                         .anyRequest().authenticated()
                 ).formLogin(login -> login
                                 .loginPage("/cms/auth/login")    //로그인 페이 설정

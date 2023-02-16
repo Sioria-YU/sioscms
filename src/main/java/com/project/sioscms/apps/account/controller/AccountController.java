@@ -35,5 +35,4 @@ public class AccountController {
         return ResponseEntity.ok(userService.getUserByGenderAndIsDelete(dto));
     }*/
 
-
 }

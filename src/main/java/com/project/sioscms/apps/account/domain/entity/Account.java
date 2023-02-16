@@ -7,15 +7,23 @@ import com.project.sioscms.common.domain.entity.CommonEntityWhidIdAndDate;
 import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.Size;
 
 @Entity
 @Getter
 @Setter
+@DynamicInsert
+@DynamicUpdate
 public class Account extends CommonEntityWhidIdAndDate {
 
     public enum Role_Type {
@@ -60,9 +68,11 @@ public class Account extends CommonEntityWhidIdAndDate {
     @Comment("유저 생년월일")
     private String birthday;
 
+    @ColumnDefault(value = "FALSE")
     @Comment("유저 삭제여부")
-    private Boolean isDelete;
+    private Boolean isDelete = false;
 
+    @Enumerated(EnumType.STRING)
     @NotNull
     @Column(nullable = false)
     private Role_Type role;

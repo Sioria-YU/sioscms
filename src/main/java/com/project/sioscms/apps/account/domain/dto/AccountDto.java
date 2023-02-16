@@ -1,12 +1,16 @@
 package com.project.sioscms.apps.account.domain.dto;
 
+import com.project.sioscms.apps.account.domain.entity.Account;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Data
 public class AccountDto {
 
+    @Data
     public static class Request{
         private Long id;
         private Long createdBy;
@@ -25,9 +29,11 @@ public class AccountDto {
         private String roadAddressDetail;
         private String birthday;
         private Boolean isDelete;
+        private Account.Role_Type role;
         private String state;
     }
 
+    @Data
     public static class Response{
         private Long id;
         private Long createdBy;
@@ -45,6 +51,7 @@ public class AccountDto {
         private String roadAddressDetail;
         private String birthday;
         private Boolean isDelete;
+        private Account.Role_Type role;
         private String state;
     }
 }
