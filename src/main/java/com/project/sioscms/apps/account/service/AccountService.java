@@ -6,13 +6,11 @@ import com.project.sioscms.apps.account.domain.repository.AccountRepository;
 import com.project.sioscms.apps.account.mapper.AccountMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Slf4j
@@ -51,8 +49,6 @@ public class AccountService {
             //// TODO: 2023/02/16  JPA Auditing 설정해서 자동으로 들어가게 해야함
             account.setCreatedBy(account.getId());
             account.setUpdatedBy(account.getId());
-            account.setCreatedOn(LocalDateTime.now());
-            account.setUpdatedOn(LocalDateTime.now());
             account.setState("T");
             return account;
         }else{
