@@ -8,7 +8,7 @@
 </head>
 <body>
   <h2>관리자 메인페이지!</h2>
-  memberVO :::: ${memberVO}<br>
+  accountDto :::: ${accountDto}<br>
   sessionScope :::: ${sessionScope}<br>
 
   <div class="container">
