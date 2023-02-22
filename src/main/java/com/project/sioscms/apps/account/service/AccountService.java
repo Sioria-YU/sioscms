@@ -45,8 +45,9 @@ public class AccountService {
 
         if(account != null){
             accountRepository.save(account);
+            accountRepository.flush();
 
-            //// TODO: 2023/02/16  JPA Auditing 설정해서 자동으로 들어가게 해야함
+            //회원 가입 기본 시퀀스 세팅
             account.setCreatedBy(account.getId());
             account.setUpdatedBy(account.getId());
             account.setState("T");

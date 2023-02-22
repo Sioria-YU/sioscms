@@ -16,10 +16,12 @@ public class CommonUserAuditorAware implements AuditorAware<Long> {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (null == authentication || !authentication.isAuthenticated()) {
             return Optional.empty();
+        }else if ("anonymousUser".equals(authentication.getPrincipal())){
+            return Optional.empty();
+        }else {
+            UserAccount userAccount = (UserAccount) authentication.getPrincipal();
+
+            return Optional.of(userAccount.getAccount().getId());
         }
-
-        UserAccount userAccount = (UserAccount) authentication.getPrincipal();
-
-        return Optional.of(userAccount.getAccount().getId());
     }
 }

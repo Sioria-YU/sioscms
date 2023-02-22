@@ -35,7 +35,7 @@
 <body>
 <div class="loginLogo">
     <a href="/main">
-        <img src="/smvf/static/firefighter/img/logo.svg" alt="로고">
+<%--        <img src="/smvf/static/firefighter/img/logo.svg" alt="로고">--%>
         <p>SIOSCMS</p>
     </a>
 </div>

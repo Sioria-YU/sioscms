@@ -16,4 +16,5 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     List<Account> findAllByGenderAndIsDelete(boolean gender, boolean isDelete);
 
     boolean existsByUserId(String userId);
+
 }
