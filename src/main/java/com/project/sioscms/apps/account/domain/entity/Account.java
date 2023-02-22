@@ -3,7 +3,7 @@ package com.project.sioscms.apps.account.domain.entity;
 
 import com.project.sioscms.apps.account.domain.dto.AccountDto;
 import com.project.sioscms.apps.account.mapper.AccountMapper;
-import com.project.sioscms.common.domain.entity.CommonEntityWhidIdAndDate;
+import com.project.sioscms.common.domain.entity.CommonEntityWithIdAndDate;
 import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,7 +23,7 @@ import javax.validation.constraints.Size;
 @Setter
 @DynamicInsert
 @DynamicUpdate
-public class Account extends CommonEntityWhidIdAndDate {
+public class Account extends CommonEntityWithIdAndDate {
 
     public enum Role_Type {
         ADMIN, //관리자 0

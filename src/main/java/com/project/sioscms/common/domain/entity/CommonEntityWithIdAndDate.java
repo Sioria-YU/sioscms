@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
-public class CommonEntityWhidIdAndDate {
+public class CommonEntityWithIdAndDate {
 
     @Comment("고유번호")
     @Id
