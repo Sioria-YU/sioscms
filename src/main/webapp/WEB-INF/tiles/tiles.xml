@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+    <!--region empty layout-->
+    <!-- =========================  empty layout  ========================= -->
+    <definition name="empty-layout" template="/WEB-INF/jsp/cms/layouts/emptyLayout.jsp">
+        <put-attribute name="body" value=""/>
+    </definition>
+
+    <definition name="cms/auth/*" extends="empty-layout">
+        <put-attribute name="body" value="/WEB-INF/jsp/cms/auth/{1}.jsp"/>
+    </definition>
+    <definition name="cms/single/*" extends="empty-layout">
+        <put-attribute name="body" value="/WEB-INF/jsp/cms/single/{1}.jsp"/>
+    </definition>
+    <definition name="cms/single/*/*" extends="empty-layout">
+        <put-attribute name="body" value="/WEB-INF/jsp/cms/single/{1}/{2}.jsp"/>
+    </definition>
+    <definition name="cms/single/*/*/*" extends="empty-layout">
+        <put-attribute name="body" value="/WEB-INF/jsp/cms/single/{1}/{2}/{3}.jsp"/>
+    </definition>
+    <!--endregion-->
+
+    <!-- region cms layout -->
+    <!--  ========================= cms layout  ========================= -->
+    <definition name="cms-layout" template="/WEB-INF/jsp/cms/layouts/mainLayout.jsp">
+        <put-attribute name="include" value="/WEB-INF/jsp/cms/layouts/include.jsp" />
+        <put-attribute name="header" value="/WEB-INF/jsp/cms/layouts/header.jsp"/>
+        <put-attribute name="side" value="/WEB-INF/jsp/cms/layouts/side.jsp"/>
+        <put-attribute name="body" value=""/>
+        <put-attribute name="footer" value="/WEB-INF/jsp/cms/layouts/footer.jsp"/>
+    </definition>
+
+    <definition name="cms/*" extends="cms-layout">
+        <put-attribute name="body" value="/WEB-INF/jsp/cms/{1}.jsp"/>
+    </definition>
+    <definition name="cms/*/*" extends="cms-layout">
+        <put-attribute name="body" value="/WEB-INF/jsp/cms/{1}/{2}.jsp"/>
+    </definition>
+    <definition name="cms/*/*/*" extends="cms-layout">
+        <put-attribute name="body" value="/WEB-INF/jsp/cms/{1}/{2}/{3}.jsp"/>
+    </definition>
+    <!--endregion-->
+</tiles-definitions>
