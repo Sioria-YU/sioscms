@@ -11699,3 +11699,68 @@ body {
   font-size: 0.75rem;
   border-radius: 0.25rem !important;
 }
+
+/*--------------------------------------------------------------
+# bootstrap icon
+--------------------------------------------------------------*/
+.icon {
+  background-color: #fff;
+  border-radius: 0.25rem;
+  text-align: center;
+  color: #012970;
+  padding: 15px 0;
+  display: flex;
+  align-items: flex-end;
+}
+.icon i {
+  margin: 0.25rem;
+  font-size: 1.5rem;
+}
+
+/*--------------------------------------------------------------
+# Page Title
+--------------------------------------------------------------*/
+.pagetitle {
+  margin-bottom: 10px;
+}
+
+.pagetitle h1 {
+  font-size: 24px;
+  margin-bottom: 0;
+  font-weight: 600;
+  color: #012970;
+}
+
+/*--------------------------------------------------------------
+# Breadcrumbs
+--------------------------------------------------------------*/
+.breadcrumb {
+  font-size: 14px;
+  font-family: "Nunito", sans-serif;
+  color: #899bbd;
+  font-weight: 600;
+}
+
+.breadcrumb a {
+  color: #899bbd;
+  transition: 0.3s;
+}
+
+.breadcrumb a:hover {
+  color: #51678f;
+}
+
+.breadcrumb .breadcrumb-item:first-child::before {
+  color: #899bbd;
+  content: "";
+}
+
+.breadcrumb .breadcrumb-item::before {
+  color: #899bbd;
+  content: ">";
+}
+
+.breadcrumb .active {
+  color: #51678f;
+  font-weight: 600;
+}

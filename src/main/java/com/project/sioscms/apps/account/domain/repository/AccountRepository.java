@@ -13,7 +13,9 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     Optional<Account> findByUserId(String userId);
 
-    List<Account> findAllByGenderAndIsDelete(boolean gender, boolean isDelete);
+    List<Account> findAllByIsDeleteAndRole(boolean isDelete, Account.Role_Type role);
+
+//    List<Account> findAllByGenderAndIsDelete(boolean gender, boolean isDelete);
 
     boolean existsByUserId(String userId);
 

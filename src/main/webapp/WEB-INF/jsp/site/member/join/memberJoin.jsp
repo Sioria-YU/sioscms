@@ -77,7 +77,7 @@
                     <select class="form-control" id="gender" name="gender" required>
                         <option value="">선택</option>
                         <option value="M">남성</option>
-                        <option value="G">여성</option>
+                        <option value="F">여성</option>
                     </select>
                     <div class="invalid-feedback">
                         이름을 입력해주세요.
