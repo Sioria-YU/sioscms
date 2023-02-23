@@ -1,4 +1,4 @@
-package com.project.sioscms.common.util;
+package com.project.sioscms.common.utils;
 
 import com.project.sioscms.secure.domain.UserAccount;
 import org.springframework.data.domain.AuditorAware;
