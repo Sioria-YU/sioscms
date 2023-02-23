@@ -20,7 +20,6 @@
 <body>
     <div class="container">
         <h2>메인 페이지</h2>
-
         <button type="button" class="btn btn-lg btn-success btn-block" onclick="redirectCmsLoginPage()">관리자 로그인</button>
         <button type="button" class="btn btn-lg btn-dark btn-block" onclick="memberJoinPageEvent()">회원가입</button>
 

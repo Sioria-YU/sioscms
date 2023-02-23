@@ -3,13 +3,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>${not empty title? title : 'TITLE'}${not empty subTitle? ' ' + subTitle : ''}</title>
+    <title>${not empty title? title : 'SiosCMS'}${not empty subTitle? ' ' + subTitle : ''}</title>
     <tiles:insertAttribute name="include"/>
 </head>
 <body class="sb-nav-fixed">
     <tiles:insertAttribute name="header"/>
-    <tiles:insertAttribute name="side"/>
-    <tiles:insertAttribute name="body"/>
+    <div id="layoutSidenav">
+        <tiles:insertAttribute name="side"/>
+        <tiles:insertAttribute name="body"/>
+    </div>
     <tiles:insertAttribute name="footer"/>
 </body>
 </html>
