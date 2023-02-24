@@ -16,7 +16,7 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-address-card"></i></div>
                     관리자 관리
                 </a>
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="/cms/member/user-list">
                     <div class="sb-nav-link-icon"><i class="far fa-address-card"></i></div>
                     사용자 관리
                 </a>
