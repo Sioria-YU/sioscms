@@ -43,7 +43,8 @@ dependencies {
     implementation("org.apache.tiles:tiles-jsp:3.0.8")
     implementation("org.apache.tiles:tiles-servlet:3.0.8")
     implementation("org.apache.tiles:tiles-core:3.0.8")
-
+    implementation("com.google.guava:guava:31.1-jre")
+    implementation("org.hibernate:hibernate-validator:8.0.0.Final")
 
     /*===========================  End of add Implementaions ===========================*/
 
