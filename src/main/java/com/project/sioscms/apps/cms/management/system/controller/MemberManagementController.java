@@ -19,21 +19,26 @@ public class MemberManagementController {
     private final MemberManagementService memberManagementService;
 
     @RequestMapping("/admin-list")
-    public ModelAndView adminList(RequestDto requestDto){
+    public ModelAndView adminList(RequestDto requestDto) throws Exception{
         ModelAndView mav = new ModelAndView("cms/member/adminList");
 
-        List<AccountDto.Response> accountList = memberManagementService.getAdminList(requestDto);
-        mav.addObject("resultList",accountList);
+        SiosPage<AccountDto.Response> siosPage = memberManagementService.getAdminList(requestDto);
+        if(siosPage != null) {
+            mav.addObject("resultList", siosPage.getContents());
+            mav.addObject("pageInfo", siosPage.getPageInfo());
+        }
 
         return mav;
     }
 
     @RequestMapping("/user-list")
-    public ModelAndView userList(RequestDto requestDto){
+    public ModelAndView userList(RequestDto requestDto) throws Exception{
         ModelAndView mav = new ModelAndView("cms/member/userList");
-        SiosPage siosPage = memberManagementService.getUserList(requestDto);
-        mav.addObject("resultList", siosPage.getPage().getContent());
-        mav.addObject("pageInfo", siosPage);
+        SiosPage<AccountDto.Response> siosPage = memberManagementService.getUserList(requestDto);
+        if(siosPage != null) {
+            mav.addObject("resultList", siosPage.getContents());
+            mav.addObject("pageInfo", siosPage.getPageInfo());
+        }
 
         return mav;
     }

@@ -4,7 +4,6 @@ import com.project.sioscms.apps.account.domain.dto.AccountDto;
 import com.project.sioscms.apps.account.domain.entity.Account;
 import com.project.sioscms.apps.account.domain.repository.AccountRepository;
 import com.project.sioscms.apps.cms.management.system.domain.dto.RequestDto;
-import com.project.sioscms.common.utils.jpa.page.PaginationUtil;
 import com.project.sioscms.common.utils.jpa.page.SiosPage;
 import com.project.sioscms.common.utils.jpa.restriction.ChangSolJpaRestriction;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,7 @@ public class MemberManagementService {
      * @param requestDto: userId, name, gender
      * @return
      */
-    public List<AccountDto.Response> getAdminList(RequestDto requestDto){
+    public SiosPage<AccountDto.Response> getAdminList(RequestDto requestDto) throws Exception {
 
         //List 동적쿼리 조건생성
         ChangSolJpaRestriction restriction = new ChangSolJpaRestriction();  //기본 값 AND 조건으로 적용됨.
@@ -44,7 +43,7 @@ public class MemberManagementService {
             }
         }
 
-        return accountRepository.findAll(restriction.toSpecification()).stream().map(Account::toResponse).collect(Collectors.toList());
+        return new SiosPage<>(accountRepository.findAll(restriction.toSpecification(), requestDto.toPageableWithSortedByCreatedOn(Sort.Direction.DESC)).map(Account::toResponse));
     }
 
     /**
@@ -52,7 +51,7 @@ public class MemberManagementService {
      * @param requestDto : userId, name, gender
      * @return
      */
-    public SiosPage getUserList(RequestDto requestDto){
+    public SiosPage<AccountDto.Response> getUserList(RequestDto requestDto) throws Exception{
         ChangSolJpaRestriction restriction = new ChangSolJpaRestriction();
         restriction.equals("isDelete", false);
         restriction.equals("role", Account.Role_Type.USER);
@@ -68,9 +67,7 @@ public class MemberManagementService {
             restriction.equals("gender", requestDto.getGender());
         }
 
-//        Page<Account> accountPage = accountRepository.findAll(restriction.toSpecification(), requestDto.toPageableWithSortedByCreatedOn(Sort.Direction.DESC));
-//        return accountRepository.findAll(restriction.toSpecification()).stream().map(Account::toResponse).collect(Collectors.toList());
-        return PaginationUtil.of(accountRepository.findAll(restriction.toSpecification(), requestDto.toPageableWithSortedByCreatedOn(Sort.Direction.DESC)).map(Account::toResponse));
+        return new SiosPage<>(accountRepository.findAll(restriction.toSpecification(), requestDto.toPageableWithSortedByCreatedOn(Sort.Direction.DESC)).map(Account::toResponse));
     }
 
 }

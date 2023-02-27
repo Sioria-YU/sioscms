@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 @Setter
 public class CommonSearchDto {
     //페이지 관련
-    private int pageNumber = 0;
-    private int pageOffset = 10;
+    private int pageNumber = 0;     //현재 페이지 번호
+    private int pageOffset = 10;    //한 페이지에 표시할 목록 수
     private String sortedColumnName = null;
     private Sort.Direction direction = Sort.Direction.DESC;
 
@@ -24,6 +24,11 @@ public class CommonSearchDto {
     private LocalDateTime endDateTime;
     private LocalDate startDate;
     private LocalDate endDate;
+
+    private void serPageNumber(int pageNumber){
+        //pageable의 page가 0부터 시작하므로 -1처리
+        this.pageNumber = Math.max(pageNumber - 1, 0);
+    }
 
     /**
      * 정렬 없는 페이징
