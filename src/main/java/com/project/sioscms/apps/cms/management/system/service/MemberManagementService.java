@@ -40,7 +40,8 @@ public class MemberManagementService {
             }
         }
 
-        return new SiosPage<>(accountRepository.findAll(restriction.toSpecification(), requestDto.toPageableWithSortedByCreatedDateTime(Sort.Direction.DESC)).map(Account::toResponse));
+        return new SiosPage<>(accountRepository.findAll(restriction.toSpecification()
+                , requestDto.toPageableWithSortedByCreatedDateTime(Sort.Direction.DESC)).map(Account::toResponse));
     }
 
     /**

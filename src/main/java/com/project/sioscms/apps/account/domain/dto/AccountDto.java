@@ -1,10 +1,7 @@
 package com.project.sioscms.apps.account.domain.dto;
 
 import com.project.sioscms.apps.account.domain.entity.Account;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 

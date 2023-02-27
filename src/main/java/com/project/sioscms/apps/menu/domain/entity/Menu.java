@@ -1,5 +1,7 @@
 package com.project.sioscms.apps.menu.domain.entity;
 
+import com.project.sioscms.apps.menu.domain.dto.MenuDto;
+import com.project.sioscms.apps.menu.mapper.MenuMapper;
 import com.project.sioscms.common.domain.entity.CommonEntityWithIdAndDate;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,4 +44,8 @@ public class Menu extends CommonEntityWithIdAndDate {
     @ColumnDefault(value = "TRUE")
     private Boolean isUsed = true;
 
+
+    public MenuDto.Response toResponse(){
+        return MenuMapper.mapper.toResponse(this);
+    }
 }
