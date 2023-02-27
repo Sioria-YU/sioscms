@@ -10,9 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 @RequiredArgsConstructor
 public class MemberManagementService {
@@ -43,7 +40,7 @@ public class MemberManagementService {
             }
         }
 
-        return new SiosPage<>(accountRepository.findAll(restriction.toSpecification(), requestDto.toPageableWithSortedByCreatedOn(Sort.Direction.DESC)).map(Account::toResponse));
+        return new SiosPage<>(accountRepository.findAll(restriction.toSpecification(), requestDto.toPageableWithSortedByCreatedDateTime(Sort.Direction.DESC)).map(Account::toResponse));
     }
 
     /**
@@ -67,7 +64,7 @@ public class MemberManagementService {
             restriction.equals("gender", requestDto.getGender());
         }
 
-        return new SiosPage<>(accountRepository.findAll(restriction.toSpecification(), requestDto.toPageableWithSortedByCreatedOn(Sort.Direction.DESC)).map(Account::toResponse));
+        return new SiosPage<>(accountRepository.findAll(restriction.toSpecification(), requestDto.toPageableWithSortedByCreatedDateTime(Sort.Direction.DESC)).map(Account::toResponse));
     }
 
 }

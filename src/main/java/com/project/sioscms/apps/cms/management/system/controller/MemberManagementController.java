@@ -23,7 +23,7 @@ public class MemberManagementController {
         ModelAndView mav = new ModelAndView("cms/member/adminList");
 
         SiosPage<AccountDto.Response> siosPage = memberManagementService.getAdminList(requestDto);
-        if(siosPage != null) {
+        if(!siosPage.isEmpty()) {
             mav.addObject("resultList", siosPage.getContents());
             mav.addObject("pageInfo", siosPage.getPageInfo());
         }
@@ -35,7 +35,7 @@ public class MemberManagementController {
     public ModelAndView userList(RequestDto requestDto) throws Exception{
         ModelAndView mav = new ModelAndView("cms/member/userList");
         SiosPage<AccountDto.Response> siosPage = memberManagementService.getUserList(requestDto);
-        if(siosPage != null) {
+        if(!siosPage.isEmpty()) {
             mav.addObject("resultList", siosPage.getContents());
             mav.addObject("pageInfo", siosPage.getPageInfo());
         }

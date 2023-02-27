@@ -36,10 +36,10 @@ public class CommonEntityWithIdAndDate {
     @CreatedDate
     @Convert(converter = LocalDateTimeConverter.class)
     @Column(updatable = false)  //데이터 수정 방지
-    LocalDateTime createdOn = LocalDateTime.now();
+    LocalDateTime createdDateTime = LocalDateTime.now();
 
     @Comment("수정일시")
     @LastModifiedDate
     @Convert(converter = LocalDateTimeConverter.class)
-    LocalDateTime updatedOn = LocalDateTime.now();
+    LocalDateTime updatedDateTime = LocalDateTime.now();
 }

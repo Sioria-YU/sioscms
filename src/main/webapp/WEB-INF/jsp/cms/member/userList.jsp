@@ -24,11 +24,11 @@
                         <div class="row mb-3">
                             <label for="userId" class="col-sm-1 col-form-label">아이디</label>
                             <div class="col-sm-5">
-                                <input type="text" class="form-control" id="userId" name="userId" value="${param.userId}" placeholder="관리자 아이디를 입력하세요." aria-label="관리자 아이디를 입력하세요.">
+                                <input type="text" class="form-control" id="userId" name="userId" value="${param.userId}" placeholder="사용자 아이디를 입력하세요." aria-label="사용자 아이디를 입력하세요.">
                             </div>
                             <label for="name" class="col-sm-1 col-form-label">성명</label>
                             <div class="col-sm-5">
-                                <input type="text" class="form-control" id="name" name="name" value="${param.name}" placeholder="관리자 성명을 입력하세요." aria-label="관리자 성명을 입력하세요.">
+                                <input type="text" class="form-control" id="name" name="name" value="${param.name}" placeholder="사용자 성명을 입력하세요." aria-label="사용자 성명을 입력하세요.">
                             </div>
                         </div>
                         <%--<div class="row mb-3">

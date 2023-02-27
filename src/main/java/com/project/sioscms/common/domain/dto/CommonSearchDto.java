@@ -54,9 +54,9 @@ public class CommonSearchDto {
      * @param direction
      * @return
      */
-    public Pageable toPageableWithSortedByCreatedOn(Sort.Direction direction){
+    public Pageable toPageableWithSortedByCreatedDateTime(Sort.Direction direction){
         if(direction == null) direction = Sort.Direction.ASC;
-        return PageRequest.of(this.pageNumber, this.pageOffset, Sort.by(direction, "createdOn"));
+        return PageRequest.of(this.pageNumber, this.pageOffset, Sort.by(direction, "createdDateTime"));
     }
 
     /**
@@ -64,9 +64,9 @@ public class CommonSearchDto {
      * @param direction
      * @return
      */
-    public Pageable toPageableWithSortedByUpdatedOn(Sort.Direction direction){
+    public Pageable toPageableWithSortedByUpdatedDateTime(Sort.Direction direction){
         if(direction == null) direction = Sort.Direction.ASC;
-        return PageRequest.of(this.pageNumber, this.pageOffset, Sort.by(direction, "updatedOn"));
+        return PageRequest.of(this.pageNumber, this.pageOffset, Sort.by(direction, "updatedDateTime"));
     }
 
     /**

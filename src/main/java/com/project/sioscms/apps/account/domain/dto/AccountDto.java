@@ -15,8 +15,8 @@ public class AccountDto {
         private Long id;
         private Long createdBy;
         private Long updatedBy;
-        private LocalDateTime createdOn;
-        private LocalDateTime updatedOn;
+        private LocalDateTime createdDateTime;
+        private LocalDateTime updatedDateTine;
         private String userId;
         private String userPassword;
         private String name;
@@ -38,8 +38,8 @@ public class AccountDto {
         private Long id;
         private Long createdBy;
         private Long updatedBy;
-        private LocalDateTime createdOn;
-        private LocalDateTime updatedOn;
+        private LocalDateTime createdDateTime;
+        private LocalDateTime updatedDateTime;
         private String userId;
         private String name;
         private String gender;

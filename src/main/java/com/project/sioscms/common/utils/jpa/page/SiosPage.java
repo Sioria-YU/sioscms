@@ -15,12 +15,13 @@ public class SiosPage<T> {
     private boolean isPrev = false;
     private int pageSize = 10;   //한 페이지에 노출될 사이즈 -> 추후 설정 값 등으로 변경
 
-    public SiosPage(Page<T> page) throws IllegalAccessException {
+    public SiosPage(Page<T> page){
         if(page != null && !page.isEmpty()){
             this.page = page;
             this.setNextPrevPage();
         }else{
-            throw new IllegalAccessException("Page<T> is Null!!!");
+//            throw new IllegalAccessException("Page<T> is Null!!!");
+            this.page = null;
         }
     }
 
@@ -29,13 +30,14 @@ public class SiosPage<T> {
      * @param page
      * @param pageSize
      */
-    public SiosPage(Page<T> page, int pageSize) throws IllegalAccessException {
+    public SiosPage(Page<T> page, int pageSize){
         if(page != null && !page.isEmpty()) {
             this.page = page;
             this.pageSize = pageSize;
             this.setNextPrevPage();
         }else{
-            throw new IllegalAccessException("Page<T> is Null!!!");
+            this.page = null;
+//            throw new IllegalAccessException("Page<T> is Null!!!");
         }
     }
 
@@ -85,6 +87,18 @@ public class SiosPage<T> {
                     .isNext(this.isNext)
                     .isPrev(this.isPrev)
                     .build();
+        }
+    }
+
+    /**
+     * Page<T> is null or empty : return true
+     * @return
+     */
+    public boolean isEmpty(){
+        if (this.page == null || this.page.isEmpty()){
+            return true;
+        }else {
+            return false;
         }
     }
 }
