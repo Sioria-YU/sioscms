@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 public class MenuDto {
     @Data
-    public class Request{
+    public static class Request{
         private Long id;
         private Long createdBy;
         private Long updatedBy;
@@ -22,7 +22,7 @@ public class MenuDto {
     }
 
     @Data
-    public class Response{
+    public static class Response{
         private Long id;
         private Long createdBy;
         private Long updatedBy;
