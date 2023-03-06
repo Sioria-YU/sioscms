@@ -51,3 +51,23 @@ spring:
         user:
             name: admin
             password: 1234
+            
+---
+spring:
+    profiles:
+        active: dev
+    datasource:
+        driver-class-name: org.postgresql.Driver
+        url: jdbc:postgresql://localhost:5432/sioscmsdb
+        username: sioscms
+        password: 1q2w3e4r
+    jpa:
+        hibernate:
+            ddl-auto: update
+    devtools:
+        livereload:
+            enabled: true
+    security:
+        user:
+            name: admin
+            password: 1234

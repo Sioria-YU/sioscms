@@ -28,16 +28,14 @@ public class MemberManagementService {
         restriction.equals("role", Account.Role_Type.ADMIN);
 
         //검색 조건 추가
-        if(requestDto != null){
-            if(requestDto.getUserId() != null && !requestDto.getUserId().isEmpty()){
-                restriction.equals("userId", requestDto.getUserId());
-            }
-            if(requestDto.getName() != null && !requestDto.getName().isEmpty()){
-                restriction.equals("name", requestDto.getName());
-            }
-            if(requestDto.getGender() != null && !requestDto.getGender().isEmpty()){
-                restriction.equals("gender", requestDto.getGender());
-            }
+        if(requestDto.getUserId() != null && !requestDto.getUserId().isEmpty()){
+            restriction.equals("userId", requestDto.getUserId());
+        }
+        if(requestDto.getName() != null && !requestDto.getName().isEmpty()){
+            restriction.equals("name", requestDto.getName());
+        }
+        if(requestDto.getGender() != null && !requestDto.getGender().isEmpty()){
+            restriction.equals("gender", requestDto.getGender());
         }
 
         return new SiosPage<>(accountRepository.findAll(restriction.toSpecification()
