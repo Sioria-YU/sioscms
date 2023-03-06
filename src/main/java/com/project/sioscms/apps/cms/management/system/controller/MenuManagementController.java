@@ -21,8 +21,10 @@ public class MenuManagementController {
         ModelAndView mav = new ModelAndView("cms/menu/list");
 
         SiosPage<MenuDto.Response> siosPage = menuManagementService.getMenuList(commonSearchDto);
-        mav.addObject("resultList",siosPage.getContents());
-        mav.addObject("pageInfo", siosPage.getPageInfo());
+        if(!siosPage.isEmpty()) {
+            mav.addObject("resultList", siosPage.getContents());
+            mav.addObject("pageInfo", siosPage.getPageInfo());
+        }
         return mav;
     }
 

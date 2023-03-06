@@ -46,7 +46,7 @@
                         <div class="row mb-3">
                             <label for="gender" class="col-sm-1 col-form-label">성별</label>
                             <div class="col-sm-5">
-                                <select class="form-select" id="gender" name="gender" aria-label="Default select example">
+                                <select class="form-select" id="gender" name="gender" aria-label="선택">
                                     <option value="" ${empty param.gender? 'selected':''}>선택</option>
                                     <option value="M" ${param.gender eq 'M'? 'selected':''}>남성</option>
                                     <option value="F" ${param.gender eq 'F'? 'selected':''}>여성</option>

@@ -8,7 +8,7 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     대시보드
                 </a>
-                <a class="nav-link" href="/cms/main">
+                <a class="nav-link" href="/cms/menu/list">
                     <div class="sb-nav-link-icon"><i class="fas fa-stream"></i></div>
                     메뉴 관리
                 </a>

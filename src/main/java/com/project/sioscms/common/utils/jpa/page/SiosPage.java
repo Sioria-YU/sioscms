@@ -63,7 +63,7 @@ public class SiosPage<T> {
      * @return
      */
     public List<T> getContents(){
-        if(this.page.isEmpty()){
+        if(this.page == null || this.page.isEmpty()){
             return null;
         }else {
             return this.page.getContent();
@@ -75,7 +75,7 @@ public class SiosPage<T> {
      * @return
      */
     public PageResponseDto getPageInfo(){
-        if(this.page.isEmpty()){
+        if(this.page == null || this.page.isEmpty()){
             return null;
         }else {
             return PageResponseDto.builder()
