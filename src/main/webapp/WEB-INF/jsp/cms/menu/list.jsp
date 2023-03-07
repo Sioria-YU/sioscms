@@ -34,12 +34,14 @@
                         <i class="bi bi-record-circle-fill"></i><h4 class="card-title">메뉴 상세</h4>
                     </div>
                     <div class="btn-group mb-1">
-                        <button type="button" class="btn btn-outline-success ms-1"><i class="bi bi-folder-plus"></i> 최상위 메뉴 추가</button>
-                        <button type="button" class="btn btn-outline-primary ms-1"><i class="bi bi-file-earmark-plus"></i> 하위 메뉴 추가</button>
+                        <button type="button" class="btn btn-outline-success ms-1" onclick="appendedRootMenu();"><i class="bi bi-folder-plus"></i> 최상위 메뉴 추가</button>
+                        <button type="button" class="btn btn-outline-primary ms-1" onclick="appendedLowerMenu();"><i class="bi bi-file-earmark-plus"></i> 하위 메뉴 추가</button>
                     </div>
                     <div class="col-md-8 card">
                         <div class="card-body">
                             <form id="menuEditForm" name="menuEditForm" action="" method="post">
+                                <input type="hidden" id="upperMenuId" name="upperMenuId" value="">
+                                <input type="hidden" name="isRoot" value="false">
                                 <div class="row mb-1">
                                     <label for="menuName" class="col-sm-2 col-form-label">메뉴 번호</label>
                                     <div class="col-sm-8">
@@ -64,20 +66,20 @@
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <label for="menuName" class="col-sm-2 col-form-label">링크 주소</label>
+                                    <label for="menuLink" class="col-sm-2 col-form-label">링크 주소</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="linkUrl" name="linkUrl" placeholder="Link URL을 입력하세요." aria-label="Link URL을 입력하세요."/>
+                                        <input type="text" class="form-control" id="menuLink" name="menuLink" placeholder="Link URL을 입력하세요." aria-label="Link URL을 입력하세요."/>
                                     </div>
                                 </div>
                                 <div class="row mb-1">
                                     <label for="isUsed1" class="col-sm-2 col-form-label">사용 여부</label>
                                     <div class="col-sm-8 align-self-center">
                                         <div class="col-sm-10">
-                                                <input class="form-check-input" type="radio" name="isUsed" id="isUsed1" value="option1" checked="">
+                                                <input class="form-check-input" type="radio" name="isUsed" id="isUsed1" value="true" checked="">
                                                 <label class="form-check-label" for="isUsed1">
                                                     사용
                                                 </label>
-                                                <input class="form-check-input" type="radio" name="isUsed" id="isUsed2" value="option2">
+                                                <input class="form-check-input" type="radio" name="isUsed" id="isUsed2" value="false">
                                                 <label class="form-check-label" for="isUsed2">
                                                     미사용
                                                 </label>
@@ -85,8 +87,9 @@
                                     </div>
                                 </div>
                                 <div class="form-btn-set text-center">
-                                    <button type="button" class="btn btn-success" onclick="">저장</button>
-                                    <button type="button" class="btn btn-danger" onclick="">삭제</button>
+                                    <button type="button" class="btn btn-success" id="saveButton" onclick="saveMenu()">저장</button>
+                                    <button type="button" class="btn btn-success" id="modifyButton" onclick="saveMenu()" style="display: none;">수정</button>
+                                    <button type="button" class="btn btn-danger" id="deleteButton" onclick="" style="display: none;">삭제</button>
                                 </div>
                             </form>
                         </div>
@@ -140,6 +143,38 @@
             ]
         }
     });
+
+    const appendedRootMenu = () =>{
+        <%-- 최초 생성 시 루트 메뉴가 없다면 insert 처리 해야함. --%>
+        document.getElementById("upperMenuId").value = '1';
+        clearMenuEditFormData();
+    }
+
+    const appendedLowerMenu = () =>{
+        document.getElementById("upperMenuId").value = ''; //메뉴 트리에서 선택한 값으로 변경
+        clearMenuEditFormData();
+    }
+
+    const clearMenuEditFormData = () =>{
+        document.getElementById("menuId").value = '';
+        document.getElementById("menuName").value = '';
+        document.getElementById("menuType").value = '';
+        document.getElementById("linkUrl").value = '';
+        document.getElementById("isUsed1").checked = true;
+        document.getElementById("isUsed2").checked = false;
+    }
+
+    const saveMenu = () =>{
+        let form = document.getElementById("menuEditForm");
+        form.action = "./save-menu";
+        form.submit();
+    }
+
+    const deleteMenu = () =>{
+        let form = document.getElementById("menuEditForm");
+        form.action = "./delete-menu";
+        form.submit();
+    }
 
     $(function (){
         $(".treeopen").on('click',function() {

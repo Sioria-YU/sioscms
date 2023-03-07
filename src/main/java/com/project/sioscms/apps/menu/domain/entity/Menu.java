@@ -33,7 +33,7 @@ public class Menu extends CommonEntityWithIdAndDate {
     private String menuLink;
 
     @Comment(value = "상위 메뉴 아이디")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Menu upperMenu;
 
     @Comment(value = "삭제 여부")
@@ -44,6 +44,9 @@ public class Menu extends CommonEntityWithIdAndDate {
     @ColumnDefault(value = "TRUE")
     private Boolean isUsed = true;
 
+    @Comment(value = "루트 여부")
+    @ColumnDefault(value = "FALSE")
+    private Boolean isRoot = false;
 
     public MenuDto.Response toResponse(){
         return MenuMapper.mapper.toResponse(this);

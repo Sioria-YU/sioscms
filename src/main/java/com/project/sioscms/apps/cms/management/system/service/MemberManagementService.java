@@ -3,7 +3,7 @@ package com.project.sioscms.apps.cms.management.system.service;
 import com.project.sioscms.apps.account.domain.dto.AccountDto;
 import com.project.sioscms.apps.account.domain.entity.Account;
 import com.project.sioscms.apps.account.domain.repository.AccountRepository;
-import com.project.sioscms.apps.cms.management.system.domain.dto.RequestDto;
+import com.project.sioscms.apps.cms.management.system.domain.dto.MemberSearchDto;
 import com.project.sioscms.common.utils.jpa.page.SiosPage;
 import com.project.sioscms.common.utils.jpa.restriction.ChangSolJpaRestriction;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class MemberManagementService {
      * @param requestDto: userId, name, gender
      * @return
      */
-    public SiosPage<AccountDto.Response> getAdminList(RequestDto requestDto) throws Exception {
+    public SiosPage<AccountDto.Response> getAdminList(MemberSearchDto requestDto) throws Exception {
 
         //List 동적쿼리 조건생성
         ChangSolJpaRestriction restriction = new ChangSolJpaRestriction();  //기본 값 AND 조건으로 적용됨.
@@ -47,7 +47,7 @@ public class MemberManagementService {
      * @param requestDto : userId, name, gender
      * @return
      */
-    public SiosPage<AccountDto.Response> getUserList(RequestDto requestDto) throws Exception{
+    public SiosPage<AccountDto.Response> getUserList(MemberSearchDto requestDto) throws Exception{
         ChangSolJpaRestriction restriction = new ChangSolJpaRestriction();
         restriction.equals("isDelete", false);
         restriction.equals("role", Account.Role_Type.USER);

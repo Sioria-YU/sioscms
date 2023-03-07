@@ -20,12 +20,26 @@ public class MenuManagementController {
     public ModelAndView menuList(CommonSearchDto commonSearchDto){
         ModelAndView mav = new ModelAndView("cms/menu/list");
 
-        SiosPage<MenuDto.Response> siosPage = menuManagementService.getMenuList(commonSearchDto);
+        /*SiosPage<MenuDto.Response> siosPage = menuManagementService.getMenuList(commonSearchDto);
         if(!siosPage.isEmpty()) {
             mav.addObject("resultList", siosPage.getContents());
             mav.addObject("pageInfo", siosPage.getPageInfo());
-        }
+        }*/
         return mav;
+    }
+
+    @RequestMapping("/save-menu")
+    public ModelAndView saveMenu(CommonSearchDto commonSearchDto, MenuDto.Request request) throws Exception{
+        ModelAndView mav = new ModelAndView("cms/menu/list");
+
+        if(menuManagementService.saveMenu(request)) {
+            mav.addObject("msg", "정상처리되었습니다.");
+        }else{
+            mav.addObject("msg", "처리 중 오류가 발생하였습니다.");
+        }
+
+        return mav;
+
     }
 
 }

@@ -8,7 +8,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class RequestDto extends CommonSearchDto {
+public class MemberSearchDto extends CommonSearchDto {
     /*아이디*/
     private String userId;
     /*성명*/
