@@ -1,11 +1,13 @@
 package com.project.sioscms.apps.menu.controller;
 
+import com.project.sioscms.apps.cms.management.system.domain.dto.MenuRequestDto;
 import com.project.sioscms.apps.menu.domain.dto.MenuDto;
 import com.project.sioscms.apps.menu.domain.dto.MenuDto.Response;
 import com.project.sioscms.apps.menu.service.MenuService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,5 +22,15 @@ public class MenuController {
     @PostMapping("/list")
     public ResponseEntity<List<Response>> getMenuList(MenuDto.Request request) throws Exception{
         return ResponseEntity.ok(menuService.getMenuList(request));
+    }
+
+    @PutMapping("/save")
+    public ResponseEntity<Boolean> saveMenu(MenuDto.Request request) throws Exception{
+        return ResponseEntity.ok(menuService.saveMenu(request));
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<Boolean> updateMenu(MenuRequestDto request) throws Exception{
+        return ResponseEntity.ok(menuService.updateMenu(request));
     }
 }

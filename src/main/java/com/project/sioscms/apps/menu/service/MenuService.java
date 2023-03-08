@@ -1,9 +1,11 @@
 package com.project.sioscms.apps.menu.service;
 
+import com.project.sioscms.apps.cms.management.system.domain.dto.MenuRequestDto;
 import com.project.sioscms.apps.menu.domain.dto.MenuDto;
 import com.project.sioscms.apps.menu.domain.dto.MenuDto.Response;
 import com.project.sioscms.apps.menu.domain.entity.Menu;
 import com.project.sioscms.apps.menu.domain.repository.MenuRepository;
+import com.project.sioscms.apps.menu.mapper.MenuMapper;
 import com.project.sioscms.common.utils.jpa.restriction.ChangSolJpaRestriction;
 import com.project.sioscms.common.utils.jpa.restriction.ChangSolJpaRestrictionType;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -24,6 +27,7 @@ public class MenuService {
 
     public List<Response> getMenuList(MenuDto.Request request) throws Exception{
         ChangSolJpaRestriction restriction = new ChangSolJpaRestriction(ChangSolJpaRestrictionType.AND);
+        restriction.equals("isDeleted",false);
 
         //root여부
         if(request.getIsRoot() != null && request.getIsRoot()){
@@ -34,6 +38,42 @@ public class MenuService {
 
         return menuRepository.findAll(restriction.toSpecification(), Sort.by(Sort.Direction.ASC, "upperMenuId", "id"))
                 .stream().map(Menu::toResponse).collect(Collectors.toList());
+    }
 
+    @Transactional
+    public boolean saveMenu(MenuDto.Request request){
+        try {
+            Menu entity = MenuMapper.mapper.toEntity(request);
+            if (request.getUpperMenuId() != null) {
+                Menu upperMenu = menuRepository.findById(request.getUpperMenuId()).orElseThrow(NullPointerException::new);
+                entity.setUpperMenu(upperMenu);
+            }
+            menuRepository.save(entity);
+            return true;
+        }catch (NullPointerException e){
+            log.error(e.toString());
+            return false;
+        }
+    }
+
+    @Transactional
+    public boolean updateMenu(MenuRequestDto request){
+        try {
+            Menu menu = menuRepository.findById(request.getMenuId()).orElseThrow(NullPointerException::new);
+
+            if (!Objects.equals(request.getUpperMenuId(), menu.getUpperMenu().getId())) {
+                Menu upperMenu = menuRepository.findById(request.getUpperMenuId()).orElseThrow(NullPointerException::new);
+                menu.setUpperMenu(upperMenu);
+            }
+            menu.setMenuName(request.getMenuName());
+            menu.setMenuType(request.getMenuType());
+            menu.setMenuLink(request.getMenuLink());
+            menu.setIsUsed(request.getIsUsed());
+
+            return true;
+        }catch (NullPointerException e){
+            log.error(e.toString());
+            return false;
+        }
     }
 }

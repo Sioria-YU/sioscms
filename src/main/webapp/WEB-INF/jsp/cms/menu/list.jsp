@@ -4,7 +4,7 @@
     <main>
         <div class="container-fluid px-4">
             <div class="pagetitle">
-                <h1 class="mt-4">관리자 관리</h1>
+                <h1 class="mt-4">메뉴 관리</h1>
                 <nav>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="/cms/main"><i class="bi bi-house-door"></i></a></li>
@@ -102,72 +102,165 @@
 <link rel="stylesheet" href="/static/js/jstree/3.3.10/themes/default/style.min.css" />
 <script src="/static/js/jstree/3.3.10/jstree.min.js"></script>
 <script>
-    $('#menu-tree-contents').jstree({
-        'core' : {
-            'data' : [
-                { "id" : "ajson1", "parent" : "#", "text" : "Simple root node" },
-                { "id" : "ajson2", "parent" : "#", "text" : "Root node 2" },
-                { "id" : "ajson201", "parent" : "ajson2", "text" : "Child 1" },
-                { "id" : "ajson202", "parent" : "ajson2", "text" : "Child 2" },
-                { "id" : "ajson203", "parent" : "ajson2", "text" : "Child 3" },
-                { "id" : "ajson204", "parent" : "ajson2", "text" : "Child 4" },
-                { "id" : "ajson205", "parent" : "ajson2", "text" : "Child 5" },
-                { "id" : "ajson3", "parent" : "#", "text" : "Root node 3" },
-                { "id" : "ajson4", "parent" : "#", "text" : "Root node 4" },
-                { "id" : "ajson401", "parent" : "ajson4", "text" : "Child 1" },
-                { "id" : "ajson402", "parent" : "ajson4", "text" : "Child 2" },
-                { "id" : "ajson403", "parent" : "ajson4", "text" : "Child 3" },
-                { "id" : "ajson404", "parent" : "ajson4", "text" : "Child 4" },
-                { "id" : "ajson405", "parent" : "ajson4", "text" : "Child 5" },
-                { "id" : "ajson5", "parent" : "#", "text" : "Root node 5" },
-                { "id" : "ajson501", "parent" : "ajson5", "text" : "Child 1" },
-                { "id" : "ajson50101", "parent" : "ajson501", "text" : "Child 1-1" },
-                { "id" : "ajson50102", "parent" : "ajson501", "text" : "Child 1-2" },
-                { "id" : "ajson50103", "parent" : "ajson501", "text" : "Child 1-3" },
-                { "id" : "ajson50104", "parent" : "ajson501", "text" : "Child 1-4" },
-                { "id" : "ajson50105", "parent" : "ajson501", "text" : "Child 1-5" },
-                { "id" : "ajson502", "parent" : "ajson5", "text" : "Child 2" },
-                { "id" : "ajson503", "parent" : "ajson5", "text" : "Child 3" },
-                { "id" : "ajson504", "parent" : "ajson5", "text" : "Child 4" },
-                { "id" : "ajson505", "parent" : "ajson5", "text" : "Child 5" },
-                { "id" : "ajson6", "parent" : "#", "text" : "Root node 6" },
-                { "id" : "ajson601", "parent" : "ajson6", "text" : "Child 1" },
-                { "id" : "ajson602", "parent" : "ajson6", "text" : "Child 2" },
-                { "id" : "ajson603", "parent" : "ajson6", "text" : "Child 3" },
-                { "id" : "ajson604", "parent" : "ajson6", "text" : "Child 4" },
-                { "id" : "ajson605", "parent" : "ajson6", "text" : "Child 5" },
-                { "id" : "ajson7", "parent" : "#", "text" : "Root node 7" },
-                { "id" : "ajson8", "parent" : "#", "text" : "Root node 8" },
-                { "id" : "ajson9", "parent" : "#", "text" : "Root node 9" },
-                { "id" : "ajson10", "parent" : "#", "text" : "Root node 10" },
+
+    const converToJsTreeData = (menuList) => {
+        let treeData = [];
+        // console.log(menuList);
+        menuList.map((v)=>{
+            let node = {
+                "id":v.id
+                , "parent":!!v.upperMenu? v.upperMenu?.id:'#'
+                , "text":v.menuName
+                , "type":""
+                , "menuType":v.menuType
+                , "menuLink":v.menuLink
+                , "isUsed":v.isUsed
+            }
+            treeData.push(node);
+        });
+        return treeData;
+    }
+
+    const initJstree = (menuList) => {
+        $('#menu-tree-contents').jstree({
+            'core': {
+                'check_callback': true,
+                'data':converToJsTreeData(menuList)
+            },
+            'themes' : {
+                "responsive": false
+            },
+            "types" : {
+                "default" : {
+                    "icon" : "fa fa-folder text-primary"
+                },
+                "file" : {
+                    "icon" : "fa fa-file text-primary"
+                }
+            },
+            "plugins": [
+                // "checkbox",
+                "contextmenu",
+                "dnd",
+                "massload",
+                "search",
+                // "sort",
+                "state",
+                "types",
+                "unique",
+                "wholerow",
+                "changed",
+                "conditionalselect"
             ]
-        }
-    });
+        }).on("select_node.jstree", function (event, data) {
+            if(data?.node?.original?.id === 1){
+                //루트메뉴 수정 불가능하도록 변경
+                $("#menuName").prop("readOnly", true);
+                $("#menuType").prop("disabled", true);
+                $("#menuLink").prop("readOnly", true);
+                $("#isUsed1").prop("disabled", true);
+                $("#isUsed2").prop("disabled", true);
+                $("#saveButton").hide();
+                $("#modifyButton").hide();
+                $("#deleteButton").hide();
+            }else{
+                // 노드가 선택된 뒤 처리할 이벤트
+                $("#menuName").prop("readOnly", false);
+                $("#menuType").prop("disabled", false);
+                $("#menuLink").prop("readOnly", false);
+                $("#isUsed1").prop("disabled", false);
+                $("#isUsed2").prop("disabled", false);
+                $("#saveButton").hide();
+                $("#modifyButton").show();
+                $("#deleteButton").show();
+            }
+
+            $("#upperMenuId").val(data?.node?.original?.parent);   //상위 메뉴 번호
+            $("#menuId").val(data?.node?.original?.id);   //메뉴번호
+            $("#menuName").val(data?.node?.original?.text);   //메뉴명
+            $("#menuType").val(data?.node?.original?.menuType);   //메뉴타입
+            $("#menuLink").val(data?.node?.original?.menuLink);   //링크주소
+            if(data?.node?.original?.isUsed){
+                document.getElementById("isUsed1").checked = true;
+                document.getElementById("isUsed2").checked = false;
+            }else{
+                document.getElementById("isUsed1").checked = false;
+                document.getElementById("isUsed2").checked = true;
+            }
+        });
+    }
+
+    const getMenus = () =>{
+        let returnData;
+        $.ajaxSetup({async: false});
+        $.post("/cms/api/menu/list",{},function (data){
+            returnData = data;
+        })
+        return returnData;
+    }
 
     const appendedRootMenu = () =>{
         <%-- 최초 생성 시 루트 메뉴가 없다면 insert 처리 해야함. --%>
-        document.getElementById("upperMenuId").value = '1';
+        //선택 노드 해제
+        $("#menu-tree-contents").jstree("deselect_all");
+        document.getElementById("upperMenuId").value = 1;
         clearMenuEditFormData();
+        $("#saveButton").show();
+        $("#modifyButton").hide();
+        $("#deleteButton").hide();
     }
 
     const appendedLowerMenu = () =>{
-        document.getElementById("upperMenuId").value = ''; //메뉴 트리에서 선택한 값으로 변경
-        clearMenuEditFormData();
+        let upperMenuId = $("#menuId").val();
+        if(!!upperMenuId) {
+            document.getElementById("upperMenuId").value = upperMenuId; //메뉴 트리에서 선택한 값으로 변경
+            clearMenuEditFormData();
+            $("#saveButton").show();
+            $("#modifyButton").hide();
+            $("#deleteButton").hide();
+        }else{
+            alert("메뉴를 선택해주세요.");
+            return false;
+        }
     }
 
     const clearMenuEditFormData = () =>{
         document.getElementById("menuId").value = '';
         document.getElementById("menuName").value = '';
         document.getElementById("menuType").value = '';
-        document.getElementById("linkUrl").value = '';
+        document.getElementById("menuLink").value = '';
         document.getElementById("isUsed1").checked = true;
         document.getElementById("isUsed2").checked = false;
     }
 
     const saveMenu = () =>{
-        let form = document.getElementById("menuEditForm");
-        form.action = "./save-menu";
-        form.submit();
+        let formData = new FormData(document.getElementById("menuEditForm"));
+        /*const obj = {};
+        formData.forEach((v,k) => obj[k] = v);
+        console.log(obj);*/
+        let url = "";
+        if($("#menuId").val() !== ''){
+            url = "/cms/api/menu/update";
+        }else{
+            url = "/cms/api/menu/save";
+        }
+
+        fetch(url,
+            {
+                method: 'PUT',
+                cache: 'no-cache',
+                body: formData
+            }
+        ).then((response) =>{
+            if(response.ok){
+                alert("정상 처리 되었습니다.");
+                $('#menu-tree-contents').jstree(true).settings.core.data = converToJsTreeData(getMenus());
+                $('#menu-tree-contents').jstree("refresh");
+            }else{
+                console.log(data);
+                alert("오류");
+            }
+        }).catch((error) => console.error(error));
     }
 
     const deleteMenu = () =>{
@@ -177,6 +270,8 @@
     }
 
     $(function (){
+        initJstree(getMenus());
+
         $(".treeopen").on('click',function() {
             $("#menu-tree-contents").jstree('open_all');
         });

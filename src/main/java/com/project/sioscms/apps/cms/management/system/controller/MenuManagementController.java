@@ -30,13 +30,13 @@ public class MenuManagementController {
 
     @RequestMapping("/save-menu")
     public ModelAndView saveMenu(CommonSearchDto commonSearchDto, MenuDto.Request request) throws Exception{
-        ModelAndView mav = new ModelAndView("cms/menu/list");
+        ModelAndView mav = new ModelAndView("redirect:/cms/menu/list");
 
-        if(menuManagementService.saveMenu(request)) {
+        /*if(menuManagementService.saveMenu(request)) {
             mav.addObject("msg", "정상처리되었습니다.");
         }else{
             mav.addObject("msg", "처리 중 오류가 발생하였습니다.");
-        }
+        }*/
 
         return mav;
 
