@@ -6,10 +6,7 @@ import com.project.sioscms.apps.menu.domain.dto.MenuDto.Response;
 import com.project.sioscms.apps.menu.service.MenuService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,5 +29,10 @@ public class MenuController {
     @PutMapping("/update")
     public ResponseEntity<Boolean> updateMenu(MenuRequestDto request) throws Exception{
         return ResponseEntity.ok(menuService.updateMenu(request));
+    }
+
+    @PutMapping("/update-order")
+    public ResponseEntity<Boolean> updateMenuOrder(MenuRequestDto request) throws Exception{
+        return ResponseEntity.ok(menuService.updateMenuOrder(request.getId(), request.getUpperMenuId(), request.getOrderNum()));
     }
 }

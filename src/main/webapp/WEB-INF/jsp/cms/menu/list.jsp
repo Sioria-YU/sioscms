@@ -21,9 +21,15 @@
                     <div class="icon">
                         <i class="bi bi-record-circle-fill"></i><h4 class="card-title">메뉴 관리</h4>
                     </div>
-                    <div class="btn-group mb-1">
-                        <button type="button" class="btn btn-outline-success btn-sm treeopen"><i class="bi bi-plus-square-fill"></i> 펼치기</button>
-                        <button type="button" class="btn btn-outline-danger btn-sm ms-1 treeclose"><i class="bi bi-dash-square-fill"></i> 접기</button>
+                    <div class="col-md-8 btn-group justify-content-between">
+                        <div class="btn-group mb-1">
+                            <button type="button" class="btn btn-outline-success btn-sm treeopen"><i class="bi bi-plus-square-fill"></i> 펼치기</button>
+                            <button type="button" class="btn btn-outline-danger btn-sm ms-1 treeclose"><i class="bi bi-dash-square-fill"></i> 접기</button>
+                        </div>
+                        <div class="btn-group mb-1">
+                            <button type="button" class="btn btn-outline-dark btn-sm ms-1 arrow-up"><i class="bi bi bi-arrow-up-square-fill"></i> 위로</button>
+                            <button type="button" class="btn btn-outline-dark btn-sm ms-1 arrow-down"><i class="bi bi-arrow-down-square-fill"></i> 아래로</button>
+                        </div>
                     </div>
                     <div class="col-md-8 card menu-card">
                         <div class="card-body" id="menu-tree-contents"></div>
@@ -111,10 +117,11 @@
                 "id":v.id
                 , "parent":!!v.upperMenu? v.upperMenu?.id:'#'
                 , "text":v.menuName
-                , "type":""
+                , "type":!v.upperMenu? 'root':'default'
                 , "menuType":v.menuType
                 , "menuLink":v.menuLink
                 , "isUsed":v.isUsed
+                , "orderNum":v.orderNum
             }
             treeData.push(node);
         });
@@ -131,8 +138,11 @@
                 "responsive": false
             },
             "types" : {
+                "#" : {
+                    "max_children" : 1
+                },
                 "default" : {
-                    "icon" : "fa fa-folder text-primary"
+                    "icon" : "fa fa-folder text-primary",
                 },
                 "file" : {
                     "icon" : "fa fa-file text-primary"
@@ -140,17 +150,17 @@
             },
             "plugins": [
                 // "checkbox",
-                "contextmenu",
+                // "contextmenu",
                 "dnd",
-                "massload",
-                "search",
+                // "massload",
+                // "search",
                 // "sort",
                 "state",
                 "types",
-                "unique",
-                "wholerow",
-                "changed",
-                "conditionalselect"
+                // "unique",
+                // "wholerow",
+                // "changed",
+                // "conditionalselect"
             ]
         }).on("select_node.jstree", function (event, data) {
             if(data?.node?.original?.id === 1){
@@ -187,7 +197,19 @@
                 document.getElementById("isUsed1").checked = false;
                 document.getElementById("isUsed2").checked = true;
             }
-        });
+        }).on("node_move.jstree", function (event, data) {
+            console.log(event); //event
+            console.log(data); //node
+            let oldItemId = data.old_instance._model.data[data.parent].children_d[data.position]; //이동하기 전 위치에 있던 객체ID
+            let oldNode = data.old_instance._model.data[oldItemId]; //이동하기 전 위치에 있던 객체 정보
+            let orderNum = oldNode.original.orderNum; //이동할 위치의 객체의 정렬번호(교체할 번호)
+
+            console.log("oldItemId ::::::: >>>>>> ", oldItemId);
+            console.log("oldNode ::::::: >>>>>> ", oldNode);
+            console.log("orderNum ::::::: >>>>>> ", orderNum);
+            // updateOrder(data.node.id, data.parent, orderNum);
+        })
+        ;
     }
 
     const getMenus = () =>{
@@ -269,6 +291,40 @@
         form.submit();
     }
 
+    /**
+     *
+     * @param id {number}
+     * @param orderNum {number}
+     */
+    const updateOrder = (id, upperMenuId, orderNum) => {
+        if(!id || !orderNum){
+            alert("이동할 메뉴를 선택하세요.");
+            return false;
+        }
+        let formData = new FormData()
+        formData.append('id', id);
+        formData.append('upperMenuId', upperMenuId);
+        formData.append('orderNum', orderNum);
+
+        let url = "/cms/api/menu/update-order";
+        fetch(url,
+            {
+                method: 'PUT',
+                cache: 'no-cache',
+                body: formData
+            }
+        ).then((response) =>{
+            if(response.ok){
+                alert("정상 처리 되었습니다.");
+                $('#menu-tree-contents').jstree(true).settings.core.data = converToJsTreeData(getMenus());
+                $('#menu-tree-contents').jstree("refresh");
+            }else{
+                console.log(data);
+                alert("오류");
+            }
+        }).catch((error) => console.error(error));
+    }
+
     $(function (){
         initJstree(getMenus());
 
@@ -277,6 +333,12 @@
         });
         $(".treeclose").on('click',function() {
             $("#menu-tree-contents").jstree('close_all');
+        });
+        $(".arrow-up").on('click',function() {
+            alert("위로");
+        });
+        $(".arrow-down").on('click',function() {
+            alert("아래로");
         });
     });
 </script>

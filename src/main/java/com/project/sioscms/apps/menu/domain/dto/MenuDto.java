@@ -3,10 +3,13 @@ package com.project.sioscms.apps.menu.domain.dto;
 import com.project.sioscms.apps.menu.domain.entity.Menu;
 import com.project.sioscms.common.domain.dto.CommonSearchDto;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
 
 public class MenuDto {
+
+    @EqualsAndHashCode(callSuper = true)
     @Data
     public static class Request extends CommonSearchDto {
         private Long id;
@@ -21,6 +24,7 @@ public class MenuDto {
         private Boolean isDeleted = false;
         private Boolean isUsed = true;
         private Boolean isRoot;
+        private Long orderNum;
     }
 
     @Data
@@ -37,5 +41,6 @@ public class MenuDto {
         private Boolean isDeleted;
         private Boolean isUsed;
         private Boolean isRoot;
+        private Long orderNum;
     }
 }

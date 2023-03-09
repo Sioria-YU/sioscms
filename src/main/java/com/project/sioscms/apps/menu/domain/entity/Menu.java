@@ -9,6 +9,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
@@ -47,6 +48,12 @@ public class Menu extends CommonEntityWithIdAndDate {
     @Comment(value = "루트 여부")
     @ColumnDefault(value = "FALSE")
     private Boolean isRoot = false;
+
+    @NotNull
+    @Comment(value = "정렬 순서")
+    @Column(nullable = false)
+    @ColumnDefault(value = "0")
+    private Long orderNum = 0L;
 
     public MenuDto.Response toResponse(){
         return MenuMapper.mapper.toResponse(this);

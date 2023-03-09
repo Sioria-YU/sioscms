@@ -36,7 +36,7 @@ public class MenuService {
             restriction.equals("isRoot", false);
         }
 
-        return menuRepository.findAll(restriction.toSpecification(), Sort.by(Sort.Direction.ASC, "upperMenuId", "id"))
+        return menuRepository.findAll(restriction.toSpecification(), Sort.by(Sort.Direction.ASC, "orderNum"))
                 .stream().map(Menu::toResponse).collect(Collectors.toList());
     }
 
@@ -47,6 +47,8 @@ public class MenuService {
             if (request.getUpperMenuId() != null) {
                 Menu upperMenu = menuRepository.findById(request.getUpperMenuId()).orElseThrow(NullPointerException::new);
                 entity.setUpperMenu(upperMenu);
+                Menu maxOrderMenu = menuRepository.findTop1ByIsDeletedOrderByOrderNumDesc(false).orElseThrow(NullPointerException::new);
+                entity.setOrderNum(maxOrderMenu.getOrderNum() + 1);
             }
             menuRepository.save(entity);
             return true;
@@ -69,6 +71,29 @@ public class MenuService {
             menu.setMenuType(request.getMenuType());
             menu.setMenuLink(request.getMenuLink());
             menu.setIsUsed(request.getIsUsed());
+
+            return true;
+        }catch (NullPointerException e){
+            log.error(e.toString());
+            return false;
+        }
+    }
+
+    @Transactional
+    public boolean updateMenuOrder(long id, long upperMenuId, long orderNum){
+        try {
+            Menu menu = menuRepository.findById(id).orElseThrow(NullPointerException::new);
+
+            if(orderNum > menu.getOrderNum()){
+                menuRepository.updateByOrders(menu.getOrderNum(), menu.getOrderNum(), orderNum, false, -1L);
+            }else{
+                menuRepository.updateByOrders(menu.getOrderNum(), orderNum, menu.getOrderNum(), false, 1L);
+            }
+            menu.setOrderNum(orderNum);
+            if(!Objects.equals(menu.getUpperMenu(), upperMenuId)){
+                Menu upperMenu = menuRepository.findById(upperMenuId).orElseThrow(NullPointerException::new);
+                menu.setUpperMenu(upperMenu);
+            }
 
             return true;
         }catch (NullPointerException e){
