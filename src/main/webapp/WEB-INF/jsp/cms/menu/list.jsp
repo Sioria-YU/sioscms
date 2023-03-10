@@ -108,7 +108,7 @@
 <link rel="stylesheet" href="/static/js/jstree/3.3.10/themes/default/style.min.css" />
 <script src="/static/js/jstree/3.3.10/jstree.min.js"></script>
 <script>
-
+    let moveOrderNum;
     const converToJsTreeData = (menuList) => {
         let treeData = [];
         // console.log(menuList);
@@ -131,7 +131,53 @@
     const initJstree = (menuList) => {
         $('#menu-tree-contents').jstree({
             'core': {
-                'check_callback': true,
+                'check_callback': (operation, node, node_parent, node_position, more) => {
+                    /*
+                    * operation : 동작 상태('create_node', 'rename_node', 'delete_node', 'move_node', 'copy_node' or 'edit')
+                    * node : 선택된 노드 정
+                    * node_parent : Drop 된 트리의 부모 노드 정보
+                    * node_position : Drop 된 위치
+                    * more : 기타 정보
+                    */
+                    // 트리에서 특정 노드를 Drag 하여 Drop 하는 시점
+                    if (operation === "move_node" && more.ref === undefined) {
+                        // console.log("move_node asdklaskdjaksldjaskljdklsajd");
+                        /*console.log("node::::::::>>>>>> ", node);
+                        console.log("node_parent::::::::>>>>>> ", node_parent);
+                        console.log("node_position::::::::>>>>>> ", node_position);
+                        console.log("more::::::::>>>>>> ", more);*/
+
+                        /* move_node event가 수행되어 모델 객체가 변경되기 전에 이동할 위치의 정렬 번호를 가져온다!
+                         * dnd event에서 순서가 위로 올라갈 경우에는 position이 0부터 계산되어 나오고,
+                         * 아래로 내려갈 경우 +1 값으로 전달되어오므로 indexOutOfException이 발생하므로
+                         * node_position-1에 해당하는 자식 객체를 불러 비교 후 정렬 값을 보정함
+                         */
+
+                        //하위메뉴가 없는 노드의 하위로 들어갈 경우
+                        if(more.origin._model.data[node_parent.id].children.length == 0){
+                            let item = node_parent
+                            moveOrderNum = item.original.orderNum +1;
+                        }else {
+                            //인덱스 유효 범위를 초과하지 않기 위해 예외처리
+                            let position = node_position;
+                            if (node_position <= 0) {
+                                position = 0;
+                            } else if (node_position >= more.origin._model.data[node_parent.id].children.length) {
+                                position--;
+                            }
+                            let moveIndexId = more.origin._model.data[node_parent.id].children[position];
+                            let item = more.origin._model.data[moveIndexId];
+                            moveOrderNum = item.original.orderNum;
+                            if(item.original.orderNum > node.original.orderNum && node_position < more.origin._model.data[node_parent.id].children.length){
+                                moveOrderNum--;
+                            }
+                        }
+
+
+                        console.log("moveOrderNum Set :::::>>>> ",moveOrderNum);
+                    }
+                    return true;
+                },
                 'data':converToJsTreeData(menuList)
             },
             'themes' : {
@@ -197,17 +243,13 @@
                 document.getElementById("isUsed1").checked = false;
                 document.getElementById("isUsed2").checked = true;
             }
-        }).on("node_move.jstree", function (event, data) {
-            console.log(event); //event
+        }).on("move_node.jstree", function (event, data) {
             console.log(data); //node
-            let oldItemId = data.old_instance._model.data[data.parent].children_d[data.position]; //이동하기 전 위치에 있던 객체ID
-            let oldNode = data.old_instance._model.data[oldItemId]; //이동하기 전 위치에 있던 객체 정보
-            let orderNum = oldNode.original.orderNum; //이동할 위치의 객체의 정렬번호(교체할 번호)
-
-            console.log("oldItemId ::::::: >>>>>> ", oldItemId);
-            console.log("oldNode ::::::: >>>>>> ", oldNode);
-            console.log("orderNum ::::::: >>>>>> ", orderNum);
-            // updateOrder(data.node.id, data.parent, orderNum);
+            // $('#menu-tree-contents').jstree("refresh");
+            // console.log("refresh after :::::: ",data.instance._model.data[1].children_d);
+            console.log("update data ::::::::: >>>>>>> ", data.node.id, data.parent, moveOrderNum);
+            updateOrder(data.node.id, data.parent, moveOrderNum);
+            moveOrderNum = 999; //정렬 변수 임시값으로 변경
         })
         ;
     }

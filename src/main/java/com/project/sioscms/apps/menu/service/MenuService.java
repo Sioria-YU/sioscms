@@ -84,13 +84,15 @@ public class MenuService {
         try {
             Menu menu = menuRepository.findById(id).orElseThrow(NullPointerException::new);
 
-            if(orderNum > menu.getOrderNum()){
-                menuRepository.updateByOrders(menu.getOrderNum(), menu.getOrderNum(), orderNum, false, -1L);
-            }else{
-                menuRepository.updateByOrders(menu.getOrderNum(), orderNum, menu.getOrderNum(), false, 1L);
+            if(orderNum != menu.getOrderNum()) {
+                if (orderNum > menu.getOrderNum()) {
+                    menuRepository.updateByOrders(menu.getOrderNum(), menu.getOrderNum(), orderNum, false, -1L);
+                } else {
+                    menuRepository.updateByOrders(menu.getOrderNum(), orderNum, menu.getOrderNum(), false, 1L);
+                }
             }
             menu.setOrderNum(orderNum);
-            if(!Objects.equals(menu.getUpperMenu(), upperMenuId)){
+            if(!Objects.equals(menu.getUpperMenu().getId(), upperMenuId)){
                 Menu upperMenu = menuRepository.findById(upperMenuId).orElseThrow(NullPointerException::new);
                 menu.setUpperMenu(upperMenu);
             }
