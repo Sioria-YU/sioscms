@@ -154,9 +154,8 @@
                          */
 
                         //하위메뉴가 없는 노드의 하위로 들어갈 경우
-                        if(more.origin._model.data[node_parent.id].children.length == 0){
-                            let item = node_parent
-                            moveOrderNum = item.original.orderNum +1;
+                        if(more.origin._model.data[node_parent.id].children.length === 0){
+                            moveOrderNum = node_parent.original.orderNum +1;
                         }else {
                             //인덱스 유효 범위를 초과하지 않기 위해 예외처리
                             let position = node_position;
@@ -168,11 +167,19 @@
                             let moveIndexId = more.origin._model.data[node_parent.id].children[position];
                             let item = more.origin._model.data[moveIndexId];
                             moveOrderNum = item.original.orderNum;
+                            //아래로 드래그 이동했을 경우 위치가 +1 되기 때문에 감소처리
                             if(item.original.orderNum > node.original.orderNum && node_position < more.origin._model.data[node_parent.id].children.length){
                                 moveOrderNum--;
                             }
-                        }
 
+                            //부모는 바뀌고, 순서는 그대로인 경우 예외처리(아래에서 위로 깊이만 달라진 경우)
+                            if(node.parent !== node_parent && node_position === more.origin._model.data[node_parent.id].children.length && item.original.orderNum+1 === node.original.orderNum){
+                                moveOrderNum = node.original.orderNum;
+                            }//부모가 바뀌고, 순서도 바뀌지만, 바뀐 부모의 마지막 위치로 이동할 경우
+                            else if(node.parent !== node_parent && node_position === more.origin._model.data[node_parent.id].children.length){
+                                moveOrderNum = item.original.orderNum+1;
+                            }
+                        }
 
                         console.log("moveOrderNum Set :::::>>>> ",moveOrderNum);
                     }
