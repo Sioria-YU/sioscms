@@ -1,5 +1,6 @@
 package com.project.sioscms.apps.menu.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.sioscms.apps.menu.domain.dto.MenuDto;
 import com.project.sioscms.apps.menu.mapper.MenuMapper;
 import com.project.sioscms.common.domain.entity.CommonEntityWithIdAndDate;
@@ -37,7 +38,7 @@ public class Menu extends CommonEntityWithIdAndDate {
     private String menuLink;
 
     @Comment(value = "상위 메뉴 아이디")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Menu upperMenu;
 
     @Comment(value = "삭제 여부")
