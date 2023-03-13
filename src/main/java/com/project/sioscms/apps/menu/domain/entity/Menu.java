@@ -5,6 +5,7 @@ import com.project.sioscms.apps.menu.mapper.MenuMapper;
 import com.project.sioscms.common.domain.entity.CommonEntityWithIdAndDate;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
@@ -14,6 +15,8 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Getter
 @Setter
+@Cacheable  //캐시 사용
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)   //캐시 전략:읽기 쓰기
 public class Menu extends CommonEntityWithIdAndDate {
     public enum MenuType{
         LINK,

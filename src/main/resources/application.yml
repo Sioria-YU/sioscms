@@ -11,6 +11,14 @@ spring:
         properties:
             hibernate:
                 format_sql: true
+            cache:
+                use_second_level_chache: true
+                region: factory_class
+                generate_statistics: true
+            javax:
+                persistence:
+                    sharedCache:
+                        mode: ENABLE_SELECTIVE
 server:
     error:
       path: /error
