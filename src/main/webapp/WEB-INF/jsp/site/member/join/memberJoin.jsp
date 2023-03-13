@@ -80,7 +80,7 @@
                         <option value="F">여성</option>
                     </select>
                     <div class="invalid-feedback">
-                        이름을 입력해주세요.
+                        성별을 선택해주세요.
                     </div>
                 </div>
                 <div class="col-md-6 mb-3">
@@ -91,7 +91,7 @@
                         <option value="USER">비관리자</option>
                     </select>
                     <div class="invalid-feedback">
-                        휴대번호를 입력해주세요.
+                        관리자여부를 선택해주세요.
                     </div>
                 </div>
             </div>

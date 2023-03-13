@@ -3,18 +3,25 @@ package com.project.sioscms.apps.cms.management.system.service;
 import com.project.sioscms.apps.account.domain.dto.AccountDto;
 import com.project.sioscms.apps.account.domain.entity.Account;
 import com.project.sioscms.apps.account.domain.repository.AccountRepository;
+import com.project.sioscms.apps.account.mapper.AccountMapper;
 import com.project.sioscms.apps.cms.management.system.domain.dto.MemberSearchDto;
 import com.project.sioscms.common.utils.jpa.page.SiosPage;
 import com.project.sioscms.common.utils.jpa.restriction.ChangSolJpaRestriction;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MemberManagementService {
     private final AccountRepository accountRepository;
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+    //region ADMIN
     /**
      * 관리자 목록 조회
      * @param requestDto: userId, name, gender
@@ -43,6 +50,30 @@ public class MemberManagementService {
     }
 
     /**
+     * 관리자 등록
+     * @param dto :AccountDto.Request
+     * @return AccountDto.Response
+     */
+    public AccountDto.Response saveAdmin(AccountDto.Request dto){
+        if(dto.getUserPassword() != null){
+            dto.setUserPassword(passwordEncoder.encode(dto.getUserPassword()));
+        }
+
+        dto.setState("T");
+        Account account = AccountMapper.mapper.toEntity(dto);
+
+        if(account != null){
+            accountRepository.save(account);
+            return account.toResponse();
+        }else{
+            log.error("회원가입 데이터 오류 발생!!!");
+            return null;
+        }
+    }
+    //endregion
+
+    //region USER
+    /**
      * 사용자 목록 조회
      * @param requestDto : userId, name, gender
      * @return
@@ -65,5 +96,5 @@ public class MemberManagementService {
 
         return new SiosPage<>(accountRepository.findAll(restriction.toSpecification(), requestDto.toPageableWithSortedByCreatedDateTime(Sort.Direction.DESC)).map(Account::toResponse));
     }
-
+    //endregion
 }

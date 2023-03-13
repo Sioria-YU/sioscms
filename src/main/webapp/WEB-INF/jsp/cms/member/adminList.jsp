@@ -61,80 +61,6 @@
                 </div>
             </div>
 
-            <%--<div class="row">
-                <div class="col-lg-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">검색 영역</h5>
-
-                            <!-- Horizontal Form -->
-                            <form id="searchForm" name="searchForm" action="./admin-list">
-                                <div class="row mb-3">
-                                    <label for="name" class="col-sm-2 col-form-label">성명</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="name">
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="userId" class="col-sm-2 col-form-label">아이디</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="userId">
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="gender" class="col-sm-2 col-form-label">성별</label>
-                                    <div class="col-sm-10">
-                                        <select class="form-select" id="gender" name="gender" aria-label="Default select example">
-                                            <option selected="">선택</option>
-                                            <option value="M">남성</option>
-                                            <option value="F">여성</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                &lt;%&ndash;<fieldset class="row mb-3">
-                                    <legend class="col-form-label col-sm-2 pt-0">Radios</legend>
-                                    <div class="col-sm-10">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked="">
-                                            <label class="form-check-label" for="gridRadios1">
-                                                First radio
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
-                                            <label class="form-check-label" for="gridRadios2">
-                                                Second radio
-                                            </label>
-                                        </div>
-                                        <div class="form-check disabled">
-                                            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3" disabled="">
-                                            <label class="form-check-label" for="gridRadios3">
-                                                Third disabled radio
-                                            </label>
-                                        </div>
-                                    </div>
-                                </fieldset>
-                                <div class="row mb-3">
-                                    <div class="col-sm-10 offset-sm-2">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="gridCheck1">
-                                            <label class="form-check-label" for="gridCheck1">
-                                                Example checkbox
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>&ndash;%&gt;
-                                <div class="text-center">
-                                    <button type="submit" class="btn btn-primary">검색</button>
-                                    <button type="reset" class="btn btn-secondary">초기화</button>
-                                </div>
-                            </form><!-- End Horizontal Form -->
-
-                        </div>
-                    </div>
-                </div>
-            </div>--%>
-
             <div class="icon">
                 <i class="bi bi-record-circle-fill"></i><h4 class="card-title">관리자 목록</h4>
             </div>
@@ -153,7 +79,7 @@
                     <c:when test="${not empty resultList}">
                         <c:forEach var="result" items="${resultList}" varStatus="status">
                             <tr>
-                                <th scope="row">${status.count}</th>
+                                <th scope="row">${pageInfo.totalCount - (pageInfo.pageNumber * pageInfo.pageOffset + status.index)}</th>
                                 <td>${result.name}</td>
                                 <td>${result.userId}</td>
                                 <td>${result.phone}</td>
@@ -169,6 +95,10 @@
                 </c:choose>
                 </tbody>
             </table>
+            <div class="form-btn-set text-end">
+                <button type="button" class="btn btn-success btn-lg" onclick="javascript:location.href='./admin-regist';">등록</button>
+                <button type="button" class="btn btn-danger btn-lg">삭제</button>
+            </div>
         </div>
     </main>
 </div>

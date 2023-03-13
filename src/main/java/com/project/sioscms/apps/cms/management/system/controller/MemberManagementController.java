@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 @RequiredArgsConstructor
@@ -16,6 +18,7 @@ public class MemberManagementController {
 
     private final MemberManagementService memberManagementService;
 
+    //region ADMIN
     @RequestMapping("/admin-list")
     public ModelAndView adminList(MemberSearchDto requestDto) throws Exception{
         ModelAndView mav = new ModelAndView("cms/member/adminList");
@@ -25,10 +28,36 @@ public class MemberManagementController {
             mav.addObject("resultList", siosPage.getContents());
             mav.addObject("pageInfo", siosPage.getPageInfo());
         }
+        if(requestDto.getMsg() != null && !requestDto.getMsg().isEmpty()){
+            mav.addObject("msg", requestDto.getMsg());
+        }
 
         return mav;
     }
 
+    @RequestMapping("/admin-regist")
+    public String adminRegist(){
+        return "cms/member/adminReg";
+    }
+
+    @RequestMapping(value = "admin-save")
+    public ModelAndView adminSave(AccountDto.Request dto, RedirectAttributes redirectAttributes) throws Exception{
+        AccountDto.Response accountDto = memberManagementService.saveAdmin(dto);
+
+        RedirectView rv = new RedirectView("/cms/member/admin-list");
+        if(accountDto != null) {
+            rv.addStaticAttribute("msg","정상 처리되었습니다.");
+        }else{
+            rv.addStaticAttribute("msg","회원가입에 실패하였습니다.");
+        }
+        ModelAndView mav = new ModelAndView(rv);
+        return mav;
+
+    }
+
+    //endregion
+
+    //region USER
     @RequestMapping("/user-list")
     public ModelAndView userList(MemberSearchDto requestDto) throws Exception{
         ModelAndView mav = new ModelAndView("cms/member/userList");
@@ -40,4 +69,6 @@ public class MemberManagementController {
 
         return mav;
     }
+
+    //endregion
 }

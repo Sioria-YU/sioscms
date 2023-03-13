@@ -49,7 +49,7 @@
                                 <input type="hidden" id="upperMenuId" name="upperMenuId" value="">
                                 <input type="hidden" name="isRoot" value="false">
                                 <div class="row mb-1">
-                                    <label for="menuName" class="col-sm-2 col-form-label">메뉴 번호</label>
+                                    <label for="menuId" class="col-sm-2 col-form-label">메뉴 번호</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" id="menuId" name="menuId" aria-label="메뉴번호" readonly/>
                                     </div>
