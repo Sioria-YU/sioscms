@@ -22,6 +22,7 @@ public class MemberManagementController {
     @RequestMapping("/admin-list")
     public ModelAndView adminList(MemberSearchDto requestDto) throws Exception{
         ModelAndView mav = new ModelAndView("cms/member/adminList");
+        requestDto.setPageSize(5);
 
         SiosPage<AccountDto.Response> siosPage = memberManagementService.getAdminList(requestDto);
         if(!siosPage.isEmpty()) {
@@ -65,6 +66,9 @@ public class MemberManagementController {
         if(!siosPage.isEmpty()) {
             mav.addObject("resultList", siosPage.getContents());
             mav.addObject("pageInfo", siosPage.getPageInfo());
+        }
+        if(requestDto.getMsg() != null && !requestDto.getMsg().isEmpty()){
+            mav.addObject("msg", requestDto.getMsg());
         }
 
         return mav;

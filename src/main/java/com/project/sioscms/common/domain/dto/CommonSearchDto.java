@@ -15,6 +15,7 @@ public class CommonSearchDto {
     //페이지 관련
     private int pageNumber = 1;     //현재 페이지 번호
     private int pageOffset = 10;    //한 페이지에 표시할 목록 수
+    private int pageSize = 10;    //한 페이지에 표시할 목록 수
     private String sortedColumnName = null;
     private Sort.Direction direction = Sort.Direction.DESC;
 

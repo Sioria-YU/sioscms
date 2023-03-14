@@ -26,7 +26,7 @@
                         <div class="row mb-3">
                             <label for="userId" class="col-sm-1 col-form-label text-center">아이디</label>
                             <div class="col-sm-5">
-                                <input type="text" class="form-control-mid" id="userId" name="userId" aria-label="아이디" required/>
+                                <input type="text" class="form-control-small" id="userId" name="userId" aria-label="아이디" required/>
                                 <button type="button" class="btn btn-dark align-top" onclick="">중복체크</button>
                             </div>
                             <label for="userPassword" class="col-sm-1 col-form-label text-center">비밀번호</label>

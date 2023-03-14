@@ -27,7 +27,9 @@
                 </div>
                 <div class="search-box-body">
                     <form id="searchForm" name="searchForm" action="./admin-list">
-                        <input type="hidden" id="pageNumber" name="pageNumber">
+                        <input type="hidden" id="pageNumber" name="pageNumber" value="${empty param.pageNumber? 1:param.pageNumber}">
+                        <input type="hidden" id="pageOffset" name="pageOffset" value="${empty param.pageOffset? 10:param.pageOffset}">
+                        <input type="hidden" id="pageSize" name="pageSize" value="${empty param.pageSize? 5:param.pageSize}">
                         <div class="row mb-3">
                             <label for="userId" class="col-sm-1 col-form-label">아이디</label>
                             <div class="col-sm-5">
@@ -66,15 +68,15 @@
                 <i class="bi bi-record-circle-fill"></i><h4 class="card-title">관리자 목록</h4>
             </div>
             <c:if test="${not empty pageInfo}">
-            <div>
-                <span class="badge bg-secondary">
-                    <h6 style="margin-bottom: 3px;">
-                    전체 <span class="badge bg-white text-secondary">${empty pageInfo.totalCount? 0:pageInfo.totalCount}</span> 건
-                        <span class="badge bg-white text-secondary">${empty pageInfo.pageNumber? 1:pageInfo.pageNumber +1}</span>
-                        / <span class="badge bg-white text-secondary">${empty pageInfo.totalPageSize? 1:pageInfo.totalPageSize}</span> 페이지
-                    </h6>
-                </span>
-            </div>
+                <div>
+                    <span class="badge bg-secondary">
+                        <h6 style="margin-bottom: 3px;">
+                        전체 <span class="badge bg-white text-secondary">${empty pageInfo.totalCount? 0:pageInfo.totalCount}</span> 건
+                            <span class="badge bg-white text-secondary">${empty pageInfo.pageNumber? 1:pageInfo.pageNumber}</span>
+                            / <span class="badge bg-white text-secondary">${empty pageInfo.totalPageSize? 1:pageInfo.totalPageSize}</span> 페이지
+                        </h6>
+                    </span>
+                </div>
             </c:if>
             <table class="table">
                 <thead>

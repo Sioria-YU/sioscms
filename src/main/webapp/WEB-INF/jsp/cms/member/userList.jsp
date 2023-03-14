@@ -57,6 +57,17 @@
             <div class="icon">
                 <i class="bi bi-record-circle-fill"></i><h4 class="card-title">사용자 목록</h4>
             </div>
+            <c:if test="${not empty pageInfo}">
+                <div>
+                    <span class="badge bg-secondary">
+                        <h6 style="margin-bottom: 3px;">
+                        전체 <span class="badge bg-white text-secondary">${empty pageInfo.totalCount? 0:pageInfo.totalCount}</span> 건
+                            <span class="badge bg-white text-secondary">${empty pageInfo.pageNumber? 1:pageInfo.pageNumber}</span>
+                            / <span class="badge bg-white text-secondary">${empty pageInfo.totalPageSize? 1:pageInfo.totalPageSize}</span> 페이지
+                        </h6>
+                    </span>
+                </div>
+            </c:if>
             <table class="table">
                 <thead>
                 <tr>
@@ -72,7 +83,7 @@
                     <c:when test="${not empty resultList}">
                         <c:forEach var="result" items="${resultList}" varStatus="status">
                             <tr>
-                                <th scope="row">${status.count}</th>
+                                <th scope="row">${pageInfo.totalCount - ((pageInfo.pageNumber-1) * pageInfo.pageOffset + status.index)}</th>
                                 <td>${result.name}</td>
                                 <td>${result.userId}</td>
                                 <td>${result.phone}</td>
@@ -88,6 +99,11 @@
                 </c:choose>
                 </tbody>
             </table>
+            <jsp:include page="/WEB-INF/jsp/common/commonPagenation.jsp"/>
+            <div class="form-btn-set text-end">
+                <button type="button" class="btn btn-success btn-lg" onclick="javascript:location.href='./user-regist';">등록</button>
+                <button type="button" class="btn btn-danger btn-lg">삭제</button>
+            </div>
         </div>
     </main>
 </div>
