@@ -49,6 +49,15 @@ public class MemberManagementService {
                 , requestDto.toPageableWithSortedByCreatedDateTime(Sort.Direction.DESC)).map(Account::toResponse), requestDto.getPageSize());
     }
 
+    public AccountDto.Response getAdmin(long id) throws Exception{
+        Account account = (Account) accountRepository.findById(id).orElseThrow(NullPointerException::new);
+        if(account.getIsDelete() || !Account.Role_Type.ADMIN.equals(account.getRole())){
+            return null;
+        }else {
+            return account.toResponse();
+        }
+    }
+
     /**
      * 관리자 등록
      * @param dto :AccountDto.Request
