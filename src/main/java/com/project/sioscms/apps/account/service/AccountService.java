@@ -58,4 +58,8 @@ public class AccountService {
         }
     }
 
+    public Boolean userIdDuplicationCheck(String userId){
+        return accountRepository.countAccountByUserId(userId) <= 0;
+    }
+
 }

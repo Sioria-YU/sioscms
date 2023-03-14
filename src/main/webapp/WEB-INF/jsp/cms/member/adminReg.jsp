@@ -22,16 +22,17 @@
         <div class="container-fluid px-4">
             <div class="col-lg-12 card">
                 <div class="card-body">
-                    <form id="adminRegistForm" name="adminRegistForm" action="/cms/member/admin-save" method="post">
+                    <form id="adminRegistForm" name="adminRegistForm" action="/cms/member/admin-save" method="post" autocomplete="off" onsubmit="return formCheck();">
                         <div class="row mb-3">
                             <label for="userId" class="col-sm-1 col-form-label text-center">아이디</label>
                             <div class="col-sm-5">
-                                <input type="text" class="form-control-small" id="userId" name="userId" aria-label="아이디" required/>
-                                <button type="button" class="btn btn-dark align-top" onclick="">중복체크</button>
+                                <input type="hidden" id="userIdCheckFlag" value="F"/>
+                                <input type="text" class="form-control-small" id="userId" name="userId" aria-label="아이디" onchange="$('#userIdCheckFlag').val('');" autocomplete="off" required/>
+                                <button type="button" class="btn btn-dark align-top" id="userIdCheckButton" onclick="userIdDuplicationCheck();">중복체크</button>
                             </div>
                             <label for="userPassword" class="col-sm-1 col-form-label text-center">비밀번호</label>
                             <div class="col-sm-5">
-                                <input type="password" class="form-control" id="userPassword" name="userPassword" aria-label="비밀번호" required/>
+                                <input type="password" class="form-control" id="userPassword" name="userPassword" aria-label="비밀번호" autocomplete="off" required/>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -70,3 +71,41 @@
         </div>
     </main>
 </div>
+
+<script>
+    const userIdDuplicationCheck = ()=>{
+        let userId = $("#userId").val();
+
+        $.ajax({
+            type: 'get',
+            url: '/api/account/id-check/'+userId,
+            async: false,
+            success: function(data){
+                if(data) {
+                    alert("사용 가능한 아이디입니다.");
+                    $("#userIdCheckFlag").val('T');
+                    $("#userPassword").focus();
+                }else{
+                    alert("이미 사용중인 아이디입니다.");
+                    $("#userIdCheckFlag").val('F');
+                    $("#userId").val('');
+                    $("#userId").focus();
+                }
+            },
+            error: function(request, status, error){
+                console.log(error);
+            }
+        });
+    }
+
+    const formCheck = ()=>{
+        let check = true;
+        if($("#userIdCheckFlag").val() !== 'T'){
+            alert("아이디 중복체크를 실행해 주세요.");
+            $("#userIdCheckButton").focus();
+            check = false;
+        }
+
+        return check && confirm("등록하시겠습니까?");
+    }
+</script>

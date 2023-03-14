@@ -23,6 +23,11 @@ public class AccountController {
         return ResponseEntity.ok(userService.findUser(id));
     }
 
+    @GetMapping(value = "/id-check/{userId}")
+    public ResponseEntity<Boolean> userIdDuplicationCheck(@PathVariable String userId){
+        return ResponseEntity.ok(userService.userIdDuplicationCheck(userId));
+    }
+
 //    @ApiOperation(value = "사용자 정보 아이디로 조회", notes = "사용자 조회 api")
     /*@GetMapping(value="/userId/{userId}")
     public ResponseEntity<AccountDto.Response> getUserInfo(@PathVariable String userId){

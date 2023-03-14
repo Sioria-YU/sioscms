@@ -55,6 +55,11 @@ public class MemberManagementService {
      * @return AccountDto.Response
      */
     public AccountDto.Response saveAdmin(AccountDto.Request dto){
+        if(accountRepository.countAccountByUserId(dto.getUserId()) > 0){
+            log.error("중복 아이디 발생!!!");
+            return null;
+        }
+
         if(dto.getUserPassword() != null){
             dto.setUserPassword(passwordEncoder.encode(dto.getUserPassword()));
         }

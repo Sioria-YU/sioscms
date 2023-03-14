@@ -14,6 +14,5 @@ public interface AccountRepository extends CommonJpaRepository<Account, Long> {
 
 //    List<Account> findAllByIsDeleteAndRole(boolean isDelete, Account.Role_Type role);
 
-    boolean existsByUserId(String userId);
-
+    long countAccountByUserId(String userId);
 }
