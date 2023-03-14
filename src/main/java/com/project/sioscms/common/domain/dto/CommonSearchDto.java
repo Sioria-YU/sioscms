@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 public class CommonSearchDto {
     //페이지 관련
-    private int pageNumber = 0;     //현재 페이지 번호
+    private int pageNumber = 1;     //현재 페이지 번호
     private int pageOffset = 10;    //한 페이지에 표시할 목록 수
     private String sortedColumnName = null;
     private Sort.Direction direction = Sort.Direction.DESC;
@@ -33,12 +33,16 @@ public class CommonSearchDto {
         this.pageNumber = Math.max(pageNumber - 1, 0);
     }
 
+    public int getPageNumber() {
+        return Math.max(this.pageNumber - 1, 0);
+    }
+
     /**
      * 정렬 없는 페이징
      * @return
      */
     public Pageable toPageable(){
-        return PageRequest.of(this.pageNumber, this.pageOffset);
+        return PageRequest.of(getPageNumber(), this.pageOffset);
     }
 
     /**
@@ -47,7 +51,7 @@ public class CommonSearchDto {
      */
     public Pageable toPageableWithSorted(){
         if(this.sortedColumnName != null && !this.sortedColumnName.isEmpty())
-            return PageRequest.of(this.pageNumber, this.pageOffset, Sort.by(this.direction, this.sortedColumnName));
+            return PageRequest.of(getPageNumber(), this.pageOffset, Sort.by(this.direction, this.sortedColumnName));
         else
             throw new NullPointerException();
     }
@@ -59,7 +63,7 @@ public class CommonSearchDto {
      */
     public Pageable toPageableWithSortedByCreatedDateTime(Sort.Direction direction){
         if(direction == null) direction = Sort.Direction.ASC;
-        return PageRequest.of(this.pageNumber, this.pageOffset, Sort.by(direction, "createdDateTime"));
+        return PageRequest.of(getPageNumber(), this.pageOffset, Sort.by(direction, "createdDateTime"));
     }
 
     /**
@@ -69,7 +73,7 @@ public class CommonSearchDto {
      */
     public Pageable toPageableWithSortedByUpdatedDateTime(Sort.Direction direction){
         if(direction == null) direction = Sort.Direction.ASC;
-        return PageRequest.of(this.pageNumber, this.pageOffset, Sort.by(direction, "updatedDateTime"));
+        return PageRequest.of(getPageNumber(), this.pageOffset, Sort.by(direction, "updatedDateTime"));
     }
 
     /**
@@ -80,7 +84,7 @@ public class CommonSearchDto {
      */
     public Pageable toPageableWithSortedByKey(String key, Sort.Direction direction){
         if(direction == null) direction = Sort.Direction.ASC;
-        return PageRequest.of(this.pageNumber, this.pageOffset, Sort.by(direction, key));
+        return PageRequest.of(getPageNumber(), this.pageOffset, Sort.by(direction, key));
     }
 
 }

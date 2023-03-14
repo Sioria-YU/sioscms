@@ -40,7 +40,7 @@ public class MemberManagementController {
         return "cms/member/adminReg";
     }
 
-    @RequestMapping(value = "admin-save")
+    @RequestMapping(value = "/admin-save")
     public ModelAndView adminSave(AccountDto.Request dto, RedirectAttributes redirectAttributes) throws Exception{
         AccountDto.Response accountDto = memberManagementService.saveAdmin(dto);
 

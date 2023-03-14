@@ -15,4 +15,20 @@ public class PageResponseDto {
     private int pageSize;       //한번에 표시할 페이지 개수
     private boolean isNext = false; //다음 페이지 목록 여부
     private boolean isPrev = false; //이전 페이지 목록 여부
+
+    public boolean getIsNext() {
+        return this.isNext;
+    }
+
+    public void setIsNext(boolean isNext){
+        this.isNext = isNext;
+    }
+
+    public boolean getIsPrev(){
+        return this.isPrev;
+    }
+
+    public void setIsPrev(boolean isPrev){
+        this.isPrev = isPrev;
+    }
 }

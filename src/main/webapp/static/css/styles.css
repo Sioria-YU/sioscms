@@ -4849,6 +4849,7 @@ textarea.form-control-lg {
   display: flex;
   padding-left: 0;
   list-style: none;
+  justify-content: center;
 }
 
 .page-link, .dataTable-pagination a {
@@ -11733,4 +11734,8 @@ body {
   width: 20px !important;
   font-size: 0.75rem;
   border-radius: 0.25rem !important;
+}
+
+main{
+  margin-bottom: 30px;
 }

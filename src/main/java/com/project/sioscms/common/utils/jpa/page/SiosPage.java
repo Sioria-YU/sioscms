@@ -46,15 +46,23 @@ public class SiosPage<T> {
      */
     private void setNextPrevPage(){
         //다음페이지, 이전페이지 존재 유무 설정
-        if(this.page.getNumber() > 0 && this.page.getTotalPages() >= this.pageSize){
-            if(this.page.getNumber()+1 < this.page.getTotalPages() - this.pageSize) {
-                this.isNext = true;
-            }else{
-                this.isNext = false;
-            }
+        int startPageSize = (int)Math.ceil(this.page.getNumber()/this.pageSize) * this.pageSize + 1;
+        int endPageSize = startPageSize + this.pageSize -1;
+        if(endPageSize > this.page.getTotalPages()){
+            endPageSize = this.page.getTotalPages();
         }
-        if(this.page.getNumber()+1 > this.pageSize){
+
+        //다음 페이지 여부
+        if(this.page.getTotalPages() > endPageSize){
+            this.isNext = true;
+        }else{
+            this.isNext = false;
+        }
+
+        if(this.page.getNumber()+1 > this.pageSize) {
             this.isPrev = true;
+        }else{
+            this.isPrev = false;
         }
     }
 
@@ -81,7 +89,7 @@ public class SiosPage<T> {
             return PageResponseDto.builder()
                     .totalCount(this.page.getTotalElements())
                     .totalPageSize(this.page.getTotalPages())
-                    .pageNumber(this.page.getNumber())
+                    .pageNumber(this.page.getNumber()+1)
                     .pageOffset(this.page.getSize())
                     .pageSize(this.pageSize)
                     .isNext(this.isNext)
