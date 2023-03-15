@@ -68,9 +68,10 @@
                     </span>
                 </div>
             </c:if>
-            <table class="table">
+            <table class="table text-center">
                 <thead>
                 <tr>
+                    <th scope="col" width="50px"><input type="checkbox" class="chk-all"/></th>
                     <th scope="col">순번</th>
                     <th scope="col">성명</th>
                     <th scope="col">아이디</th>
@@ -83,8 +84,9 @@
                     <c:when test="${not empty resultList}">
                         <c:forEach var="result" items="${resultList}" varStatus="status">
                             <tr>
+                                <th><input type="checkbox" class="chk-items" value="${result.id}"/></th>
                                 <th scope="row">${pageInfo.totalCount - ((pageInfo.pageNumber-1) * pageInfo.pageOffset + status.index)}</th>
-                                <td>${result.name}</td>
+                                <td><a href="/cms/member/user-view/${result.id}">${result.name}</a></td>
                                 <td>${result.userId}</td>
                                 <td>${result.phone}</td>
                                 <td>${empty result.gender? '':result.gender eq 'M'? '남성':'여성'}</td>
@@ -93,7 +95,7 @@
                     </c:when>
                     <c:otherwise>
                         <tr class="text-center">
-                            <td colspan="5">조회된 데이터가 존재하지 않습니다.</td>
+                            <td colspan="6">조회된 데이터가 존재하지 않습니다.</td>
                         </tr>
                     </c:otherwise>
                 </c:choose>
@@ -107,3 +109,14 @@
         </div>
     </main>
 </div>
+<script>
+    $(function(){
+        $(".chk-all").on('click',()=>{
+            if($(".chk-all").is(":checked")) {
+                $(".chk-items").prop('checked', true);
+            }else{
+                $(".chk-items").prop('checked', false);
+            }
+        });
+    });
+</script>

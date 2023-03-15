@@ -83,7 +83,7 @@ public class MemberManagementService {
             accountRepository.save(account);
             return account.toResponse();
         }else{
-            log.error("회원가입 데이터 오류 발생!!!");
+            log.error("관리자 등록 데이터 오류 발생!!!");
             return null;
         }
     }
@@ -132,6 +132,63 @@ public class MemberManagementService {
         }
 
         return new SiosPage<>(accountRepository.findAll(restriction.toSpecification(), requestDto.toPageableWithSortedByCreatedDateTime(Sort.Direction.DESC)).map(Account::toResponse));
+    }
+
+    public AccountDto.Response getUser(long id) throws Exception{
+        Account account = (Account) accountRepository.findById(id).orElseThrow(NullPointerException::new);
+        if(account.getIsDelete() || !Account.Role_Type.USER.equals(account.getRole())){
+            return null;
+        }else {
+            return account.toResponse();
+        }
+    }
+
+    /**
+     * 사용자 등록
+     * @param dto :AccountDto.Request
+     * @return AccountDto.Response
+     */
+    @Transactional
+    public AccountDto.Response saveUser(AccountDto.Request dto){
+        if(accountRepository.countAccountByUserId(dto.getUserId()) > 0){
+            log.error("중복 아이디 발생!!!");
+            return null;
+        }
+
+        if(dto.getUserPassword() != null){
+            dto.setUserPassword(passwordEncoder.encode(dto.getUserPassword()));
+        }
+
+        dto.setState("T");
+        Account account = AccountMapper.mapper.toEntity(dto);
+
+        if(account != null){
+            accountRepository.save(account);
+            return account.toResponse();
+        }else{
+            log.error("사용자 등록 데이터 오류 발생!!!");
+            return null;
+        }
+    }
+
+    /**
+     * 사용자 수정
+     * @param dto :AccountDto.Request
+     * @return AccountDto.Response
+     */
+    @Transactional
+    public AccountDto.Response modifyUser(AccountDto.Request dto){
+        Account account = accountRepository.findById(dto.getId()).orElse(null);
+
+        if(account != null){
+            account.setName(dto.getName());
+            account.setPhone(dto.getPhone());
+            account.setGender(dto.getGender());
+            return account.toResponse();
+        }else{
+            log.error("사용자 수정 - 회원 데이터 조회 불가!!!");
+            return null;
+        }
     }
     //endregion
 }

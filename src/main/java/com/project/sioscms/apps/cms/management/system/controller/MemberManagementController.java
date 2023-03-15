@@ -60,7 +60,7 @@ public class MemberManagementController {
         if(accountDto != null) {
             rv.addStaticAttribute("msg","정상 처리되었습니다.");
         }else{
-            rv.addStaticAttribute("msg","회원가입에 실패하였습니다.");
+            rv.addStaticAttribute("msg","처리 실패하였습니다.");
         }
         ModelAndView mav = new ModelAndView(rv);
         return mav;
@@ -75,7 +75,7 @@ public class MemberManagementController {
         if(accountDto != null) {
             rv.addStaticAttribute("msg","정상 처리되었습니다.");
         }else{
-            rv.addStaticAttribute("msg","회원가입에 실패하였습니다.");
+            rv.addStaticAttribute("msg","처리 실패하였습니다.");
         }
         ModelAndView mav = new ModelAndView(rv);
         return mav;
@@ -99,5 +99,49 @@ public class MemberManagementController {
         return mav;
     }
 
+    @RequestMapping("/user-view/{id}")
+    public ModelAndView userView(@PathVariable long id) throws Exception {
+        ModelAndView mav = new ModelAndView("cms/member/userView");
+        AccountDto.Response result = memberManagementService.getUser(id);
+        if(result != null){
+            mav.addObject("result", result);
+        }
+
+        return mav;
+    }
+
+    @RequestMapping("/user-regist")
+    public String userRegist(){
+        return "cms/member/userReg";
+    }
+
+    @RequestMapping(value = "/user-save")
+    public ModelAndView userSave(AccountDto.Request dto) throws Exception{
+        AccountDto.Response accountDto = memberManagementService.saveUser(dto);
+
+        RedirectView rv = new RedirectView("/cms/member/user-list");
+        if(accountDto != null) {
+            rv.addStaticAttribute("msg","정상 처리되었습니다.");
+        }else{
+            rv.addStaticAttribute("msg","처리 실패하였습니다.");
+        }
+        ModelAndView mav = new ModelAndView(rv);
+        return mav;
+
+    }
+
+    @RequestMapping("/user-update")
+    public ModelAndView userUpdate(AccountDto.Request dto) throws Exception{
+        AccountDto.Response accountDto = memberManagementService.modifyUser(dto);
+
+        RedirectView rv = new RedirectView("/cms/member/user-list");
+        if(accountDto != null) {
+            rv.addStaticAttribute("msg","정상 처리되었습니다.");
+        }else{
+            rv.addStaticAttribute("msg","처리 실패하였습니다.");
+        }
+        ModelAndView mav = new ModelAndView(rv);
+        return mav;
+    }
     //endregion
 }

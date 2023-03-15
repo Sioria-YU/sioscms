@@ -4,12 +4,12 @@
     <main>
         <div class="container-fluid px-4">
             <div class="pagetitle">
-                <h1 class="mt-4">관리자 관리</h1>
+                <h1 class="mt-4">사용자 관리</h1>
                 <nav>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="/cms/main"><i class="bi bi-house-door"></i></a></li>
                         <li class="breadcrumb-item">시스템관리</li>
-                        <li class="breadcrumb-item active">관리자 관리</li>
+                        <li class="breadcrumb-item active">사용자 관리</li>
                     </ol>
                 </nav>
             </div>
@@ -17,13 +17,13 @@
 
         <div class="container-fluid px-4">
             <div class="icon">
-                <i class="bi bi-record-circle-fill"></i><h4 class="card-title">관리자 등록</h4>
+                <i class="bi bi-record-circle-fill"></i><h4 class="card-title">사용자 등록</h4>
             </div>
 
             <div class="container-fluid px-4">
                 <div class="col-lg-12 card">
                     <div class="card-body">
-                        <form id="adminRegistForm" name="adminRegistForm" action="/cms/member/admin-update" method="post" autocomplete="off" onsubmit="return formCheck();">
+                        <form id="userRegistForm" name="userRegistForm" action="/cms/member/user-update" method="post" autocomplete="off" onsubmit="return formCheck();">
                             <div class="row mb-3">
                                 <label for="userId" class="col-sm-1 col-form-label text-center">아이디</label>
                                 <div class="col-sm-5">
@@ -57,13 +57,13 @@
                                 <label for="role" class="col-sm-1 col-form-label text-center">회원구분</label>
                                 <div class="col-sm-5">
                                     <select class="form-control" id="role" name="role" readonly>
-                                        <option value="ADMIN">관리자</option>
+                                        <option value="USER">사용자</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="form-btn-set text-center">
                                 <button type="submit" class="btn btn-primary">수정</button>
-                                <a href="/cms/member/admin-list" class="btn btn-secondary">취소</a>
+                                <a href="/cms/member/user-list" class="btn btn-secondary">취소</a>
                             </div>
                         </form>
                     </div>
