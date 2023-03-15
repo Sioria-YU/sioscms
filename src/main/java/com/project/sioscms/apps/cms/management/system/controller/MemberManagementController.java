@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
@@ -54,7 +53,7 @@ public class MemberManagementController {
     }
 
     @RequestMapping(value = "/admin-save")
-    public ModelAndView adminSave(AccountDto.Request dto, RedirectAttributes redirectAttributes) throws Exception{
+    public ModelAndView adminSave(AccountDto.Request dto) throws Exception{
         AccountDto.Response accountDto = memberManagementService.saveAdmin(dto);
 
         RedirectView rv = new RedirectView("/cms/member/admin-list");
@@ -66,6 +65,20 @@ public class MemberManagementController {
         ModelAndView mav = new ModelAndView(rv);
         return mav;
 
+    }
+
+    @RequestMapping("/admin-update")
+    public ModelAndView adminUpdate(AccountDto.Request dto) throws Exception{
+        AccountDto.Response accountDto = memberManagementService.modifyAdmin(dto);
+
+        RedirectView rv = new RedirectView("/cms/member/admin-list");
+        if(accountDto != null) {
+            rv.addStaticAttribute("msg","정상 처리되었습니다.");
+        }else{
+            rv.addStaticAttribute("msg","회원가입에 실패하였습니다.");
+        }
+        ModelAndView mav = new ModelAndView(rv);
+        return mav;
     }
 
     //endregion

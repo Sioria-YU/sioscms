@@ -13,10 +13,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MemberManagementService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -63,6 +65,7 @@ public class MemberManagementService {
      * @param dto :AccountDto.Request
      * @return AccountDto.Response
      */
+    @Transactional
     public AccountDto.Response saveAdmin(AccountDto.Request dto){
         if(accountRepository.countAccountByUserId(dto.getUserId()) > 0){
             log.error("중복 아이디 발생!!!");
@@ -81,6 +84,26 @@ public class MemberManagementService {
             return account.toResponse();
         }else{
             log.error("회원가입 데이터 오류 발생!!!");
+            return null;
+        }
+    }
+
+    /**
+     * 관리자 수정
+     * @param dto :AccountDto.Request
+     * @return AccountDto.Response
+     */
+    @Transactional
+    public AccountDto.Response modifyAdmin(AccountDto.Request dto){
+        Account account = accountRepository.findById(dto.getId()).orElse(null);
+
+        if(account != null){
+            account.setName(dto.getName());
+            account.setPhone(dto.getPhone());
+            account.setGender(dto.getGender());
+            return account.toResponse();
+        }else{
+            log.error("관리자 수정 - 회원 데이터 조회 불가!!!");
             return null;
         }
     }

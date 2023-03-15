@@ -81,6 +81,7 @@
             <table class="table text-center">
                 <thead>
                 <tr>
+                    <th scope="col" width="50px"><input type="checkbox" class="chk-all"/></th>
                     <th scope="col">순번</th>
                     <th scope="col">성명</th>
                     <th scope="col">아이디</th>
@@ -93,6 +94,7 @@
                     <c:when test="${not empty resultList}">
                         <c:forEach var="result" items="${resultList}" varStatus="status">
                             <tr>
+                                <th><input type="checkbox" class="chk-items" value="${result.id}"/></th>
                                 <th scope="row">${pageInfo.totalCount - ((pageInfo.pageNumber-1) * pageInfo.pageOffset + status.index)}</th>
                                 <td><a href="/cms/member/admin-view/${result.id}">${result.name}</a></td>
                                 <td>${result.userId}</td>
@@ -112,8 +114,19 @@
             <jsp:include page="/WEB-INF/jsp/common/commonPagenation.jsp"/>
             <div class="form-btn-set text-end">
                 <button type="button" class="btn btn-success btn-lg" onclick="javascript:location.href='./admin-regist';">등록</button>
-                <button type="button" class="btn btn-danger btn-lg">삭제</button>
+                <button type="button" class="btn btn-danger btn-lg" onclick="javascript:alert('미구현');">삭제</button>
             </div>
         </div>
     </main>
 </div>
+<script>
+    $(function(){
+       $(".chk-all").on('click',()=>{
+           if($(".chk-all").is(":checked")) {
+               $(".chk-items").prop('checked', true);
+           }else{
+               $(".chk-items").prop('checked', false);
+           }
+       });
+    });
+</script>
