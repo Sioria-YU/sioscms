@@ -181,7 +181,7 @@
                             }
                         }
 
-                        console.log("moveOrderNum Set :::::>>>> ",moveOrderNum);
+                        // console.log("moveOrderNum Set :::::>>>> ",moveOrderNum);
                     }
                     return true;
                 },
@@ -251,10 +251,10 @@
                 document.getElementById("isUsed2").checked = true;
             }
         }).on("move_node.jstree", function (event, data) {
-            console.log(data); //node
+            // console.log(data); //node
             // $('#menu-tree-contents').jstree("refresh");
             // console.log("refresh after :::::: ",data.instance._model.data[1].children_d);
-            console.log("update data ::::::::: >>>>>>> ", data.node.id, data.parent, moveOrderNum);
+            // console.log("update data ::::::::: >>>>>>> ", data.node.id, data.parent, moveOrderNum);
             updateOrder(data.node.id, data.parent, moveOrderNum);
             moveOrderNum = 999; //정렬 변수 임시값으로 변경
         })
