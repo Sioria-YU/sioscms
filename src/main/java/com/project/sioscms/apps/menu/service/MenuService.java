@@ -25,14 +25,14 @@ import java.util.stream.Collectors;
 public class MenuService {
     private final MenuRepository menuRepository;
 
-    public List<Response> getMenuList(MenuDto.Request request) throws Exception{
+    public List<Response> getMenuList(MenuDto.Request request) throws Exception {
         ChangSolJpaRestriction restriction = new ChangSolJpaRestriction(ChangSolJpaRestrictionType.AND);
-        restriction.equals("isDeleted",false);
+        restriction.equals("isDeleted", false);
 
         //root여부
-        if(request.getIsRoot() != null && request.getIsRoot()){
+        if (request.getIsRoot() != null && request.getIsRoot()) {
             restriction.equals("isRoot", true);
-        }else if(request.getIsRoot() != null && !request.getIsRoot()){
+        } else if (request.getIsRoot() != null && !request.getIsRoot()) {
             restriction.equals("isRoot", false);
         }
 
@@ -41,7 +41,7 @@ public class MenuService {
     }
 
     @Transactional
-    public boolean saveMenu(MenuDto.Request request){
+    public boolean saveMenu(MenuDto.Request request) {
         try {
             Menu entity = MenuMapper.mapper.toEntity(request);
             if (request.getUpperMenuId() != null) {
@@ -52,14 +52,14 @@ public class MenuService {
             }
             menuRepository.save(entity);
             return true;
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             log.error(e.toString());
             return false;
         }
     }
 
     @Transactional
-    public boolean updateMenu(MenuRequestDto request){
+    public boolean updateMenu(MenuRequestDto request) {
         try {
             Menu menu = menuRepository.findById(request.getMenuId()).orElseThrow(NullPointerException::new);
 
@@ -73,18 +73,18 @@ public class MenuService {
             menu.setIsUsed(request.getIsUsed());
 
             return true;
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             log.error(e.toString());
             return false;
         }
     }
 
     @Transactional
-    public boolean updateMenuOrder(long id, long upperMenuId, long orderNum){
+    public boolean updateMenuOrder(long id, long upperMenuId, long orderNum) {
         try {
             Menu menu = menuRepository.findById(id).orElseThrow(NullPointerException::new);
 
-            if(orderNum != menu.getOrderNum()) {
+            if (orderNum != menu.getOrderNum()) {
                 if (orderNum > menu.getOrderNum()) {
                     menuRepository.updateByOrders(menu.getOrderNum(), menu.getOrderNum(), orderNum, false, -1L);
                 } else {
@@ -92,13 +92,64 @@ public class MenuService {
                 }
             }
             menu.setOrderNum(orderNum);
-            if(!Objects.equals(menu.getUpperMenu().getId(), upperMenuId)){
+            if (!Objects.equals(menu.getUpperMenu().getId(), upperMenuId)) {
                 Menu upperMenu = menuRepository.findById(upperMenuId).orElseThrow(NullPointerException::new);
                 menu.setUpperMenu(upperMenu);
             }
 
             return true;
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
+            log.error(e.toString());
+            return false;
+        }
+    }
+
+    /**
+     * 메뉴 업/다운 버튼 이동 이벤트
+     * @param request
+     * @return
+     */
+    @Transactional
+    public boolean updateUpdownOrder(MenuRequestDto request) {
+        try {
+            if (request.getMenuOrderType() != null) {
+                Menu menu = menuRepository.findById(request.getMenuId()).orElseThrow(NullPointerException::new);
+
+                long order = menu.getOrderNum();
+
+                switch (request.getMenuOrderType().name()){
+                    case "UP" -> order--;
+                    case "DOWN" -> order++;
+                }
+                if(order < 0) return false;
+
+                Menu moveToOrder = menuRepository.findTop1ByIsDeletedAndOrderNumOrderById(false, order).orElseThrow(NullPointerException::new);
+                //현재 부모 위로 올라갈 경우
+                if(!menu.getUpperMenu().getId().equals(moveToOrder.getUpperMenu().getId()) && menu.getUpperMenu().getId().equals(moveToOrder.getId())) {
+                    menu.setUpperMenu(moveToOrder.getUpperMenu());
+                    moveToOrder.setOrderNum(menu.getOrderNum());
+                    menu.setOrderNum(order);
+                }//부모 메뉴가 다를 경우
+                else if(!menu.getUpperMenu().getId().equals(moveToOrder.getUpperMenu().getId())){
+                    menu.setUpperMenu(moveToOrder.getUpperMenu());
+                }//부모가 같은 경우
+                else{
+                    //이동하려는 순번 하위에 자식이 있는 경우 해당 메뉴 하위로 이동
+                    if(menuRepository.countByUpperMenu_IdAndIsDeleted(moveToOrder.getId(), false) > 0){
+                        menu.setUpperMenu(moveToOrder);
+                        moveToOrder.setOrderNum(menu.getOrderNum());
+                        menu.setOrderNum(order);
+                    }//순서만 변경
+                    else {
+                        moveToOrder.setOrderNum(menu.getOrderNum());
+                        menu.setOrderNum(order);
+                    }
+                }
+                menuRepository.flush();
+                return true;
+            }
+            return false;
+        } catch (NullPointerException e) {
             log.error(e.toString());
             return false;
         }

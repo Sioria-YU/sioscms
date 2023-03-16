@@ -374,6 +374,37 @@
         }).catch((error) => console.error(error));
     }
 
+    const menuMoveEvent = (menuOrderType) => {
+        let menuId = $("#menuId").val();
+        if(!menuId){
+            alert("이동할 메뉴를 선택하세요.");
+            return false;
+        }
+
+        $.ajax({
+            type: 'PUT',
+            url: '/cms/api/menu/update-updown-order',
+            async: false,
+            data: {
+                menuId: menuId,
+                menuOrderType: menuOrderType
+            },
+            success: function (data) {
+                if (data) {
+                    alert("정상 처리 되었습니다.");
+                    $('#menu-tree-contents').jstree(true).settings.core.data = converToJsTreeData(getMenus());
+                    $('#menu-tree-contents').jstree("refresh");
+                } else {
+                    alert("오류가 발생하였습니다.");
+                    return false;
+                }
+            },
+            error: function (request, status, error) {
+                console.log(error);
+            }
+        });
+    }
+
     $(function (){
         initJstree(getMenus());
 
@@ -384,10 +415,10 @@
             $("#menu-tree-contents").jstree('close_all');
         });
         $(".arrow-up").on('click',function() {
-            alert("위로");
+            menuMoveEvent('UP');
         });
         $(".arrow-down").on('click',function() {
-            alert("아래로");
+            menuMoveEvent('DOWN');
         });
     });
 </script>

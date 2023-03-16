@@ -7,6 +7,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MenuRequestDto extends MenuDto.Request{
+    public enum MenuOrderType{
+        UP,
+        DOWN
+    }
     Long menuId;
-
+    MenuOrderType menuOrderType;
 }

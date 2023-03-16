@@ -12,6 +12,10 @@ import java.util.Optional;
 public interface MenuRepository extends CommonJpaRepository<Menu,Long> {
     Optional<Menu> findTop1ByIsDeletedOrderByOrderNumDesc(boolean isDeleted);
 
+    Optional<Menu> findTop1ByIsDeletedAndOrderNumOrderById(boolean isDeleted, long orderNum);
+
+    Long countByUpperMenu_IdAndIsDeleted(long upperMenuId, boolean isDeleted);
+
     @Modifying
     @Query(value =
             "UPDATE Menu m " +

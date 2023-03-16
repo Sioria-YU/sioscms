@@ -35,4 +35,9 @@ public class MenuController {
     public ResponseEntity<Boolean> updateMenuOrder(MenuRequestDto request) throws Exception{
         return ResponseEntity.ok(menuService.updateMenuOrder(request.getId(), request.getUpperMenuId(), request.getOrderNum()));
     }
+
+    @PutMapping("/update-updown-order")
+    public ResponseEntity<Boolean> updateUpdownOrder(MenuRequestDto request) throws Exception{
+        return ResponseEntity.ok(menuService.updateUpdownOrder(request));
+    }
 }
