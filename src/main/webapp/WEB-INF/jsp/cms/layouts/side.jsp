@@ -89,7 +89,7 @@
             let menuHtml = "";
 
             if(!!data?.length > 0){
-                console.log(data);
+                // console.log(data);
                 //1depth
                 let depthLevel1 = data.filter(i => i.upperMenu.id === 1);
                 depthLevel1.forEach(i => {
@@ -129,7 +129,6 @@
                     });
                 });
             }
-            console.log(firstHtml + menuHtml + lastHtml);
             $("#sb-sidenav-menu").html(firstHtml + menuHtml + lastHtml);
         })
     });

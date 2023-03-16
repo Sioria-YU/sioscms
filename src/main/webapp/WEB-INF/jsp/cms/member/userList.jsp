@@ -84,7 +84,7 @@
                     <c:when test="${not empty resultList}">
                         <c:forEach var="result" items="${resultList}" varStatus="status">
                             <tr>
-                                <th><input type="checkbox" class="chk-items" value="${result.id}"/></th>
+                                <th><input type="checkbox" class="chk-items" name="chk-items" value="${result.id}"/></th>
                                 <th scope="row">${pageInfo.totalCount - ((pageInfo.pageNumber-1) * pageInfo.pageOffset + status.index)}</th>
                                 <td><a href="/cms/member/user-view/${result.id}">${result.name}</a></td>
                                 <td>${result.userId}</td>
@@ -104,7 +104,7 @@
             <jsp:include page="/WEB-INF/jsp/common/commonPagenation.jsp"/>
             <div class="form-btn-set text-end">
                 <button type="button" class="btn btn-success btn-lg" onclick="javascript:location.href='./user-regist';">등록</button>
-                <button type="button" class="btn btn-danger btn-lg">삭제</button>
+                <button type="button" class="btn btn-danger btn-lg" onclick="userDeleteEvent();">삭제</button>
             </div>
         </div>
     </main>
@@ -119,4 +119,46 @@
             }
         });
     });
+
+    const userDeleteEvent = () => {
+        if($("input[name=chk-items]:checked").length > 0) {
+            let idList = [];
+            $("input[name=chk-items]:checked").each((index,item) => {
+                console.log(index,': => ', item.value);
+                idList.push(parseInt(item.value));
+            });
+
+            if(idList.length > 0){
+                if(confirm("삭제하시겠습니까?")) {
+                    $.ajax({
+                        type: 'PUT',
+                        url: '/api/account/delete',
+                        async: false,
+                        data: {
+                            idList:idList
+                        },
+                        success: function (data) {
+                            if (data) {
+                                alert("삭제되었습니다.");
+                                location.reload();
+                            } else {
+                                alert("오류가 발생하였습니다.");
+                                return false;
+                            }
+                        },
+                        error: function (request, status, error) {
+                            console.log(error);
+                        }
+                    });
+                }else {
+                    return false;
+                }
+            }else{
+                console.log("id 목록 생성 실패");
+            }
+        }else{
+            alert("삭제할 목록을 선택하세요.");
+            return false;
+        }
+    }
 </script>
