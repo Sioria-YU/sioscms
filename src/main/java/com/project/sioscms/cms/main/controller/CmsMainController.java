@@ -1,4 +1,4 @@
-package com.project.sioscms.apps.cms.main.controller;
+package com.project.sioscms.cms.main.controller;
 
 import com.project.sioscms.secure.domain.UserAccount;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

@@ -1,10 +1,10 @@
-package com.project.sioscms.apps.cms.management.system.service;
+package com.project.sioscms.cms.management.system.service;
 
 import com.project.sioscms.apps.account.domain.dto.AccountDto;
 import com.project.sioscms.apps.account.domain.entity.Account;
 import com.project.sioscms.apps.account.domain.repository.AccountRepository;
 import com.project.sioscms.apps.account.mapper.AccountMapper;
-import com.project.sioscms.apps.cms.management.system.domain.dto.MemberSearchDto;
+import com.project.sioscms.cms.management.system.domain.dto.MemberSearchDto;
 import com.project.sioscms.common.utils.jpa.page.SiosPage;
 import com.project.sioscms.common.utils.jpa.restriction.ChangSolJpaRestriction;
 import lombok.RequiredArgsConstructor;

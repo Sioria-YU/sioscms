@@ -1,8 +1,8 @@
-package com.project.sioscms.apps.cms.management.system.controller;
+package com.project.sioscms.cms.management.system.controller;
 
 import com.project.sioscms.apps.account.domain.dto.AccountDto;
-import com.project.sioscms.apps.cms.management.system.domain.dto.MemberSearchDto;
-import com.project.sioscms.apps.cms.management.system.service.MemberManagementService;
+import com.project.sioscms.cms.management.system.domain.dto.MemberSearchDto;
+import com.project.sioscms.cms.management.system.service.MemberManagementService;
 import com.project.sioscms.common.utils.jpa.page.SiosPage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

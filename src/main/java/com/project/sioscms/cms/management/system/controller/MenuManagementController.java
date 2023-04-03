@@ -1,4 +1,4 @@
-package com.project.sioscms.apps.cms.management.system.controller;
+package com.project.sioscms.cms.management.system.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

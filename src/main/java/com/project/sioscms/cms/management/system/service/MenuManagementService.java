@@ -1,4 +1,4 @@
-package com.project.sioscms.apps.cms.management.system.service;
+package com.project.sioscms.cms.management.system.service;
 
 import com.project.sioscms.apps.menu.domain.dto.MenuDto;
 import com.project.sioscms.apps.menu.domain.entity.Menu;

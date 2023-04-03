@@ -1,6 +1,6 @@
 package com.project.sioscms.apps.menu.service;
 
-import com.project.sioscms.apps.cms.management.system.domain.dto.MenuRequestDto;
+import com.project.sioscms.cms.management.system.domain.dto.MenuRequestDto;
 import com.project.sioscms.apps.menu.domain.dto.MenuDto;
 import com.project.sioscms.apps.menu.domain.dto.MenuDto.Response;
 import com.project.sioscms.apps.menu.domain.entity.Menu;

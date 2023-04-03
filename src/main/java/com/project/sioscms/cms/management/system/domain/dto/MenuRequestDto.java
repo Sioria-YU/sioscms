@@ -1,4 +1,4 @@
-package com.project.sioscms.apps.cms.management.system.domain.dto;
+package com.project.sioscms.cms.management.system.domain.dto;
 
 import com.project.sioscms.apps.menu.domain.dto.MenuDto;
 import lombok.Getter;

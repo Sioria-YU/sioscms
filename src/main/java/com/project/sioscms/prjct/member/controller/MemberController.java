@@ -1,4 +1,4 @@
-package com.project.sioscms.apps.member.controller;
+package com.project.sioscms.prjct.member.controller;
 
 import com.project.sioscms.apps.account.domain.dto.AccountDto;
 import com.project.sioscms.apps.account.domain.entity.Account;

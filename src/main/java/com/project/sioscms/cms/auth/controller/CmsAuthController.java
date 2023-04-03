@@ -1,8 +1,6 @@
-package com.project.sioscms.apps.cms.auth.controller;
+package com.project.sioscms.cms.auth.controller;
 
-import com.project.sioscms.apps.cms.auth.domain.dto.MemberLoginDto;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller

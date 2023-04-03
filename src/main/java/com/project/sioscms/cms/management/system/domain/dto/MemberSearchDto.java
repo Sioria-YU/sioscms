@@ -1,4 +1,4 @@
-package com.project.sioscms.apps.cms.management.system.domain.dto;
+package com.project.sioscms.cms.management.system.domain.dto;
 
 import com.project.sioscms.common.domain.dto.CommonSearchDto;
 import lombok.Getter;

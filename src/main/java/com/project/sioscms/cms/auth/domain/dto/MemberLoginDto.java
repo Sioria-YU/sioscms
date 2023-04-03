@@ -1,4 +1,4 @@
-package com.project.sioscms.apps.cms.auth.domain.dto;
+package com.project.sioscms.cms.auth.domain.dto;
 
 import lombok.Data;
 
