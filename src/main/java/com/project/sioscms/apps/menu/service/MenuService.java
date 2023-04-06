@@ -25,7 +25,12 @@ import java.util.stream.Collectors;
 public class MenuService {
     private final MenuRepository menuRepository;
 
-    public List<Response> getMenuList(MenuDto.Request request) throws Exception {
+    /**
+     * 메뉴 목록 조회
+     * @param request MenuDto.Request
+     * @return List<Response>
+     */
+    public List<Response> getMenuList(MenuDto.Request request){
         ChangSolJpaRestriction restriction = new ChangSolJpaRestriction(ChangSolJpaRestrictionType.AND);
         restriction.equals("isDeleted", false);
 
@@ -40,6 +45,11 @@ public class MenuService {
                 .stream().map(Menu::toResponse).collect(Collectors.toList());
     }
 
+    /**
+     * 메뉴 생성
+     * @param request MenuDto.Request
+     * @return boolean
+     */
     @Transactional
     public boolean saveMenu(MenuDto.Request request) {
         try {
@@ -58,6 +68,11 @@ public class MenuService {
         }
     }
 
+    /**
+     * 메뉴 수정
+     * @param request MenuRequestDto
+     * @return boolean
+     */
     @Transactional
     public boolean updateMenu(MenuRequestDto request) {
         try {
@@ -79,6 +94,13 @@ public class MenuService {
         }
     }
 
+    /**
+     * 메뉴 이동 이벤트
+     * @param id 메뉴 아이디
+     * @param upperMenuId 상위 메뉴 아이디
+     * @param orderNum 정렬순서
+     * @return
+     */
     @Transactional
     public boolean updateMenuOrder(long id, long upperMenuId, long orderNum) {
         try {
@@ -106,8 +128,8 @@ public class MenuService {
 
     /**
      * 메뉴 업/다운 버튼 이동 이벤트
-     * @param request
-     * @return
+     * @param request :MenuRequestDto
+     * @return boolean
      */
     @Transactional
     public boolean updateUpdownOrder(MenuRequestDto request) {

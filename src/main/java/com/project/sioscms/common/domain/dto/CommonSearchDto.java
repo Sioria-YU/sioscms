@@ -40,7 +40,7 @@ public class CommonSearchDto {
 
     /**
      * 정렬 없는 페이징
-     * @return
+     * @return Pageable
      */
     public Pageable toPageable(){
         return PageRequest.of(getPageNumber(), this.pageOffset);
@@ -48,7 +48,7 @@ public class CommonSearchDto {
 
     /**
      * 검색 조건에 따른 페이징과 정렬
-     * @return
+     * @return Pageable
      */
     public Pageable toPageableWithSorted(){
         if(this.sortedColumnName != null && !this.sortedColumnName.isEmpty())
@@ -59,8 +59,8 @@ public class CommonSearchDto {
 
     /**
      * 등록일 기준으로 정렬하는 페이징
-     * @param direction
-     * @return
+     * @param direction :ASC,DESC
+     * @return Pageable
      */
     public Pageable toPageableWithSortedByCreatedDateTime(Sort.Direction direction){
         if(direction == null) direction = Sort.Direction.ASC;
@@ -69,8 +69,8 @@ public class CommonSearchDto {
 
     /**
      * 수정일 기준으로 정렬하는 페이징
-     * @param direction
-     * @return
+     * @param direction :ASC,DESC
+     * @return Pageable
      */
     public Pageable toPageableWithSortedByUpdatedDateTime(Sort.Direction direction){
         if(direction == null) direction = Sort.Direction.ASC;
@@ -79,9 +79,9 @@ public class CommonSearchDto {
 
     /**
      * key를 인자로 받아 정렬하는 페이징
-     * @param key
-     * @param direction
-     * @return
+     * @param key :culumnName
+     * @param direction :ASC,DESC
+     * @return Pageable
      */
     public Pageable toPageableWithSortedByKey(String key, Sort.Direction direction){
         if(direction == null) direction = Sort.Direction.ASC;

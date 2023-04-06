@@ -27,7 +27,7 @@ public class MemberManagementService {
     /**
      * 관리자 목록 조회
      * @param requestDto: userId, name, gender
-     * @return
+     * @return SiosPage<AccountDto.Response>
      */
     public SiosPage<AccountDto.Response> getAdminList(MemberSearchDto requestDto) throws Exception {
 
@@ -51,6 +51,12 @@ public class MemberManagementService {
                 , requestDto.toPageableWithSortedByCreatedDateTime(Sort.Direction.DESC)).map(Account::toResponse), requestDto.getPageSize());
     }
 
+    /**
+     * 관리자 계정 조회
+     * @param id 계정 PK
+     * @return AccountDto.Response
+     * @throws Exception
+     */
     public AccountDto.Response getAdmin(long id) throws Exception{
         Account account = (Account) accountRepository.findById(id).orElseThrow(NullPointerException::new);
         if(account.getIsDelete() || !Account.Role_Type.ADMIN.equals(account.getRole())){
@@ -113,7 +119,7 @@ public class MemberManagementService {
     /**
      * 사용자 목록 조회
      * @param requestDto : userId, name, gender
-     * @return
+     * @return SiosPage<AccountDto.Response>
      */
     public SiosPage<AccountDto.Response> getUserList(MemberSearchDto requestDto) throws Exception{
         ChangSolJpaRestriction restriction = new ChangSolJpaRestriction();

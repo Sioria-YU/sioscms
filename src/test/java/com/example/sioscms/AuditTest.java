@@ -34,9 +34,9 @@ public class AuditTest {
         accountService.saveUser(dto);
 
         Account account = accountService.findByUserId("admin").orElseThrow(NullPointerException::new);
-        System.out.println("CreatedOn :::: " + account.getCreatedOn() + " ||| " + "UpdatedOn :::: " + account.getUpdatedOn() );
+        System.out.println("CreatedOn :::: " + account.getCreatedDateTime() + " ||| " + "UpdatedOn :::: " + account.getUpdatedDateTime() );
 
-        Assert.notNull(account.getCreatedOn(), "CreatedOn is null");
-        Assert.notNull(account.getUpdatedOn(), "UpdatedOn is null");
+        Assert.notNull(account.getCreatedDateTime(), "CreatedOn is null");
+        Assert.notNull(account.getUpdatedDateTime(), "UpdatedOn is null");
     }
 }

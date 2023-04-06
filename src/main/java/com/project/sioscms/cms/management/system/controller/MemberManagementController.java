@@ -19,6 +19,13 @@ public class MemberManagementController {
     private final MemberManagementService memberManagementService;
 
     //region ADMIN
+
+    /**
+     * 관리자 계정 목록 조회
+     * @param requestDto MemberSearchDto
+     * @return ModelAndView resultList,pageInfo
+     * @throws Exception
+     */
     @RequestMapping("/admin-list")
     public ModelAndView adminList(MemberSearchDto requestDto) throws Exception{
         ModelAndView mav = new ModelAndView("cms/member/adminList");
@@ -36,6 +43,12 @@ public class MemberManagementController {
         return mav;
     }
 
+    /**
+     * 관리자 계정 상세 조회
+     * @param id 계정 PK
+     * @return ModelAndView result
+     * @throws Exception
+     */
     @RequestMapping("/admin-view/{id}")
     public ModelAndView adminView(@PathVariable long id) throws Exception {
         ModelAndView mav = new ModelAndView("cms/member/adminView");
@@ -47,11 +60,21 @@ public class MemberManagementController {
         return mav;
     }
 
+    /**
+     * 관리자 계정 생성 페이지 이동
+     * @return String url
+     */
     @RequestMapping("/admin-regist")
     public String adminRegist(){
         return "cms/member/adminReg";
     }
 
+    /**
+     * 관리자 계성 생성
+     * @param dto AccountDto.Request
+     * @return ModelAndView url, message
+     * @throws Exception
+     */
     @RequestMapping(value = "/admin-save")
     public ModelAndView adminSave(AccountDto.Request dto) throws Exception{
         AccountDto.Response accountDto = memberManagementService.saveAdmin(dto);
@@ -67,6 +90,12 @@ public class MemberManagementController {
 
     }
 
+    /**
+     * 관리자 계정 수정
+     * @param dto AccountDto.Request
+     * @return ModelAndView url, message
+     * @throws Exception
+     */
     @RequestMapping("/admin-update")
     public ModelAndView adminUpdate(AccountDto.Request dto) throws Exception{
         AccountDto.Response accountDto = memberManagementService.modifyAdmin(dto);
@@ -84,6 +113,13 @@ public class MemberManagementController {
     //endregion
 
     //region USER
+
+    /**
+     * 사용자 계정 목록 조회
+     * @param requestDto MemberSearchDto
+     * @return ModelAndView resultList, pageInfo
+     * @throws Exception
+     */
     @RequestMapping("/user-list")
     public ModelAndView userList(MemberSearchDto requestDto) throws Exception{
         ModelAndView mav = new ModelAndView("cms/member/userList");
@@ -99,6 +135,12 @@ public class MemberManagementController {
         return mav;
     }
 
+    /**
+     * 사용자 계정 상세 조회
+     * @param id 계정 PK
+     * @return ModelAndView result
+     * @throws Exception
+     */
     @RequestMapping("/user-view/{id}")
     public ModelAndView userView(@PathVariable long id) throws Exception {
         ModelAndView mav = new ModelAndView("cms/member/userView");
@@ -110,11 +152,21 @@ public class MemberManagementController {
         return mav;
     }
 
+    /**
+     * 사용자 계정 생성 페이지 이동
+     * @return String url
+     */
     @RequestMapping("/user-regist")
     public String userRegist(){
         return "cms/member/userReg";
     }
 
+    /**
+     * 사용자 계정 생성
+     * @param dto AccountDto.Request
+     * @return ModelAndView url, message
+     * @throws Exception
+     */
     @RequestMapping(value = "/user-save")
     public ModelAndView userSave(AccountDto.Request dto) throws Exception{
         AccountDto.Response accountDto = memberManagementService.saveUser(dto);
@@ -130,6 +182,12 @@ public class MemberManagementController {
 
     }
 
+    /**
+     * 사용자 계정 수정
+     * @param dto AccountDto.Request
+     * @return ModelAndView url, message
+     * @throws Exception
+     */
     @RequestMapping("/user-update")
     public ModelAndView userUpdate(AccountDto.Request dto) throws Exception{
         AccountDto.Response accountDto = memberManagementService.modifyUser(dto);
