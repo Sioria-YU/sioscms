@@ -21,7 +21,7 @@ public class CommonEntityWithIdAndDate {
 
     @Comment("고유번호")
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //시퀀스 생성 규칙
     Long id;
 
     @Comment("등록자 pk")

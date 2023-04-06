@@ -10,9 +10,9 @@ import org.mapstruct.factory.Mappers;
 public interface AccountMapper extends CommonEntityMapper<Account, AccountDto.Request, AccountDto.Response> {
     AccountMapper mapper = Mappers.getMapper(AccountMapper.class);
 
-    @Override
-    AccountDto.Response toResponse(final Account user);
+//    @Override
+//    AccountDto.Response toResponse(final Account user);
 
-    @Override
-    Account toEntity(final AccountDto.Request dto);
+//    @Override
+//    Account toEntity(final AccountDto.Request dto);
 }
