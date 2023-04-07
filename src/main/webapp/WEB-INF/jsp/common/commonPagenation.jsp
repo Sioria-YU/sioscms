@@ -24,7 +24,7 @@
             </c:if>
             <c:forEach var="i" begin="${startPageNumber}" end="${endPageNumber}" step="1">
                 <c:if test="${i eq pageInfo.pageNumber}">
-                    <li class="page-item"><button type="button" class="page-link">${i}</button></li>
+                    <li class="page-item"><button type="button" class="page-link" style="background-color: lightblue;">${i}</button></li>
                 </c:if>
                 <c:if test="${i ne pageInfo.pageNumber}">
                     <li class="page-item"><button type="button" class="page-link" onclick="pageMoveEvent(${i})">${i}</button></li>
