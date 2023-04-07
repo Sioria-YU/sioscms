@@ -29,10 +29,10 @@ public class CommonSearchDto {
     //응답 관련
     private String msg;
 
-    private void setPageNumber(int pageNumber){
+    /*private void setPageNumber(int pageNumber){
         //pageable의 page가 0부터 시작하므로 -1처리
         this.pageNumber = Math.max(pageNumber - 1, 0);
-    }
+    }*/
 
     public int getPageNumber() {
         return Math.max(this.pageNumber - 1, 0);
