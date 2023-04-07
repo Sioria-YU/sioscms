@@ -17,7 +17,7 @@
                 </button>
             </li>
             <li class="page-item">
-                <button type="button" class="page-link" onclick="pageMoveEvent(${startPageNumber - 10})" aria-label="이전">
+                <button type="button" class="page-link" onclick="pageMoveEvent(${startPageNumber - 1})" aria-label="이전">
                     <span aria-hidden="true"><</span>
                 </button>
             </li>
