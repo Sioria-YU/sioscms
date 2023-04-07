@@ -167,7 +167,7 @@ public class MenuService {
                         menu.setOrderNum(order);
                     }
                 }
-                menuRepository.flush();
+//                menuRepository.flush();
                 return true;
             }
             return false;

@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface AccountRepository extends CommonJpaRepository<Account, Long> {
-    Optional<Object> findById(long id);
+//    Optional<Object> findById(long id);
 
     Optional<Account> findByUserId(String userId);
 
