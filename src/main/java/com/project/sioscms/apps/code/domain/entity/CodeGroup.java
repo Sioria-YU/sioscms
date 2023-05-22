@@ -2,6 +2,8 @@ package com.project.sioscms.apps.code.domain.entity;
 
 import com.project.sioscms.apps.code.domain.dto.CodeGroupDto;
 import com.project.sioscms.apps.code.mapper.CodeGroupMapper;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.annotation.CreatedBy;
@@ -14,6 +16,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@Setter
 public class CodeGroup {
 
     @Id
