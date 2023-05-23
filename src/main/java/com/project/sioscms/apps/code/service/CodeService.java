@@ -24,6 +24,11 @@ public class CodeService {
     private final CodeRepository codeRepository;
     private final CodeGroupRepository codeGroupRepository;
 
+    /**
+     * 코드 목록 조회
+     * @param dto CodeDto.Request
+     * @return List<CodeDto.Response>
+     */
     public List<CodeDto.Response> getCodeList(CodeDto.Request dto){
         ChangSolJpaRestriction restriction = new ChangSolJpaRestriction(ChangSolJpaRestrictionType.AND);
         restriction.equals("isDeleted", false);
@@ -39,6 +44,11 @@ public class CodeService {
                 .stream().map(Code::toResponse).collect(Collectors.toList());
     }
 
+    /**
+     * 코드 조회
+     * @param codeId String
+     * @return CodeDto.Response
+     */
     public CodeDto.Response getCode(String codeId){
         if(codeId != null) {
             Code code = codeRepository.findByCodeId(codeId).orElse(null);

@@ -9,9 +9,11 @@ public class CodeGroupDto {
 
     @Data
     public static class Request extends CommonSearchDto{
-        private String codeGroup;
+        private String codeGroupId;
         private String codeGroupLabel;
+        private String codeGroupNote;
         private Boolean isDeleted;
+        private Boolean isUsed;
         private Long createdBy;
         private Long updatedBy;
         private LocalDateTime createdDateTime;
@@ -20,9 +22,11 @@ public class CodeGroupDto {
 
     @Data
     public static class Response{
-        private String codeGroup;
+        private String codeGroupId;
         private String codeGroupLabel;
+        private String codeGroupNote;
         private Boolean isDeleted;
+        private Boolean isUsed;
         private Long createdBy;
         private Long updatedBy;
         private LocalDateTime createdDateTime;

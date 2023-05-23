@@ -13,6 +13,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
@@ -24,12 +25,21 @@ public class CodeGroup {
     @Comment("그룹코드 아이디")
     private String codeGroupId;
 
+    @NotNull
     @Comment("코드그룹 명")
     private String codeGroupLabel;
+
+    @Comment("코드그룹 설명")
+    @Column(length = 1000)
+    private String codeGroupNote;
 
     @Comment("삭제여부")
     @ColumnDefault(value = "FALSE")
     private Boolean isDeleted = false;
+
+    @Comment("사용여부")
+    @ColumnDefault(value = "TRUE")
+    private Boolean isUsed = true;
 
     @Comment("등록자 pk")
     @CreatedBy
