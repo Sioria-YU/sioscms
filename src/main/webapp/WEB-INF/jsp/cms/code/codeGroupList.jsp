@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <script>
     const formCheck = () =>{
         if($("#isCodeGroupIdChk").val() === 'F'){
@@ -119,6 +120,7 @@
             <table class="table text-center">
                 <thead>
                 <tr>
+                    <th><input type="checkbox" class="form-check-input" id="checkAll"></th>
                     <th scope="col">순번</th>
                     <th scope="col">코드그룹 아이디</th>
                     <th scope="col">코드그룹 명</th>
@@ -130,12 +132,14 @@
                 <c:choose>
                     <c:when test="${not empty resultList}">
                         <c:forEach var="result" items="${resultList}" varStatus="status">
+                            <fmt:parseDate var="createdDateTime" value="${result.createdDateTime}" pattern="yyyy-MM-dd" type="both"/>
                             <tr>
+                                <td><input type="checkbox" class="form-check-input" name="codeGroupCheck" value="${result.codeGroupId}"></td>
                                 <th scope="row">${pageInfo.totalCount - ((pageInfo.pageNumber-1) * pageInfo.pageOffset + status.index)}</th>
                                 <td><a href="/cms/code/code-group/view/${result.codeGroupId}">${result.codeGroupId}</a></td>
                                 <td><a href="/cms/code/code-group/view/${result.codeGroupId}">${result.codeGroupLabel}</a></td>
                                 <td>${result.codeGroupNote}</td>
-                                <td>${result.createdDateTime}</td>
+                                <td><fmt:formatDate value="${createdDateTime}" pattern="yyyy-MM-dd"/></td>
                             </tr>
                         </c:forEach>
                     </c:when>
@@ -148,7 +152,9 @@
                 </tbody>
             </table>
             <jsp:include page="/WEB-INF/jsp/common/commonPagenation.jsp"/>
+
             <div class="form-btn-set text-end">
+                <button type="button" class="btn btn-danger btn-lg" onclick="alert('미구현');">선택 삭제</button>
                 <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#codeGroupRegistModal">등록</button>
             </div>
         </div>
