@@ -59,7 +59,9 @@ spring:
         user:
             name: admin
             password: 1234
-            
+attach:
+    path: /Users/sioria/project/sioscms/upload
+    
 ---
 spring:
     profiles:
@@ -79,3 +81,5 @@ spring:
         user:
             name: admin
             password: 1234
+attach:
+    path: /data/www/sioscms/upload
