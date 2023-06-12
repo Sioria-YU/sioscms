@@ -11,6 +11,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -19,14 +20,17 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
+@EntityListeners(AuditingEntityListener.class)
 public class CodeGroup {
 
     @Id
     @Comment("그룹코드 아이디")
+    @Column(length = 100)
     private String codeGroupId;
 
     @NotNull
     @Comment("코드그룹 명")
+    @Column(length = 100)
     private String codeGroupLabel;
 
     @Comment("코드그룹 설명")

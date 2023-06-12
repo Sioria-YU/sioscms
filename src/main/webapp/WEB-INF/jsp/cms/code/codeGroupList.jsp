@@ -1,5 +1,61 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<script>
+    const formCheck = () =>{
+        if($("#isCodeGroupIdChk").val() === 'F'){
+            alert("코드그룹 아이디 중복체크를 실행해 주세요.");
+            $("#codeGroupIdCheckEventButton").focus();
+            return false;
+        }
+
+        if(confirm("등록하시겠습니까?")){
+            let formData = new FormData(document.getElementById("codeGroupForm"));
+
+            fetch("/cms/api/code-group/save",
+                {
+                    method: 'POST',
+                    cache: 'no-cache',
+                    body: formData
+                }
+            ).then((response) =>{
+                if(response.ok){
+                    alert("정상 처리 되었습니다.");
+                    location.reload();
+                }else{
+                    console.log(data);
+                    alert("오류가 발생하였습니다.");
+                }
+            }).catch((error) => console.error(error));
+
+        }
+
+        // let codeGroupLabel = formData.get("codeGroupLabel");
+        // let codeGroupId = formData.get("codeGroupId");
+        // let isUsed = formData.get("isUsed");
+        // let codeGroupNote = formData.get("codeGroupNote");
+        // let isCodeGroupIdChk = formData.get("isCodeGroupIdChk");
+
+
+
+    }
+
+    const codeGroupIdCheckEvent = () => {
+        let formData = new FormData(document.getElementById("codeGroupForm"));
+
+        $.post("/cms/api/code-group/duplication-check", {codeGroupId:formData.get("codeGroupId")}, function(data){
+            if(!!data){
+                if(data){
+                    $("#isCodeGroupIdChk").val("T");
+                    alert("사용할 수 있는 아이디입니다.");
+                }else{
+                    alert("사용할 수 없는 아이디입니다.");
+                }
+            }
+        });
+    }
+
+</script>
+
 <div id="layoutSidenav_content">
     <main>
         <div class="container-fluid px-4">
@@ -77,7 +133,7 @@
                             <tr>
                                 <th scope="row">${pageInfo.totalCount - ((pageInfo.pageNumber-1) * pageInfo.pageOffset + status.index)}</th>
                                 <td><a href="/cms/code/code-group/view/${result.codeGroupId}">${result.codeGroupId}</a></td>
-                                <td>${result.codeGroupLabel}</td>
+                                <td><a href="/cms/code/code-group/view/${result.codeGroupId}">${result.codeGroupLabel}</a></td>
                                 <td>${result.codeGroupNote}</td>
                                 <td>${result.createdDateTime}</td>
                             </tr>
@@ -93,8 +149,56 @@
             </table>
             <jsp:include page="/WEB-INF/jsp/common/commonPagenation.jsp"/>
             <div class="form-btn-set text-end">
-                <button type="button" class="btn btn-success btn-lg" onclick="javascript:location.href='./codeGroup-regist';">등록</button>
+                <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#codeGroupRegistModal">등록</button>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="codeGroupRegistModal" tabindex="-1" aria-labelledby="codeGroupRegistModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="codeGroupRegistModalTitle">코드그룹 등록</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="codeGroupForm" name="codeGroupForm" method="post" action="./save">
+                            <input type="hidden" id="isCodeGroupIdChk" name="isCodeGroupIdChk" value="F">
+                            <div class="row mb-3">
+                                <label for="codeGroupLabel" class="col-sm-3 col-form-label">코드그룹 명</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control-small" name="codeGroupLabel" value="" placeholder="코드그룹 명을 입력하세요." aria-label="코드그룹 명을 입력하세요." maxlength="100">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="codeGroupId" class="col-sm-3 col-form-label">코드그룹 아이디</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control-small" name="codeGroupId" value="" placeholder="코드그룹 아이디를 입력하세요." aria-label="코드그룹 아이디를 입력하세요." onchange="$('#isCodeGroupIdChk').val('F');" maxlength="100">
+                                    <button type="button" class="btn-dark" id="codeGroupIdCheckEventButton" onclick="codeGroupIdCheckEvent();">중복체크</button>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="codeGroupId" class="col-sm-3 col-form-label">사용 여부</label>
+                                <div class="col-sm-7">
+                                    <label for="isUsed_Y"><input type="radio" class="form-check-input" id="isUsed_Y" name="isUsed" value="TRUE" placeholder="사용" aria-label="사용" checked>사용</label>
+                                    <label for="isUsed_N"><input type="radio" class="form-check-input ms-1" id="isUsed_N" name="isUsed" value="FALSE" placeholder="미사용" aria-label="미사용">미사용</label>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="codeGroupId" class="col-sm-3 col-form-label">설명</label>
+                                <div class="col-sm-7">
+                                    <textarea class="textarea form-control" name="codeGroupNote" ></textarea>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                        <button type="button" class="btn btn-success" onclick="formCheck();">등록</button>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
 </div>
+

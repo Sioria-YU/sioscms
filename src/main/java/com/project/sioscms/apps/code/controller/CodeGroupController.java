@@ -24,21 +24,23 @@ public class CodeGroupController {
         return ResponseEntity.ok(codeGroupService.getCodeGroup(codeGroupId));
     }
 
-    @GetMapping("/save")
-    @PostMapping
+    @PostMapping("/save")
     public ResponseEntity<CodeGroupDto.Response> saveCodeGroup(CodeGroupDto.Request dto){
         return ResponseEntity.ok(codeGroupService.saveCodeGroup(dto));
     }
 
-    @GetMapping("/update")
-    @PutMapping
+    @PutMapping("/update")
     public ResponseEntity<CodeGroupDto.Response> updateCodeGroup(CodeGroupDto.Request dto){
         return ResponseEntity.ok(codeGroupService.updateCodeGroup(dto));
     }
 
-    @GetMapping("/delete/{codeGroupId}")
-    @PutMapping
+    @PutMapping("/delete/{codeGroupId}")
     public ResponseEntity<Boolean> deleteCodeGroup(@PathVariable("codeGroupId") String codeGroupId){
         return ResponseEntity.ok(codeGroupService.deleteCodeGroup(codeGroupId));
+    }
+
+    @PostMapping("/duplication-check")
+    public ResponseEntity<Boolean> duplicationCheck(@RequestParam("codeGroupId") String codeGroupId){
+        return ResponseEntity.ok(codeGroupService.duplicationCheck(codeGroupId));
     }
 }

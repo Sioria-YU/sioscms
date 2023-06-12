@@ -54,6 +54,8 @@ public class CodeGroupService {
     public CodeGroupDto.Response saveCodeGroup(CodeGroupDto.Request dto){
         if(dto != null && dto.getCodeGroupId() != null && dto.getCodeGroupLabel() != null){
             CodeGroup entity = CodeGroupMapper.mapper.toEntity(dto);
+            entity.setIsDeleted(false);
+
             codeGroupRepository.save(entity);
 
             return entity.toResponse();
@@ -84,6 +86,15 @@ public class CodeGroupService {
             codeGroup.setIsUsed(false);
 
             return true;
+        }else{
+            return false;
+        }
+    }
+
+    public Boolean duplicationCheck(String codeGroupId){
+        if(codeGroupId != null && !codeGroupId.isEmpty()){
+            CodeGroup codeGroup = codeGroupRepository.findByCodeGroupId(codeGroupId).orElse(null);
+            return codeGroup == null;
         }else{
             return false;
         }
