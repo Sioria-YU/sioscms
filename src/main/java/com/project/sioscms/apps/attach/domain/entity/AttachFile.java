@@ -39,7 +39,7 @@ public class AttachFile  extends CommonEntityWithIdAndDate {
 
     @ColumnDefault(value = "0")
     @Comment("파일 순번")
-    private Long fileOrder;
+    private Long fileOrderNum;
 
     @ColumnDefault(value = "FALSE")
     @Comment("삭제여부")
