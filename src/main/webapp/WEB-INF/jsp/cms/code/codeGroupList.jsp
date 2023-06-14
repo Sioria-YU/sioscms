@@ -19,25 +19,18 @@
                     body: formData
                 }
             ).then((response) =>{
-                if(response.ok){
+                return response.json();
+            }).then((data) => {
+                if(!!data){
                     alert("정상 처리 되었습니다.");
                     location.reload();
-                }else{
-                    console.log(data);
-                    alert("오류가 발생하였습니다.");
                 }
-            }).catch((error) => console.error(error));
+            }).catch((error) => {
+                console.error(error);
+                alert("오류가 발생하였습니다.");
+            });
 
         }
-
-        // let codeGroupLabel = formData.get("codeGroupLabel");
-        // let codeGroupId = formData.get("codeGroupId");
-        // let isUsed = formData.get("isUsed");
-        // let codeGroupNote = formData.get("codeGroupNote");
-        // let isCodeGroupIdChk = formData.get("isCodeGroupIdChk");
-
-
-
     }
 
     const codeGroupIdCheckEvent = () => {
@@ -186,8 +179,8 @@
                             <div class="row mb-3">
                                 <label for="codeGroupId" class="col-sm-3 col-form-label">사용 여부</label>
                                 <div class="col-sm-7">
-                                    <label for="isUsed_Y"><input type="radio" class="form-check-input" id="isUsed_Y" name="isUsed" value="TRUE" placeholder="사용" aria-label="사용" checked>사용</label>
-                                    <label for="isUsed_N"><input type="radio" class="form-check-input ms-1" id="isUsed_N" name="isUsed" value="FALSE" placeholder="미사용" aria-label="미사용">미사용</label>
+                                    <label for="isUsed_Y" class="col-form-label"><input type="radio" class="form-check-input me-1" id="isUsed_Y" name="isUsed" value="TRUE" placeholder="사용" aria-label="사용" checked>사용</label>
+                                    <label for="isUsed_N" class="col-form-label ms-1"><input type="radio" class="form-check-input me-1" id="isUsed_N" name="isUsed" value="FALSE" placeholder="미사용" aria-label="미사용">미사용</label>
                                 </div>
                             </div>
                             <div class="row mb-3">

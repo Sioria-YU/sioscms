@@ -10,7 +10,7 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters.LocalDateTimeConverter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -55,13 +55,13 @@ public class CodeGroup {
 
     @Comment("등록일시")
     @CreatedDate
-    @Convert(converter = Jsr310JpaConverters.LocalDateTimeConverter.class)
+    @Convert(converter = LocalDateTimeConverter.class)
     @Column(updatable = false)
     private LocalDateTime createdDateTime = LocalDateTime.now();
 
     @Comment("수정일시")
     @LastModifiedDate
-    @Convert(converter = Jsr310JpaConverters.LocalDateTimeConverter.class)
+    @Convert(converter = LocalDateTimeConverter.class)
     private LocalDateTime updatedDateTime = LocalDateTime.now();
 
     public CodeGroupDto.Response toResponse(){ return CodeGroupMapper.mapper.toResponse(this); }

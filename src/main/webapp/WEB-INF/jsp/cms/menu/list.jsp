@@ -323,15 +323,16 @@
                 body: formData
             }
         ).then((response) =>{
-            if(response.ok){
+            return response.json();
+        }).then((data) => {
+            if(!!data){
                 alert("정상 처리 되었습니다.");
                 $('#menu-tree-contents').jstree(true).settings.core.data = converToJsTreeData(getMenus());
                 $('#menu-tree-contents').jstree("refresh");
-            }else{
-                console.log(data);
-                alert("오류");
             }
-        }).catch((error) => console.error(error));
+        }).catch((error) => {
+            alert("오류가 발생하였습니다.");
+        });
     }
 
     const deleteMenu = () =>{
@@ -363,15 +364,17 @@
                 body: formData
             }
         ).then((response) =>{
-            if(response.ok){
+            return response.json();
+        }).then((data) => {
+            if(!!data){
                 alert("정상 처리 되었습니다.");
                 $('#menu-tree-contents').jstree(true).settings.core.data = converToJsTreeData(getMenus());
                 $('#menu-tree-contents').jstree("refresh");
-            }else{
-                console.log(data);
-                alert("오류");
             }
-        }).catch((error) => console.error(error));
+        }).catch((error) => {
+            console.error(error);
+            alert("오류가 발생하였습니다.");
+        });
     }
 
     const menuMoveEvent = (menuOrderType) => {
@@ -400,7 +403,8 @@
                 }
             },
             error: function (request, status, error) {
-                console.log(error);
+                console.error(error);
+                alert("오류가 발생하였습니다.");
             }
         });
     }

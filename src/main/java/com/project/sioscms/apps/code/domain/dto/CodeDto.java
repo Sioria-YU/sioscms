@@ -28,6 +28,8 @@ public class CodeDto {
 
         private Boolean isDeleted;
 
+        private Boolean isUsed;
+
         private Long createdBy;
 
         private Long updatedBy;
@@ -56,6 +58,8 @@ public class CodeDto {
         private Integer orderNum;
 
         private Boolean isDeleted;
+
+        private Boolean isUsed;
 
         private Long createdBy;
 

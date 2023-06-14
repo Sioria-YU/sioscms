@@ -26,7 +26,7 @@ public class CodeController {
 
     @PostMapping("/save")
     public ResponseEntity<CodeDto.Response> saveCode(CodeDto.Request dto){
-        return null;
+        return ResponseEntity.ok(codeService.saveCode(dto));
     }
 
     @PutMapping("/update")
@@ -37,5 +37,10 @@ public class CodeController {
     @PutMapping("/delete/{codeId}")
     public ResponseEntity<Boolean> deleteCode(@PathVariable("codeId") String codeId){
         return null;
+    }
+
+    @PostMapping("/duplication-check")
+    public ResponseEntity<Boolean> duplicationCheck(@RequestParam("codeId") String codeId){
+        return ResponseEntity.ok(codeService.duplicationCheck(codeId));
     }
 }
