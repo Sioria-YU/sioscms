@@ -19,6 +19,41 @@
         });
     }
 
+    const codeGroupUpdateEvent = () => {
+        if($("#codeGroupLabel").val() == ''){
+            alert("코드그룹 명을 입력하세요.");
+            $("#codeGroupLabel").focus();
+            return false;
+        }
+
+        if(confirm("수정하시겠습니까?")) {
+            $.ajax({
+                type: 'PUT',
+                url: '/cms/api/code-group/update',
+                async: false,
+                data: {
+                    codeGroupId     : '${codeGroupInfo.codeGroupId}',
+                    codeGroupLabel  : $("#codeGroupLabel").val(),
+                    isUsed          : $("#isUsed_Y").is(":checked"),
+                    codeGroupNote   : $("#codeGroupNote").val()
+                },
+                success: function (data) {
+                    if (!!data) {
+                        alert("정상 처리 되었습니다.");
+                        location.reload();
+                    } else {
+                        alert("오류가 발생하였습니다.");
+                        return false;
+                    }
+                },
+                error: function (request, status, error) {
+                    console.error(error);
+                    alert("오류가 발생하였습니다.");
+                }
+            });
+        }
+    }
+
     const formCheck = () => {
         if($("#isCodeChk").val() === 'F'){
             alert("코드그룹 아이디 중복체크를 실행해 주세요.");
@@ -110,7 +145,7 @@
             </div>
             <div class="row mb-3">
                 <div class="col-sm-7 form-btn-set text-end">
-                    <button type="button" class="btn btn-success btn-lg" onclick="alert('미구현');">수정</button>
+                    <button type="button" class="btn btn-success btn-lg" onclick="codeGroupUpdateEvent();">수정</button>
                     <button type="button" class="btn btn-dark btn-lg" onclick="location.href='/cms/code/code-group/list'">뒤로 가기</button>
                 </div>
             </div>
