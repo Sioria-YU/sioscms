@@ -54,6 +54,10 @@
         }
     }
 
+    const codeDeleteEvent = () => {
+        let codeIdList = {};
+    }
+
     const formCheck = () => {
         if($("#isCodeChk").val() === 'F'){
             alert("코드그룹 아이디 중복체크를 실행해 주세요.");
@@ -96,6 +100,22 @@
             });
         }
     }
+
+    $(function (){
+        $("#checkAll").on('click',function(){
+            if($("#checkAll").is(":checked")){
+                $(".checkItem").prop("checked", true);
+            }else{
+                $(".checkItem").prop("checked", false);
+            }
+        });
+
+        $(".checkItem").on('click',function(){
+            if(!$(this).is(":checked")){
+                $("#checkAll").prop("checked", false);
+            }
+        });
+    });
 </script>
 
 <div id="layoutSidenav_content">
@@ -175,7 +195,7 @@
                         <c:forEach var="result" items="${codeList}" varStatus="status">
                             <fmt:parseDate var="createdDateTime" value="${result.createdDateTime}" pattern="yyyy-MM-dd" type="both"/>
                             <tr>
-                                <td><input type="checkbox" class="form-check-input" name="codeGroupCheck" value="${result.codeId}"></td>
+                                <td><input type="checkbox" class="form-check-input checkItem" name="codeCheck" value="${result.codeId}"></td>
                                 <th scope="row">${fn:length(codeList) - status.index}</th>
                                 <td>${result.codeLabel}</td>
                                 <td>${result.codeId}</td>
@@ -199,7 +219,7 @@
             </table>
 
             <div class="form-btn-set text-end">
-                <button type="button" class="btn btn-danger btn-lg" onclick="alert('미구현');">선택 삭제</button>
+                <button type="button" class="btn btn-danger btn-lg" onclick="codeDeleteEvent();">선택 삭제</button>
                 <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#codeRegistModal">추가</button>
             </div>
         </div>

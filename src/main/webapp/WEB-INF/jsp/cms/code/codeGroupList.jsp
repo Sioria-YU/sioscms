@@ -2,6 +2,21 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <script>
+    const codeGroupIdCheckEvent = () => {
+        let formData = new FormData(document.getElementById("codeGroupForm"));
+
+        $.post("/cms/api/code-group/duplication-check", {codeGroupId:formData.get("codeGroupId")}, function(data){
+            if(!!data){
+                if(data){
+                    $("#isCodeGroupIdChk").val("T");
+                    alert("사용할 수 있는 아이디입니다.");
+                }else{
+                    alert("사용할 수 없는 아이디입니다.");
+                }
+            }
+        });
+    }
+
     const formCheck = () =>{
         if($("#isCodeGroupIdChk").val() === 'F'){
             alert("코드그룹 아이디 중복체크를 실행해 주세요.");
@@ -31,21 +46,6 @@
             });
 
         }
-    }
-
-    const codeGroupIdCheckEvent = () => {
-        let formData = new FormData(document.getElementById("codeGroupForm"));
-
-        $.post("/cms/api/code-group/duplication-check", {codeGroupId:formData.get("codeGroupId")}, function(data){
-            if(!!data){
-                if(data){
-                    $("#isCodeGroupIdChk").val("T");
-                    alert("사용할 수 있는 아이디입니다.");
-                }else{
-                    alert("사용할 수 없는 아이디입니다.");
-                }
-            }
-        });
     }
 
 </script>
