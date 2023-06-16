@@ -86,6 +86,11 @@ public class CodeService {
         }
     }
 
+    /**
+     * 코드 다중삭제
+     * @param codeIdList String[]
+     * @return Boolean
+     */
     @Transactional
     public Boolean multipleDeleteCode(String[] codeIdList){
         if(codeIdList != null && codeIdList.length > 0){
