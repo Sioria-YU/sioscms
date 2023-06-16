@@ -9,12 +9,12 @@
 
         $.post("/cms/api/code/duplication-check", {codeId:formData.get("codeId")}, function(data){
             if(!!data){
-                if(data){
-                    $("#isCodeChk").val("T");
-                    alert("사용할 수 있는 코드입니다.");
-                }else{
-                    alert("사용할 수 없는 코드입니다.");
-                }
+                $("#isCodeChk").val("T");
+                alert("사용할 수 있는 코드입니다.");
+            }else{
+                alert("사용할 수 없는 코드입니다.");
+                $("#codeId").val('');
+                $("#codeId").focus();
             }
         });
     }
@@ -28,8 +28,8 @@
 
         if(confirm("수정하시겠습니까?")) {
             $.ajax({
-                type: 'PUT',
                 url: '/cms/api/code-group/update',
+                type: 'PUT',
                 async: false,
                 data: {
                     codeGroupId     : '${codeGroupInfo.codeGroupId}',
@@ -55,7 +55,38 @@
     }
 
     const codeDeleteEvent = () => {
-        let codeIdList = {};
+        if($(".checkItem:checked").length > 0) {
+            let codeIdList = [];
+
+            $(".checkItem:checked").each(function () {
+                codeIdList.push($(this).val());
+            });
+
+            if(confirm("삭제하시겠습니까?")){
+                $.ajax({
+                    url: '/cms/api/code/mulitple-delete',
+                    type: 'DELETE',
+                    async: false,
+                    data: {
+                        codeIdList: codeIdList
+                    },
+                    success: function (data) {
+                        if (!!data) {
+                            alert("정상 처리 되었습니다.");
+                            location.reload();
+                        } else {
+                            alert("오류가 발생하였습니다.");
+                        }
+                    },
+                    error: function (request, status, error) {
+                        console.error(error);
+                        alert("오류가 발생하였습니다.");
+                    }
+                });
+            }
+        }else{
+            alert("선택된 목록이 없습니다.");
+        }
     }
 
     const formCheck = () => {

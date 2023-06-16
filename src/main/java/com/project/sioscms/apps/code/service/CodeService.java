@@ -86,6 +86,24 @@ public class CodeService {
         }
     }
 
+    @Transactional
+    public Boolean multipleDeleteCode(String[] codeIdList){
+        if(codeIdList != null && codeIdList.length > 0){
+            for (int i = 0; i < codeIdList.length; i++) {
+                Code code = codeRepository.findByCodeId(codeIdList[i]).orElse(null);
+                if(code != null){
+                    codeRepository.delete(code);
+                }else{
+                    return false;
+                }
+            }
+            codeRepository.flush();
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     /**
      * 코드 아이디 중복 체크
      * @param codeId String

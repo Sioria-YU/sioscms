@@ -34,9 +34,14 @@ public class CodeController {
         return null;
     }
 
-    @PutMapping("/delete/{codeId}")
+    @DeleteMapping("/delete/{codeId}")
     public ResponseEntity<Boolean> deleteCode(@PathVariable("codeId") String codeId){
         return null;
+    }
+
+    @DeleteMapping("/mulitple-delete")
+    public ResponseEntity<Boolean> multipleDeleteCode(@RequestParam("codeIdList[]") String[] codeIdList){
+        return ResponseEntity.ok(codeService.multipleDeleteCode(codeIdList));
     }
 
     @PostMapping("/duplication-check")
