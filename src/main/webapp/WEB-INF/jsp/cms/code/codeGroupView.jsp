@@ -89,6 +89,23 @@
         }
     }
 
+    const modifyModalOpenEvent = (codeLabel, codeId, option1, option2, option3, option4, isUsed) => {
+        let codeModifyModal = new bootstrap.Modal(document.getElementById('codeModifyModal'), {
+            keyboard: false
+        });
+
+        $("#modifyCodeLabel").val(codeLabel);
+        $("#modifyCodeId").val(codeId);
+        $("#modifyOption1").val(option1);
+        $("#modifyOption2").val(option2);
+        $("#modifyOption3").val(option3);
+        $("#modifyOption4").val(option4);
+
+        isUsed? $("#modifyCodeIsUsed_Y").prop("checked", true) : $("#modifyCodeIsUsed_N").prop("checked", true);
+
+        codeModifyModal.show();
+    }
+
     const formCheck = () => {
         if($("#isCodeChk").val() === 'F'){
             alert("코드그룹 아이디 중복체크를 실행해 주세요.");
@@ -114,6 +131,53 @@
             fetch("/cms/api/code/save",
                 {
                     method: 'POST',
+                    cache: 'no-cache',
+                    body: formData
+                }
+            ).then((response) =>{
+                return response.json();
+            }).then((data) => {
+                if(!!data){
+                    alert("정상 처리 되었습니다.");
+                    location.reload();
+                }
+            }).catch((error) => {
+                <%-- return data가 null일 경우 response.json() 메서드에서 error를 발생시켜서 여기로 옴 --%>
+                console.error(error);
+                alert("오류가 발생하였습니다.");
+            });
+        }
+    }
+
+    const modifyFormCheck = () => {
+        let formData = new FormData(document.getElementById("codeModifyForm"));
+
+        if(formData.get("codeGroupId") === ''){
+            alert("코드그룹 아이디가 잘못 입력 되었습니다.\n새로고침 후 다시 이용해주세요.");
+            return false;
+        }
+
+        if(formData.get("codeId") === ''){
+            alert("코드 값이 잘못 입력 되었습니다.\n새로고침 후 다시 이용해주세요.");
+            return false;
+        }
+
+        if(formData.get("codeLabel") === ''){
+            alert("코드 명을 입력하세요.");
+            $("#modifyCodeLabel").focus();
+            return false;
+        }
+
+        if(formData.get("isUsed") === ''){
+            alert("사용 여부를 선택하세요");
+            $("#modifyCodeIsUsed_Y").focus();
+            return false;
+        }
+
+        if(confirm("수정하시겠습니까?")){
+            fetch("/cms/api/code/update",
+                {
+                    method: 'PUT',
                     cache: 'no-cache',
                     body: formData
                 }
@@ -228,7 +292,12 @@
                             <tr>
                                 <td><input type="checkbox" class="form-check-input checkItem" name="codeCheck" value="${result.codeId}"></td>
                                 <th scope="row">${fn:length(codeList) - status.index}</th>
-                                <td>${result.codeLabel}</td>
+                                <td>
+                                    <a href="#"
+                                       onclick="modifyModalOpenEvent('${result.codeLabel}', '${result.codeId}', '${result.option1}', '${result.option2}' ,'${result.option3}' ,'${result.option4}' ,${result.isUsed});">
+                                        ${result.codeLabel}
+                                    </a>
+                                </td>
                                 <td>${result.codeId}</td>
                                 <td>${result.option1}</td>
                                 <td>${result.option2}</td>
@@ -317,6 +386,70 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
                         <button type="button" class="btn btn-success" onclick="formCheck();">등록</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="codeModifyModal" tabindex="-1" aria-labelledby="codeModifyModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="codeModifyModalTitle">코드그룹 등록</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="codeModifyForm" name="codeModifyForm" method="post" action="">
+                            <input type="hidden" name="codeGroupId" value="${codeGroupInfo.codeGroupId}">
+
+                            <div class="row mb-3">
+                                <label for="codeLabel" class="col-sm-3 col-form-label">코드 명</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control-small" id="modifyCodeLabel" name="codeLabel" value="" placeholder="코드 명을 입력하세요." aria-label="코드 명을 입력하세요." maxlength="100">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="codeId" class="col-sm-3 col-form-label">코드</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control form-control-small" id="modifyCodeId" name="codeId" value="" maxlength="100" readonly>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="option1" class="col-sm-3 col-form-label">옵션1</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control-small" id="modifyOption1" name="option1" value="" placeholder="옵션1을 입력하세요." aria-label="옵션1을 입력하세요." maxlength="100">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="option2" class="col-sm-3 col-form-label">옵션2</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control-small" id="modifyOption2" name="option2" value="" placeholder="옵션2를 입력하세요." aria-label="옵션2를 입력하세요." maxlength="100">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="option3" class="col-sm-3 col-form-label">옵션3</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control-small" id="modifyOption3" name="option3" value="" placeholder="옵션3을 입력하세요." aria-label="옵션3을 입력하세요." maxlength="100">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="option4" class="col-sm-3 col-form-label">옵션4</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control-small" id="modifyOption4" name="option4" value="" placeholder="옵션4를 입력하세요." aria-label="옵션4를 입력하세요." maxlength="100">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="modifyCodeIsUsed_Y" class="col-sm-3 col-form-label">사용 여부</label>
+                                <div class="col-sm-7">
+                                    <label for="modifyCodeIsUsed_Y" class="col-form-label"><input type="radio" class="form-check-input me-1" id="modifyCodeIsUsed_Y" name="isUsed" value="TRUE" placeholder="사용" aria-label="사용" checked>사용</label>
+                                    <label for="modifyCodeIsUsed_N" class="col-form-label ms-1"><input type="radio" class="form-check-input me-1" id="modifyCodeIsUsed_N" name="isUsed" value="FALSE" placeholder="미사용" aria-label="미사용">미사용</label>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                        <button type="button" class="btn btn-success" onclick="modifyFormCheck();">수정</button>
                     </div>
                 </div>
             </div>

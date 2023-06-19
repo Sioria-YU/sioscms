@@ -86,6 +86,28 @@ public class CodeService {
         }
     }
 
+    @Transactional
+    public CodeDto.Response updateCode(CodeDto.Request dto){
+        if(dto != null && dto.getCodeId() != null && dto.getCodeGroupId() != null && dto.getCodeLabel() != null){
+            Code entity = codeRepository.findByCodeId(dto.getCodeId()).orElse(null);
+
+            if(entity != null){
+                entity.setCodeLabel(dto.getCodeLabel());
+                entity.setOption1(dto.getOption1());
+                entity.setOption2(dto.getOption2());
+                entity.setOption3(dto.getOption3());
+                entity.setOption4(dto.getOption4());
+                entity.setIsUsed(dto.getIsUsed());
+
+                return entity.toResponse();
+            }else{
+                return null;
+            }
+        }else{
+            return null;
+        }
+    }
+
     /**
      * 코드 다중삭제
      * @param codeIdList String[]

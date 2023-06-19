@@ -31,7 +31,7 @@ public class CodeController {
 
     @PutMapping("/update")
     public ResponseEntity<CodeDto.Response> updateCode(CodeDto.Request dto){
-        return null;
+        return ResponseEntity.ok(codeService.updateCode(dto));
     }
 
     @DeleteMapping("/delete/{codeId}")
