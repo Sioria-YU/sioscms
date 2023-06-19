@@ -14,6 +14,7 @@ import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters.LocalDa
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
@@ -21,15 +22,20 @@ import java.time.LocalDateTime;
 @Setter
 @EntityListeners(AuditingEntityListener.class)
 public class Code {
+    @Getter
+    @Setter
+    public static class CodePk implements Serializable{
+        @Comment("코드 아이디")
+        @Column(length = 100)
+        private String codeId;
 
-    @Id
-    @Comment("코드 아이디")
-    @Column(length = 100)
-    private String codeId;
+        @ManyToOne
+        @Comment("코드그룹 아이디")
+        private CodeGroup codeGroup;
+    }
 
-    @ManyToOne
-    @Comment("코드그룹 아이디")
-    private CodeGroup codeGroup;
+    @EmbeddedId
+    CodePk codePk;
 
     @Comment("코드 명")
     @Column(length = 100)

@@ -21,7 +21,8 @@ public class CodeController {
 
     @GetMapping("/{codeId}")
     public ResponseEntity<CodeDto.Response> getCode(@PathVariable("codeId") String codeId){
-        return ResponseEntity.ok(codeService.getCode(codeId));
+//        return ResponseEntity.ok(codeService.getCode(codeId));
+        return ResponseEntity.ok(null);
     }
 
     @PostMapping("/save")
@@ -40,13 +41,13 @@ public class CodeController {
     }
 
     @DeleteMapping("/mulitple-delete")
-    public ResponseEntity<Boolean> multipleDeleteCode(@RequestParam("codeIdList[]") String[] codeIdList){
-        return ResponseEntity.ok(codeService.multipleDeleteCode(codeIdList));
+    public ResponseEntity<Boolean> multipleDeleteCode(@RequestParam("codeGroupId") String codeGroupId, @RequestParam("codeIdList[]") String[] codeIdList){
+        return ResponseEntity.ok(codeService.multipleDeleteCode(codeGroupId, codeIdList));
     }
 
     @PostMapping("/duplication-check")
-    public ResponseEntity<Boolean> duplicationCheck(@RequestParam("codeId") String codeId){
-        return ResponseEntity.ok(codeService.duplicationCheck(codeId));
+    public ResponseEntity<Boolean> duplicationCheck(@RequestParam("codeGroupId") String codeGroupId, @RequestParam("codeId") String codeId){
+        return ResponseEntity.ok(codeService.duplicationCheck(codeGroupId, codeId));
     }
 
     @PutMapping("order-swap")

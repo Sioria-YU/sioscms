@@ -1,5 +1,6 @@
 package com.project.sioscms.apps.code.domain.dto;
 
+import com.project.sioscms.apps.code.domain.entity.Code;
 import com.project.sioscms.apps.code.domain.entity.CodeGroup;
 import com.project.sioscms.common.domain.dto.CommonSearchDto;
 import lombok.Data;
@@ -41,9 +42,7 @@ public class CodeDto {
 
     @Data
     public static class Response{
-        private String codeId;
-
-        private CodeGroup codeGroup;
+        private Code.CodePk codePk;
 
         private String codeLabel;
 

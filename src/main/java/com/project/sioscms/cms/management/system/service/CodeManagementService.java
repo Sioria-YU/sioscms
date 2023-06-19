@@ -55,7 +55,7 @@ public class CodeManagementService {
         rs.equals("isDeleted", false);
 
         if(codeGroupId != null && !codeGroupId.isEmpty()){
-            rs.equals("codeGroup.codeGroupId", codeGroupId);
+            rs.equals("codePk.codeGroup.codeGroupId", codeGroupId);
         }
 
         return codeRepository.findAll(rs.toSpecification(), Sort.by(Sort.Direction.ASC, "orderNum"))

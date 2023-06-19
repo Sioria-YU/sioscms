@@ -7,7 +7,11 @@
     const codeIdCheckEvent = () => {
         let formData = new FormData(document.getElementById("codeForm"));
 
-        $.post("/cms/api/code/duplication-check", {codeId:formData.get("codeId")}, function(data){
+        $.post("/cms/api/code/duplication-check"
+            , {
+                codeGroupId: '${codeGroupInfo.codeGroupId}',
+                codeId: formData.get("codeId")
+            }, function(data){
             if(!!data){
                 $("#isCodeChk").val("T");
                 alert("사용할 수 있는 코드입니다.");
@@ -68,6 +72,7 @@
                     type: 'DELETE',
                     async: false,
                     data: {
+                        codeGroupId: '${codeGroupInfo.codeGroupId}',
                         codeIdList: codeIdList
                     },
                     success: function (data) {
@@ -384,15 +389,15 @@
                             <fmt:parseDate var="createdDateTime" value="${result.createdDateTime}" pattern="yyyy-MM-dd" type="both"/>
                             <tr class="move-item" draggable="true">
                                 <td><i class="bi bi-list toggle-sidebar-btn"></i></td>
-                                <td><input type="checkbox" class="form-check-input checkItem" name="codeCheck" value="${result.codeId}"></td>
+                                <td><input type="checkbox" class="form-check-input checkItem" name="codeCheck" value="${result.codePk.codeId}"></td>
                                 <th scope="row">${fn:length(codeList) - status.index}</th>
                                 <td>
                                     <a href="#"
-                                       onclick="modifyModalOpenEvent('${result.codeLabel}', '${result.codeId}', '${result.option1}', '${result.option2}' ,'${result.option3}' ,'${result.option4}' ,${result.isUsed});">
+                                       onclick="modifyModalOpenEvent('${result.codeLabel}', '${result.codePk.codeId}', '${result.option1}', '${result.option2}' ,'${result.option3}' ,'${result.option4}' ,${result.isUsed});">
                                         ${result.codeLabel}
                                     </a>
                                 </td>
-                                <td>${result.codeId}</td>
+                                <td>${result.codePk.codeId}</td>
                                 <td>${result.option1}</td>
                                 <td>${result.option2}</td>
                                 <td>${result.option3}</td>

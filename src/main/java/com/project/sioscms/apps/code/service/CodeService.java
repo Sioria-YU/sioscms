@@ -51,12 +51,13 @@ public class CodeService {
      * @return CodeDto.Response
      */
     public CodeDto.Response getCode(String codeId){
-        if(codeId != null) {
+        /*if(codeId != null) {
             Code code = codeRepository.findByCodeId(codeId).orElse(null);
             return code != null ? code.toResponse() : null;
         }else{
             return null;
-        }
+        }*/
+        return null;
     }
 
     /**
@@ -69,11 +70,14 @@ public class CodeService {
         if(dto != null && dto.getCodeId() != null && dto.getCodeGroupId() != null && dto.getCodeLabel() != null){
             Code entity = CodeMapper.mapper.toEntity(dto);
             entity.setIsDeleted(false);
-            entity.setOrderNum(codeRepository.countByCodeGroup_CodeGroupIdAndIsDeleted(dto.getCodeGroupId(), false).intValue());
+            entity.setOrderNum(codeRepository.countByCodePk_CodeGroup_CodeGroupIdAndIsDeleted(dto.getCodeGroupId(), false).intValue());
 
             CodeGroup codeGroup = codeGroupRepository.findByCodeGroupId(dto.getCodeGroupId()).orElse(null);
             if(codeGroup != null){
-                entity.setCodeGroup(codeGroup);
+                Code.CodePk pk = new Code.CodePk();
+                pk.setCodeGroup(codeGroup);
+                pk.setCodeId(dto.getCodeId());
+                entity.setCodePk(pk);
             }else{
                 return null;
             }
@@ -89,7 +93,7 @@ public class CodeService {
     @Transactional
     public CodeDto.Response updateCode(CodeDto.Request dto){
         if(dto != null && dto.getCodeId() != null && dto.getCodeGroupId() != null && dto.getCodeLabel() != null){
-            Code entity = codeRepository.findByCodeId(dto.getCodeId()).orElse(null);
+            Code entity = codeRepository.findByCodePk_CodeGroup_CodeGroupIdAndCodePk_CodeId(dto.getCodeGroupId(), dto.getCodeId()).orElse(null);
 
             if(entity != null){
                 entity.setCodeLabel(dto.getCodeLabel());
@@ -114,13 +118,13 @@ public class CodeService {
      * @return Boolean
      */
     @Transactional
-    public Boolean multipleDeleteCode(String[] codeIdList){
-        if(codeIdList != null && codeIdList.length > 0){
-            for (int i = 0; i < codeIdList.length; i++) {
-                Code code = codeRepository.findByCodeId(codeIdList[i]).orElse(null);
-                if(code != null){
+    public Boolean multipleDeleteCode(String codeGroupId, String[] codeIdList){
+        if(codeGroupId != null && codeIdList != null && codeIdList.length > 0){
+            for (String cd : codeIdList) {
+                Code code = codeRepository.findByCodePk_CodeGroup_CodeGroupIdAndCodePk_CodeId(codeGroupId, cd).orElse(null);
+                if (code != null) {
                     codeRepository.delete(code);
-                }else{
+                } else {
                     return false;
                 }
             }
@@ -136,9 +140,9 @@ public class CodeService {
      * @param codeId String
      * @return Boolean
      */
-    public Boolean duplicationCheck(String codeId){
-        if(codeId != null && !codeId.isEmpty()){
-            Code code = codeRepository.findByCodeId(codeId).orElse(null);
+    public Boolean duplicationCheck(String codeGroupId, String codeId){
+        if(codeGroupId != null && codeId != null && !codeId.isEmpty()){
+            Code code = codeRepository.findByCodePk_CodeGroup_CodeGroupIdAndCodePk_CodeId(codeGroupId, codeId).orElse(null);
             return code == null;
         }else{
             return false;
@@ -151,8 +155,8 @@ public class CodeService {
             CodeGroup codeGroup = codeGroupRepository.findByCodeGroupId(codeGroupId).orElse(null);
 
             if(codeGroup != null){
-                Code code1 = codeRepository.findByCodeGroupAndCodeId(codeGroup, codeId1).orElse(null);
-                Code code2 = codeRepository.findByCodeGroupAndCodeId(codeGroup, codeId2).orElse(null);
+                Code code1 = codeRepository.findByCodePk_CodeGroupAndCodePk_CodeId(codeGroup, codeId1).orElse(null);
+                Code code2 = codeRepository.findByCodePk_CodeGroupAndCodePk_CodeId(codeGroup, codeId2).orElse(null);
 
                 //정렬 순번 스왑
                 if(code1 != null && code2 != null){

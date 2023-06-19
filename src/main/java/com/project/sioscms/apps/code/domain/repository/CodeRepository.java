@@ -9,10 +9,11 @@ import java.util.Optional;
 
 @Repository
 public interface CodeRepository extends CommonJpaRepository<Code, Long> {
-    Optional<Code> findByCodeId(String codeId);
 
-    Optional<Code> findByCodeGroupAndCodeId(CodeGroup codeGroup, String codeId);
+    Optional<Code> findByCodePk_CodeGroupAndCodePk_CodeId(CodeGroup codeGroup, String codeId);
+
+    Optional<Code> findByCodePk_CodeGroup_CodeGroupIdAndCodePk_CodeId(String codeGroupId, String codeId);
 
     //코드 그룹 하위 코드 개수 조회
-    Long countByCodeGroup_CodeGroupIdAndIsDeleted(String codeGroupId, boolean isDeleted);
+    Long countByCodePk_CodeGroup_CodeGroupIdAndIsDeleted(String codeGroupId, boolean isDeleted);
 }
