@@ -48,4 +48,9 @@ public class CodeController {
     public ResponseEntity<Boolean> duplicationCheck(@RequestParam("codeId") String codeId){
         return ResponseEntity.ok(codeService.duplicationCheck(codeId));
     }
+
+    @PutMapping("order-swap")
+    public ResponseEntity<Boolean> orderSwap(@RequestParam("codeGroupId") String codeGroupId, @RequestParam("codeId1") String codeId1, @RequestParam("codeId2") String codeId2){
+        return ResponseEntity.ok(codeService.orderSwapUpdate(codeGroupId, codeId1, codeId2));
+    }
 }

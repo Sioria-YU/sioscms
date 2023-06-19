@@ -196,6 +196,31 @@
         }
     }
 
+    const orderSwapEvent = (codeId1, codeId2) => {
+        $.ajax({
+            url: '/cms/api/code/order-swap',
+            type: 'PUT',
+            async: false,
+            data: {
+                codeGroupId: '${codeGroupInfo.codeGroupId}',
+                codeId1: codeId1,
+                codeId2: codeId2
+            },
+            success: function (data) {
+                if (!!data) {
+                    alert("코드 순서가 변경되었습니다.");
+                    location.reload();
+                } else {
+                    alert("오류가 발생하였습니다.");
+                }
+            },
+            error: function (request, status, error) {
+                console.error(error);
+                alert("오류가 발생하였습니다.");
+            }
+        });
+    }
+
     $(function (){
         $("#checkAll").on('click',function(){
             if($("#checkAll").is(":checked")){
@@ -210,8 +235,75 @@
                 $("#checkAll").prop("checked", false);
             }
         });
+
+        function handleDragStart(e) {
+            this.style.opacity = '0.4';
+
+            dragSrcEl = this;
+
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', this.innerHTML);
+        }
+
+        function handleDragEnd(e) {
+            this.style.opacity = '1';
+
+            moveItems.forEach(function (item) {
+                item.classList.remove('over');
+            });
+        }
+
+        function handleDragOver(e) {
+            if (e.preventDefault) {
+                e.preventDefault();
+            }
+            return false;
+        }
+
+        function handleDragEnter(e) {
+            this.classList.add('over');
+        }
+
+        function handleDragLeave(e) {
+            this.classList.remove('over');
+        }
+
+        function handleDrop(e) {
+            e.stopPropagation(); // stops the browser from redirecting.
+
+            let thisCode = null;
+            let dragSrcElCode = null;
+
+            if (dragSrcEl !== this) {
+                dragSrcEl.innerHTML = this.innerHTML;
+                this.innerHTML = e.dataTransfer.getData('text/html');
+
+                thisCode = $(this).find(".checkItem").val();
+                dragSrcElCode = $(dragSrcEl).find(".checkItem").val();
+
+                orderSwapEvent(thisCode, dragSrcElCode);
+            }
+
+            return false;
+        }
+
+        let moveItems = document.querySelectorAll('.move-item');
+        moveItems.forEach(function(item) {
+            item.addEventListener('dragstart', handleDragStart);
+            item.addEventListener('dragover', handleDragOver);
+            item.addEventListener('dragenter', handleDragEnter);
+            item.addEventListener('dragleave', handleDragLeave);
+            item.addEventListener('dragend', handleDragEnd);
+            item.addEventListener('drop', handleDrop);
+        });
     });
 </script>
+
+<style>
+    .move-item.over {
+        border: 3px dotted #ffc107;
+    }
+</style>
 
 <div id="layoutSidenav_content">
     <main>
@@ -271,7 +363,8 @@
             <table class="table text-center">
                 <thead>
                 <tr>
-                    <th><input type="checkbox" class="form-check-input" id="checkAll"></th>
+                    <th scope="col"></th>
+                    <th scope="col"><input type="checkbox" class="form-check-input" id="checkAll"></th>
                     <th scope="col">순번</th>
                     <th scope="col">코드명</th>
                     <th scope="col">코드</th>
@@ -289,7 +382,8 @@
                     <c:when test="${not empty codeList}">
                         <c:forEach var="result" items="${codeList}" varStatus="status">
                             <fmt:parseDate var="createdDateTime" value="${result.createdDateTime}" pattern="yyyy-MM-dd" type="both"/>
-                            <tr>
+                            <tr class="move-item" draggable="true">
+                                <td><i class="bi bi-list toggle-sidebar-btn"></i></td>
                                 <td><input type="checkbox" class="form-check-input checkItem" name="codeCheck" value="${result.codeId}"></td>
                                 <th scope="row">${fn:length(codeList) - status.index}</th>
                                 <td>

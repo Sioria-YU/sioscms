@@ -144,4 +144,32 @@ public class CodeService {
             return false;
         }
     }
+
+    @Transactional
+    public Boolean orderSwapUpdate(String codeGroupId, String codeId1, String codeId2){
+        if(codeGroupId != null && codeId1 != null && codeId2 != null){
+            CodeGroup codeGroup = codeGroupRepository.findByCodeGroupId(codeGroupId).orElse(null);
+
+            if(codeGroup != null){
+                Code code1 = codeRepository.findByCodeGroupAndCodeId(codeGroup, codeId1).orElse(null);
+                Code code2 = codeRepository.findByCodeGroupAndCodeId(codeGroup, codeId2).orElse(null);
+
+                //정렬 순번 스왑
+                if(code1 != null && code2 != null){
+                    int tmpOrderNum = code1.getOrderNum();
+                    code1.setOrderNum(code2.getOrderNum());
+                    code2.setOrderNum(tmpOrderNum);
+                    codeRepository.flush();
+
+                    return true;
+                }else{
+                    return false;
+                }
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
 }
