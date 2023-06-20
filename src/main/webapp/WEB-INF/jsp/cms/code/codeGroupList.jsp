@@ -129,13 +129,13 @@
                         <div class="row mb-3">
                             <label for="codeGroupId" class="col-sm-2 col-form-label">코드그룹 아이디</label>
                             <div class="col-sm-3">
-                                <input type="text" class="form-control" id="codeGroupId" name="codeGroupId" value="${param.userId}" placeholder="코드그룹 아이디를 입력하세요." aria-label="코드그룹 아이디를 입력하세요.">
+                                <input type="text" class="form-control" id="codeGroupId" name="codeGroupId" value="${param.codeGroupId}" placeholder="코드그룹 아이디를 입력하세요." aria-label="코드그룹 아이디를 입력하세요.">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="codeGroupLabel" class="col-sm-2 col-form-label">코드그룹 명</label>
                             <div class="col-sm-3">
-                                <input type="text" class="form-control" id="codeGroupLabel" name="codeGroupLabel" value="${param.name}" placeholder="코드그룹 명을 입력하세요." aria-label="코드그룹 명을 입력하세요.">
+                                <input type="text" class="form-control" id="codeGroupLabel" name="codeGroupLabel" value="${param.codeGroupLabel}" placeholder="코드그룹 명을 입력하세요." aria-label="코드그룹 명을 입력하세요.">
                             </div>
                         </div>
                         <div class="form-btn-set text-center">

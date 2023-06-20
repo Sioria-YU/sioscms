@@ -32,10 +32,18 @@ public class CodeGroupService {
      */
     public List<CodeGroupDto.Response> getCodeGroupList(CodeGroupDto.Request dto){
 
-        ChangSolJpaRestriction restriction = new ChangSolJpaRestriction(ChangSolJpaRestrictionType.AND);
-        restriction.equals("isDeleted", false);
+        ChangSolJpaRestriction rs = new ChangSolJpaRestriction(ChangSolJpaRestrictionType.AND);
+        rs.equals("isDeleted", false);
 
-        return codeGroupRepository.findAll(restriction.toSpecification(), Sort.by(Sort.Direction.DESC, "createdDateTime"))
+        if(dto.getCodeGroupId() != null){
+            rs.iLike("codeGroupId", "%" + dto.getCodeGroupId() + "%");
+        }
+
+        if(dto.getCodeGroupLabel() != null){
+            rs.like("codeGroupLabel", "%" + dto.getCodeGroupLabel() + "%");
+        }
+
+        return codeGroupRepository.findAll(rs.toSpecification(), Sort.by(Sort.Direction.DESC, "createdDateTime"))
                 .stream().map(CodeGroup::toResponse).collect(Collectors.toList());
     }
 

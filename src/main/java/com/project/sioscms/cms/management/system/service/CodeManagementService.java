@@ -28,10 +28,10 @@ public class CodeManagementService {
         rs.equals("isDeleted", false);
 
         if(requestDto.getCodeGroupId() != null && !requestDto.getCodeGroupId().isEmpty()){
-            rs.like("codeGroupId", requestDto.getCodeGroupId());
+            rs.like("codeGroupId", "%" + requestDto.getCodeGroupId() + "%");
         }
         if(requestDto.getCodeGroupLabel() != null && !requestDto.getCodeGroupLabel().isEmpty()){
-            rs.like("codeGroupLabel", requestDto.getCodeGroupLabel());
+            rs.like("codeGroupLabel", "%" + requestDto.getCodeGroupLabel() + "%");
         }
 
         return new SiosPage<>(codeGroupRepository.findAll(rs.toSpecification()
