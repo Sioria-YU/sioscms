@@ -43,4 +43,9 @@ public class CodeGroupController {
     public ResponseEntity<Boolean> duplicationCheck(@RequestParam("codeGroupId") String codeGroupId){
         return ResponseEntity.ok(codeGroupService.duplicationCheck(codeGroupId));
     }
+
+    @DeleteMapping("/mulitple-delete")
+    public ResponseEntity<Boolean> multipleDelete(@RequestParam("codeGroupIdList[]") String[] codeGroupIdList){
+        return ResponseEntity.ok(codeGroupService.multipleDelete(codeGroupIdList));
+    }
 }

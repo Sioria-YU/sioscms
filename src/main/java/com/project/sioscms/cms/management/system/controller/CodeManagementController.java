@@ -34,7 +34,7 @@ public class CodeManagementController {
     }
 
     @RequestMapping("/code-group/view/{codeGroupId}")
-    public ModelAndView codeGroupView(@PathVariable(value = "codeGroupId") String codeGroupId) throws Exception {
+    public ModelAndView codeGroupView(@PathVariable(value = "codeGroupId") String codeGroupId){
         ModelAndView mav = new ModelAndView("cms/code/codeGroupView");
 
         if (codeGroupId == null || codeGroupId.isEmpty()){

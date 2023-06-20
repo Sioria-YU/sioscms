@@ -390,7 +390,7 @@
                             <tr class="move-item" draggable="true">
                                 <td><i class="bi bi-list toggle-sidebar-btn"></i></td>
                                 <td><input type="checkbox" class="form-check-input checkItem" name="codeCheck" value="${result.codePk.codeId}"></td>
-                                <th scope="row">${fn:length(codeList) - status.index}</th>
+                                <th scope="row">${status.count}</th>
                                 <td>
                                     <a href="#"
                                        onclick="modifyModalOpenEvent('${result.codeLabel}', '${result.codePk.codeId}', '${result.option1}', '${result.option2}' ,'${result.option3}' ,'${result.option4}' ,${result.isUsed});">
@@ -410,7 +410,7 @@
                     </c:when>
                     <c:otherwise>
                         <tr class="text-center">
-                            <td colspan="11">조회된 데이터가 존재하지 않습니다.</td>
+                            <td colspan="12">조회된 데이터가 존재하지 않습니다.</td>
                         </tr>
                     </c:otherwise>
                 </c:choose>

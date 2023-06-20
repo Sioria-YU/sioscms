@@ -17,6 +17,41 @@
         });
     }
 
+    const codeGroupDeleteEvent = () => {
+        if($(".checkItem:checked").length > 0) {
+            let codeGroupIdList = [];
+
+            $(".checkItem:checked").each(function () {
+                codeGroupIdList.push($(this).val());
+            });
+
+            if(confirm("삭제하시겠습니까?")){
+                $.ajax({
+                    url: '/cms/api/code-group/mulitple-delete',
+                    type: 'DELETE',
+                    async: false,
+                    data: {
+                        codeGroupIdList: codeGroupIdList
+                    },
+                    success: function (data) {
+                        if (!!data) {
+                            alert("정상 처리 되었습니다.");
+                            location.reload();
+                        } else {
+                            alert("오류가 발생하였습니다.");
+                        }
+                    },
+                    error: function (request, status, error) {
+                        console.error(error);
+                        alert("오류가 발생하였습니다.");
+                    }
+                });
+            }
+        }else{
+            alert("선택된 목록이 없습니다.");
+        }
+    }
+
     const formCheck = () =>{
         if($("#isCodeGroupIdChk").val() === 'F'){
             alert("코드그룹 아이디 중복체크를 실행해 주세요.");
@@ -47,6 +82,22 @@
 
         }
     }
+
+    $(function (){
+        $("#checkAll").on('click',function(){
+            if($("#checkAll").is(":checked")){
+                $(".checkItem").prop("checked", true);
+            }else{
+                $(".checkItem").prop("checked", false);
+            }
+        });
+
+        $(".checkItem").on('click',function(){
+            if(!$(this).is(":checked")){
+                $("#checkAll").prop("checked", false);
+            }
+        });
+    });
 
 </script>
 
@@ -113,7 +164,7 @@
             <table class="table text-center">
                 <thead>
                 <tr>
-                    <th><input type="checkbox" class="form-check-input" id="checkAll"></th>
+                    <th><label for="checkAll"><input type="checkbox" class="form-check-input" id="checkAll"/></label></th>
                     <th scope="col">순번</th>
                     <th scope="col">코드그룹 아이디</th>
                     <th scope="col">코드그룹 명</th>
@@ -127,7 +178,7 @@
                         <c:forEach var="result" items="${resultList}" varStatus="status">
                             <fmt:parseDate var="createdDateTime" value="${result.createdDateTime}" pattern="yyyy-MM-dd" type="both"/>
                             <tr>
-                                <td><input type="checkbox" class="form-check-input" name="codeGroupCheck" value="${result.codeGroupId}"></td>
+                                <td><input type="checkbox" class="form-check-input checkItem" name="codeGroupCheck" value="${result.codeGroupId}"></td>
                                 <th scope="row">${pageInfo.totalCount - ((pageInfo.pageNumber-1) * pageInfo.pageOffset + status.index)}</th>
                                 <td><a href="/cms/code/code-group/view/${result.codeGroupId}">${result.codeGroupId}</a></td>
                                 <td><a href="/cms/code/code-group/view/${result.codeGroupId}">${result.codeGroupLabel}</a></td>
@@ -147,7 +198,7 @@
             <jsp:include page="/WEB-INF/jsp/common/commonPagenation.jsp"/>
 
             <div class="form-btn-set text-end">
-                <button type="button" class="btn btn-danger btn-lg" onclick="alert('미구현');">선택 삭제</button>
+                <button type="button" class="btn btn-danger btn-lg" onclick="codeGroupDeleteEvent();">선택 삭제</button>
                 <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#codeGroupRegistModal">등록</button>
             </div>
         </div>

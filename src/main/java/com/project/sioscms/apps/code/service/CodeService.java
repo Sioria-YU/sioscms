@@ -70,7 +70,13 @@ public class CodeService {
         if(dto != null && dto.getCodeId() != null && dto.getCodeGroupId() != null && dto.getCodeLabel() != null){
             Code entity = CodeMapper.mapper.toEntity(dto);
             entity.setIsDeleted(false);
-            entity.setOrderNum(codeRepository.countByCodePk_CodeGroup_CodeGroupIdAndIsDeleted(dto.getCodeGroupId(), false).intValue());
+
+            int orderNum = 0;
+            Code topOrderCode = codeRepository.findDistinctTop1ByCodePk_CodeGroup_CodeGroupIdOrderByOrderNumDesc(dto.getCodeGroupId()).orElse(null);
+            if(topOrderCode != null){
+                orderNum = topOrderCode.getOrderNum() + 1;
+            }
+            entity.setOrderNum(orderNum);
 
             CodeGroup codeGroup = codeGroupRepository.findByCodeGroupId(dto.getCodeGroupId()).orElse(null);
             if(codeGroup != null){

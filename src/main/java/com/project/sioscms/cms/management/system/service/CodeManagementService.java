@@ -50,7 +50,7 @@ public class CodeManagementService {
         return codeGroup == null? null : codeGroup.toResponse();
     }
 
-    public List<CodeDto.Response> getCodeList(String codeGroupId) throws Exception{
+    public List<CodeDto.Response> getCodeList(String codeGroupId){
         ChangSolJpaRestriction rs = new ChangSolJpaRestriction();
         rs.equals("isDeleted", false);
 

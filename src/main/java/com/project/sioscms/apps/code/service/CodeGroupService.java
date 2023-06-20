@@ -1,8 +1,10 @@
 package com.project.sioscms.apps.code.service;
 
 import com.project.sioscms.apps.code.domain.dto.CodeGroupDto;
+import com.project.sioscms.apps.code.domain.entity.Code;
 import com.project.sioscms.apps.code.domain.entity.CodeGroup;
 import com.project.sioscms.apps.code.domain.repository.CodeGroupRepository;
+import com.project.sioscms.apps.code.domain.repository.CodeRepository;
 import com.project.sioscms.apps.code.mapper.CodeGroupMapper;
 import com.project.sioscms.common.utils.jpa.restriction.ChangSolJpaRestriction;
 import com.project.sioscms.common.utils.jpa.restriction.ChangSolJpaRestrictionType;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class CodeGroupService {
     private final CodeGroupRepository codeGroupRepository;
+    private final CodeRepository codeRepository;
 
     /**
      * 코드그룹 목록 조회
@@ -95,6 +98,30 @@ public class CodeGroupService {
         if(codeGroupId != null && !codeGroupId.isEmpty()){
             CodeGroup codeGroup = codeGroupRepository.findByCodeGroupId(codeGroupId).orElse(null);
             return codeGroup == null;
+        }else{
+            return false;
+        }
+    }
+
+    @Transactional
+    public Boolean multipleDelete(String[] codeGroupIdList){
+        if(codeGroupIdList != null && codeGroupIdList.length > 0){
+            for (String codeGroupId : codeGroupIdList) {
+                CodeGroup codeGroup = codeGroupRepository.findByCodeGroupId(codeGroupId).orElse(null);
+                if(codeGroup != null){
+                    //코드 그룹 하위 자식들을 먼저 삭제한다.
+                    List<Code> codeList = codeRepository.findAllByCodePk_CodeGroup(codeGroup);
+                    if(codeList != null){
+                        codeRepository.deleteAll(codeList);
+                    }
+
+                    //코드 그룹 삭제
+                    codeGroupRepository.delete(codeGroup);
+                }
+            }
+
+            codeGroupRepository.flush();
+            return true;
         }else{
             return false;
         }
