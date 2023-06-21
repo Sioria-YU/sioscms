@@ -98,4 +98,19 @@ public class AccountService {
         }
     }
 
+    @Transactional
+    public Boolean passwordChange(String userId, String userPwd){
+        if(userId != null && userPwd != null){
+            Account account = accountRepository.findByUserId(userId).orElse(null);
+            if(account == null){
+                return false;
+            }else{
+                account.setUserPassword(passwordEncoder.encode(userPwd));
+                return true;
+            }
+        }else {
+            return false;
+        }
+    }
+
 }
