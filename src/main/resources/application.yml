@@ -61,7 +61,11 @@ spring:
             password: 1234
 attach:
     path: /Users/sioria/project/sioscms/upload
-    
+is-real-file-delete: Y
+aes:
+    secret-key: dhtkdwnsdi199503291045dhtkdwns12
+    iv-key: dhtkdwnsdi199503
+    spec-name: AES/CBC/PKCS5Padding
 ---
 spring:
     profiles:
@@ -83,3 +87,8 @@ spring:
             password: 1234
 attach:
     path: /data/www/sioscms/upload
+is-real-file-delete: Y
+aes:
+    secret-key: dhtkdwnsdi199503291045dhtkdwns12
+    iv-key: dhtkdwnsdi199503
+    spec-name: AES/CBC/PKCS5Padding

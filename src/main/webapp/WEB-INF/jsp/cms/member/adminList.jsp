@@ -1,5 +1,60 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<script>
+    $(function(){
+        $(".chk-all").on('click',()=>{
+            if($(".chk-all").is(":checked")) {
+                $(".chk-items").prop('checked', true);
+            }else{
+                $(".chk-items").prop('checked', false);
+            }
+        });
+    });
+
+    const userDeleteEvent = () => {
+        if($("input[name=chk-items]:checked").length > 0) {
+            let idList = [];
+            $("input[name=chk-items]:checked").each((index,item) => {
+                console.log(index,': => ', item.value);
+                idList.push(parseInt(item.value));
+            });
+
+            if(idList.length > 0){
+                if(confirm("삭제하시겠습니까?")) {
+                    $.ajax({
+                        type: 'PUT',
+                        url: '/api/account/delete',
+                        async: false,
+                        data: {
+                            idList:idList
+                        },
+                        success: function (data) {
+                            if (data) {
+                                alert("삭제되었습니다.");
+                                location.reload();
+                            } else {
+                                alert("오류가 발생하였습니다.");
+                                return false;
+                            }
+                        },
+                        error: function (request, status, error) {
+                            console.log(error);
+                        }
+                    });
+                }else {
+                    return false;
+                }
+            }else{
+                console.log("id 목록 생성 실패");
+            }
+        }else{
+            alert("삭제할 목록을 선택하세요.");
+            return false;
+        }
+    }
+</script>
+
 <div id="layoutSidenav_content">
     <main>
         <div class="container-fluid px-4">
@@ -119,56 +174,3 @@
         </div>
     </main>
 </div>
-<script>
-    $(function(){
-       $(".chk-all").on('click',()=>{
-           if($(".chk-all").is(":checked")) {
-               $(".chk-items").prop('checked', true);
-           }else{
-               $(".chk-items").prop('checked', false);
-           }
-       });
-    });
-
-    const userDeleteEvent = () => {
-        if($("input[name=chk-items]:checked").length > 0) {
-            let idList = [];
-            $("input[name=chk-items]:checked").each((index,item) => {
-                console.log(index,': => ', item.value);
-                idList.push(parseInt(item.value));
-            });
-
-            if(idList.length > 0){
-                if(confirm("삭제하시겠습니까?")) {
-                    $.ajax({
-                        type: 'PUT',
-                        url: '/api/account/delete',
-                        async: false,
-                        data: {
-                            idList:idList
-                        },
-                        success: function (data) {
-                            if (data) {
-                                alert("삭제되었습니다.");
-                                location.reload();
-                            } else {
-                                alert("오류가 발생하였습니다.");
-                                return false;
-                            }
-                        },
-                        error: function (request, status, error) {
-                            console.log(error);
-                        }
-                    });
-                }else {
-                    return false;
-                }
-            }else{
-                console.log("id 목록 생성 실패");
-            }
-        }else{
-            alert("삭제할 목록을 선택하세요.");
-            return false;
-        }
-    }
-</script>
