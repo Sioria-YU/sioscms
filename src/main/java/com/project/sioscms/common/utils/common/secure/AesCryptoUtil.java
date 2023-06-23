@@ -6,9 +6,14 @@ import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.Cipher;
+import javax.crypto.CipherInputStream;
+import javax.crypto.CipherOutputStream;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.File;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -56,13 +61,48 @@ public class AesCryptoUtil {
 
     //region 파일 암호화
     public static Boolean encryptFile(String secretKey, String ivKey, String specName, File attachFile, File createFile) throws Exception{
-        return false;
+
+        Cipher c = Cipher.getInstance(specName);
+        SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(), "AES");
+        IvParameterSpec ivParamSpec = new IvParameterSpec(ivKey.getBytes());
+        c.init(Cipher.ENCRYPT_MODE, keySpec, ivParamSpec);
+
+        try (FileOutputStream output = new FileOutputStream(createFile);
+             CipherOutputStream cipherOutput = new CipherOutputStream(output, c)) {
+
+            String data = Files.lines(attachFile.toPath()).collect(Collectors.joining("\n"));
+            cipherOutput.write(data.getBytes(StandardCharsets.UTF_8));
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
     //endregion
 
     //region 파일 복호화
     public static Boolean decryptFile(String secretKey, String ivKey, String specName, File encryptFile, File outputFile) throws Exception{
-        return false;
+        Cipher c = Cipher.getInstance(specName);
+        SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(), "AES");
+        IvParameterSpec ivParamSpec = new IvParameterSpec(ivKey.getBytes());
+        c.init(Cipher.ENCRYPT_MODE, keySpec, ivParamSpec);
+
+        try (
+                CipherInputStream cipherInput = new CipherInputStream(new FileInputStream(encryptFile), c);
+                InputStreamReader inputStream = new InputStreamReader(cipherInput);
+                BufferedReader reader = new BufferedReader(inputStream);
+                FileOutputStream fileOutput = new FileOutputStream(outputFile)) {
+
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+            fileOutput.write(sb.toString().getBytes(StandardCharsets.UTF_8));
+        }catch (Exception e){
+            return false;
+        }
+        return true;
     }
     //endregion
 

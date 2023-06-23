@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -26,5 +28,9 @@ public class AesCryptoService {
 
     public String decrypt(String plainText) throws Exception {
         return AesCryptoUtil.decrypt(SECRET_KEY, IV_KEY, SPEC_NAME, plainText);
+    }
+
+    public Boolean encryptFile(File attachFile, File createFile) throws Exception {
+        return AesCryptoUtil.encryptFile(SECRET_KEY, IV_KEY, SPEC_NAME, attachFile, createFile);
     }
 }
