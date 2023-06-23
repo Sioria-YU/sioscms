@@ -3,12 +3,16 @@
 
 <script>
     const encryptTestEvent = () => {
+        if($("#plainText").val() == ''){
+            alert("입력!!");
+            return false;
+        }
         $.ajax({
-            url: '/api/attach/encrept-test',
+            url: '/api/attach/encrypt-test',
             type: 'GET',
             async: false,
             data: {
-                plainText: $("#plainText").val()
+                inputText: $("#plainText").val()
             },
             success: function (data) {
                 if (!!data) {
@@ -23,6 +27,37 @@
             }
         });
     }
+
+    const decryptTestEvent = () => {
+        if($("#outputText").val() == ''){
+            alert("입력!!");
+            return false;
+        }
+        $.ajax({
+            url: '/api/attach/decrypt-test',
+            type: 'GET',
+            async: false,
+            data: {
+                inputText: $("#outputText").val()
+            },
+            success: function (data) {
+                if (!!data) {
+                    $("#plainText").val(data);
+                } else {
+                    alert("오류가 발생하였습니다.");
+                }
+            },
+            error: function (request, status, error) {
+                console.error(error);
+                alert("오류가 발생하였습니다.");
+            }
+        });
+    }
+
+    const clearEvent = () => {
+        // $("#outputText").val('');
+        $("#plainText").val('');
+    }
 </script>
 
 <div id="layoutSidenav_content">
@@ -35,6 +70,8 @@
             <input type="text" class="form-control mb-2" id="plainText"/>
             <input type="text" class="form-control mb-2" id="outputText" readonly/>
             <button type="button" class="btn btn-dark mb-2" onclick="encryptTestEvent();">encryptTest</button>
+            <button type="button" class="btn btn-success mb-2" onclick="decryptTestEvent();">decryptTest</button>
+            <button type="button" class="btn btn-info mb-2" onclick="clearEvent();">clear</button>
             <div class="row">
                 <div class="col-xl-3 col-md-6">
                     <div class="card bg-primary text-white mb-4">

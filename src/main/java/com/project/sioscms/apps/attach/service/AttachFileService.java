@@ -1,6 +1,6 @@
 package com.project.sioscms.apps.attach.service;
 
-import com.project.sioscms.common.utils.common.secure.AesCryptoUtil;
+import com.project.sioscms.common.service.AesCryptoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class AttachFileService {
 
-    public String encryptTest(String plainText) throws Exception {
-        return AesCryptoUtil.encrypt(plainText);
+    private final AesCryptoService aesCryptoService;
+
+    public String encryptTest(String inputText) throws Exception {
+        return aesCryptoService.encrypt(inputText);
+    }
+
+    public String decryptTest(String inputText) throws Exception {
+        return aesCryptoService.decrypt(inputText);
     }
 }

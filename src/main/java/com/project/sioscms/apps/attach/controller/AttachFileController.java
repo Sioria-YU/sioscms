@@ -15,8 +15,13 @@ public class AttachFileController {
 
     private final AttachFileService attachFileService;
 
-    @GetMapping("/encrept-test")
-    public ResponseEntity<String> encryptTest(@RequestParam("plainText") String plainText) throws Exception {
-        return ResponseEntity.ok(attachFileService.encryptTest(plainText));
+    @GetMapping("/encrypt-test")
+    public ResponseEntity<String> encryptTest(@RequestParam("inputText") String inputText) throws Exception {
+        return ResponseEntity.ok(attachFileService.encryptTest(inputText));
+    }
+
+    @GetMapping("/decrypt-test")
+    public ResponseEntity<String> decryptTest(@RequestParam("inputText") String inputText) throws Exception {
+        return ResponseEntity.ok(attachFileService.decryptTest(inputText));
     }
 }
