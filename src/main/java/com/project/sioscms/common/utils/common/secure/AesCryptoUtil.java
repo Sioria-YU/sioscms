@@ -1,23 +1,18 @@
 package com.project.sioscms.common.utils.common.secure;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
-import javax.crypto.CipherOutputStream;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class AesCryptoUtil {
 
     //region 평문 암호화
@@ -62,16 +57,26 @@ public class AesCryptoUtil {
     //region 파일 암호화
     public static Boolean encryptFile(String secretKey, String ivKey, String specName, File attachFile, File createFile) throws Exception{
 
-        Cipher c = Cipher.getInstance(specName);
+        Cipher cipher = Cipher.getInstance(specName);
         SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(), "AES");
         IvParameterSpec ivParamSpec = new IvParameterSpec(ivKey.getBytes());
-        c.init(Cipher.ENCRYPT_MODE, keySpec, ivParamSpec);
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivParamSpec);
 
-        try (FileOutputStream output = new FileOutputStream(createFile);
-             CipherOutputStream cipherOutput = new CipherOutputStream(output, c)) {
+        try(FileInputStream fileInputStream = new FileInputStream(attachFile);
+            FileOutputStream fileOutputStream = new FileOutputStream(createFile))
+        {
+            byte[] fileBytes = new byte[1024];
+            byte[] output = new byte[cipher.getOutputSize(fileBytes.length)];
+            int procLength = 0;
+            int read = -1;
 
-            String data = Files.lines(attachFile.toPath()).collect(Collectors.joining("\n"));
-            cipherOutput.write(data.getBytes(StandardCharsets.UTF_8));
+            while ((read = fileInputStream.read(fileBytes)) != -1){
+                procLength = cipher.update(fileBytes, 0, fileBytes.length, output, 0);
+            }
+
+            procLength = cipher.doFinal(output, procLength);
+            fileOutputStream.write(output);
+
         }catch (Exception e){
             e.printStackTrace();
             return false;

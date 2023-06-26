@@ -19,8 +19,8 @@ public class AttachFileService {
 
     private final AesCryptoService aesCryptoService;
 
-    @Value("${is-real-file-delete}")
-    private String isRealFileDelete;
+    @Value("${attach.delete.enabled}")
+    private boolean attachDeleteEnabled;
 
     @Value("${attach.path}")
     private String attachPath;
@@ -37,25 +37,25 @@ public class AttachFileService {
         String originalFileName = file.getOriginalFilename();
         //원본 파일을 얻어온다.
         File originFile = new File(attachPath + File.separator + "tmp" + File.separator + originalFileName);
-
-        file.transferTo(originFile);
-
-        //암호화 하여 저장할 파일을 생성한다.
-        File destination = new File(attachPath + File.separator + aesCryptoService.encrypt(originalFileName));
-//        destination.createNewFile();
-
         //파일 생성 경로 확인
         if(!originFile.exists()){
             originFile.mkdir();
         }
 
-        if(!destination.exists()){
-            destination.mkdir();
+        file.transferTo(originFile);
+
+        //암호화 하여 저장할 파일을 생성한다.
+        File destination = new File(attachPath + File.separator + aesCryptoService.encrypt(originalFileName));
+        if(!destination.createNewFile()){
+            destination = new File(attachPath + File.separator + aesCryptoService.encrypt(originalFileName + System.nanoTime()));
+            destination.createNewFile();
         }
 
         boolean isWrited = aesCryptoService.encryptFile(originFile, destination);
 
+
         if(isWrited){
+            originFile.delete();
             return ResponseEntity.status(HttpStatus.CREATED).body(originalFileName);
         }else{
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(originalFileName);

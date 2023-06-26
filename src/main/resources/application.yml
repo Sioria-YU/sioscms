@@ -67,7 +67,8 @@ spring:
             password: 1234
 attach:
     path: /Users/sioria/project/sioscms/upload
-is-real-file-delete: Y
+    delete:
+        enabled: true
 aes:
     secret-key: dhtkdwnsdi199503291045dhtkdwns12
     iv-key: dhtkdwnsdi199503
@@ -94,7 +95,8 @@ spring:
             password: 1234
 attach:
     path: /data/www/sioscms/upload
-is-real-file-delete: Y
+    delete:
+        enabled: true
 aes:
     secret-key: dhtkdwnsdi199503291045dhtkdwns12
     iv-key: dhtkdwnsdi199503
