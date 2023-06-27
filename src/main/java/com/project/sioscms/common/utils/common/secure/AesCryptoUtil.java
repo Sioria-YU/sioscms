@@ -18,14 +18,6 @@ import java.io.FileOutputStream;
 @Component
 public class AesCryptoUtil {
 
-    private static Cipher getCipher(String secretKey, String ivKey, String specName) throws Exception{
-        Cipher cipher = Cipher.getInstance(specName);
-        SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(), "AES");
-        IvParameterSpec ivParamSpec = new IvParameterSpec(ivKey.getBytes());
-        cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivParamSpec);
-        return cipher;
-    }
-
     //region 평문 암호화
     public static String encrypt(String secretKey, String ivKey, String specName, String inputText) throws Exception{
         //Null Or Empty Value Prevention
@@ -34,7 +26,10 @@ public class AesCryptoUtil {
         }
 
         //Cipher 초기 값 주입
-        Cipher cipher = AesCryptoUtil.getCipher(secretKey, ivKey, specName);
+        Cipher cipher = Cipher.getInstance(specName);
+        SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(), "AES");
+        IvParameterSpec ivParamSpec = new IvParameterSpec(ivKey.getBytes());
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivParamSpec);
 
         byte[] encrypted = cipher.doFinal(inputText.getBytes("UTF-8"));
 
@@ -51,7 +46,10 @@ public class AesCryptoUtil {
         }
 
         //Cipher 초기 값 주입
-        Cipher cipher = AesCryptoUtil.getCipher(secretKey, ivKey, specName);
+        Cipher cipher = Cipher.getInstance(specName);
+        SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(), "AES");
+        IvParameterSpec ivParamSpec = new IvParameterSpec(ivKey.getBytes());
+        cipher.init(Cipher.DECRYPT_MODE, keySpec, ivParamSpec);
 
         //base64 decode
         byte[] decodedBytes = Base64.decodeBase64(inputText);
@@ -64,7 +62,10 @@ public class AesCryptoUtil {
     //region 파일 암호화
     public static Boolean encryptFile(String secretKey, String ivKey, String specName, File attachFile, File createFile) throws Exception{
         //Cipher 초기 값 주입
-        Cipher cipher = AesCryptoUtil.getCipher(secretKey, ivKey, specName);
+        Cipher cipher = Cipher.getInstance(specName);
+        SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(), "AES");
+        IvParameterSpec ivParamSpec = new IvParameterSpec(ivKey.getBytes());
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivParamSpec);
 
         try(
                 //암호화할 파일을 읽을 스트림 객체 생성
@@ -92,7 +93,10 @@ public class AesCryptoUtil {
     //region 파일 복호화
     public static Boolean decryptFile(String secretKey, String ivKey, String specName, File encryptedFile, HttpServletResponse response) throws Exception{
         //Cipher 초기 값 주입
-        Cipher cipher = AesCryptoUtil.getCipher(secretKey, ivKey, specName);
+        Cipher cipher = Cipher.getInstance(specName);
+        SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(), "AES");
+        IvParameterSpec ivParamSpec = new IvParameterSpec(ivKey.getBytes());
+        cipher.init(Cipher.DECRYPT_MODE, keySpec, ivParamSpec);
 
         try (
                 //암호화 파일을 읽어들일 스트림 객체 생성

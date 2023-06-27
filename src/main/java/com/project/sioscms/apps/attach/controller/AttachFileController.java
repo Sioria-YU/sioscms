@@ -31,7 +31,8 @@ public class AttachFileController {
     }
 
     @GetMapping("/download/{fileName}")
-    public ResponseEntity download(@PathVariable("fileName") String fileName, HttpServletResponse response) throws Exception {
-        return ResponseEntity.ok(attachFileService.download(fileName, response));
+    public void download(@PathVariable("fileName") String fileName, HttpServletResponse response) throws Exception {
+        attachFileService.download(fileName, response);
+//        return ResponseEntity.ok(attachFileService.download(fileName, response));
     }
 }

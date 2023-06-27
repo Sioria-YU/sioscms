@@ -70,30 +70,31 @@ public class AttachFileService {
         }
     }
 
-    public ResponseEntity download(String fileName, HttpServletResponse response) throws Exception{
+    public void download(String fileName, HttpServletResponse response) throws Exception{
         //파일명으로 파일 조회
         //암호화 파일 경로, 복호화 파일명 얻어옴
 
         //파일을 읽어옴(inputStream)
         File encryptFile = new File(attachPath + File.separator + fileName);    //파일 조회 시 들어있는 경로로 변경해야함
         String originalFileName = new String(Base64.decodeBase64(fileName), StandardCharsets.UTF_8);
+        System.out.println("originalFileName :::::::>>>>> " + originalFileName);
 
         try {
             //response output
-            response.setContentType("application/octet-stream");
+            response.setContentType("application/octet-stream; charset=utf-8");
             response.setHeader("Content-Disposition", "attachment; fileName='" + URLEncoder.encode(originalFileName, StandardCharsets.UTF_8) + "'");
             response.setHeader("Content-Transfer-Encoding", "binary");
 
             //파일 복호화 및 전송
             if(aesCryptoService.decryptFile(encryptFile, response)) {
-                return ResponseEntity.status(HttpStatus.CREATED).body(originalFileName);
+//                return ResponseEntity.status(HttpStatus.CREATED).body(originalFileName);
             }else{
                 log.error("file decrypting failed!!!");
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(originalFileName);
+//                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(originalFileName);
             }
         }catch (Exception e){
             log.error(e.toString());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(originalFileName);
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(originalFileName);
         }
     }
 }
