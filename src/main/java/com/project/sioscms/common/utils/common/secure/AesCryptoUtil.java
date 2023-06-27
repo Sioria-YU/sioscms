@@ -6,14 +6,25 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
+import javax.crypto.CipherOutputStream;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.*;
-import java.nio.charset.StandardCharsets;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 
 @Slf4j
 @Component
 public class AesCryptoUtil {
+
+    private static Cipher getCipher(String secretKey, String ivKey, String specName) throws Exception{
+        Cipher cipher = Cipher.getInstance(specName);
+        SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(), "AES");
+        IvParameterSpec ivParamSpec = new IvParameterSpec(ivKey.getBytes());
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivParamSpec);
+        return cipher;
+    }
 
     //region 평문 암호화
     public static String encrypt(String secretKey, String ivKey, String specName, String inputText) throws Exception{
@@ -22,12 +33,10 @@ public class AesCryptoUtil {
             return null;
         }
 
-        Cipher c = Cipher.getInstance(specName);
-        SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(), "AES");
-        IvParameterSpec ivParamSpec = new IvParameterSpec(ivKey.getBytes());
-        c.init(Cipher.ENCRYPT_MODE, keySpec, ivParamSpec);
+        //Cipher 초기 값 주입
+        Cipher cipher = AesCryptoUtil.getCipher(secretKey, ivKey, specName);
 
-        byte[] encrypted = c.doFinal(inputText.getBytes("UTF-8"));
+        byte[] encrypted = cipher.doFinal(inputText.getBytes("UTF-8"));
 
         //base64 encode
         return new String(Base64.encodeBase64(encrypted));
@@ -41,14 +50,12 @@ public class AesCryptoUtil {
             return null;
         }
 
-        Cipher c = Cipher.getInstance(specName);
-        SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(), "AES");
-        IvParameterSpec ivParamSpec = new IvParameterSpec(ivKey.getBytes());
-        c.init(Cipher.DECRYPT_MODE, keySpec, ivParamSpec);
+        //Cipher 초기 값 주입
+        Cipher cipher = AesCryptoUtil.getCipher(secretKey, ivKey, specName);
 
         //base64 decode
         byte[] decodedBytes = Base64.decodeBase64(inputText);
-        byte[] decrypted = c.doFinal(decodedBytes);
+        byte[] decrypted = cipher.doFinal(decodedBytes);
 
         return new String(decrypted, "UTF-8");
     }
@@ -56,58 +63,57 @@ public class AesCryptoUtil {
 
     //region 파일 암호화
     public static Boolean encryptFile(String secretKey, String ivKey, String specName, File attachFile, File createFile) throws Exception{
+        //Cipher 초기 값 주입
+        Cipher cipher = AesCryptoUtil.getCipher(secretKey, ivKey, specName);
 
-        Cipher cipher = Cipher.getInstance(specName);
-        SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(), "AES");
-        IvParameterSpec ivParamSpec = new IvParameterSpec(ivKey.getBytes());
-        cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivParamSpec);
-
-        try(FileInputStream fileInputStream = new FileInputStream(attachFile);
-            FileOutputStream fileOutputStream = new FileOutputStream(createFile))
+        try(
+                //암호화할 파일을 읽을 스트림 객체 생성
+                FileInputStream fileInputStream = new FileInputStream(attachFile);
+                // 암호화된 내용을 출력할 스트림 객체 생성
+                FileOutputStream fileOutputStream = new FileOutputStream(createFile);
+                CipherOutputStream cipherOutputStream = new CipherOutputStream(fileOutputStream, cipher))
         {
-            byte[] fileBytes = new byte[1024];
-            byte[] output = new byte[cipher.getOutputSize(fileBytes.length)];
-            int procLength = 0;
-            int read = -1;
+            byte[] buffer = new byte[4096];
+            int bytesRead;
 
-            while ((read = fileInputStream.read(fileBytes)) != -1){
-                procLength = cipher.update(fileBytes, 0, fileBytes.length, output, 0);
+            while ((bytesRead = fileInputStream.read(buffer)) != -1) {
+                // 암호화된 내용을 출력 파일에 작성
+                cipherOutputStream.write(buffer, 0, bytesRead);
             }
 
-            procLength = cipher.doFinal(output, procLength);
-            fileOutputStream.write(output);
-
+            return true;
         }catch (Exception e){
             e.printStackTrace();
             return false;
         }
-        return true;
     }
     //endregion
 
     //region 파일 복호화
-    public static Boolean decryptFile(String secretKey, String ivKey, String specName, File encryptFile, File outputFile) throws Exception{
-        Cipher c = Cipher.getInstance(specName);
-        SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(), "AES");
-        IvParameterSpec ivParamSpec = new IvParameterSpec(ivKey.getBytes());
-        c.init(Cipher.ENCRYPT_MODE, keySpec, ivParamSpec);
+    public static Boolean decryptFile(String secretKey, String ivKey, String specName, File encryptedFile, HttpServletResponse response) throws Exception{
+        //Cipher 초기 값 주입
+        Cipher cipher = AesCryptoUtil.getCipher(secretKey, ivKey, specName);
 
         try (
-                CipherInputStream cipherInput = new CipherInputStream(new FileInputStream(encryptFile), c);
-                InputStreamReader inputStream = new InputStreamReader(cipherInput);
-                BufferedReader reader = new BufferedReader(inputStream);
-                FileOutputStream fileOutput = new FileOutputStream(outputFile)) {
+                //암호화 파일을 읽어들일 스트림 객체 생성
+                FileInputStream inputStream = new FileInputStream(encryptedFile);
+                CipherInputStream cipherInputStream = new CipherInputStream(inputStream, cipher)) {
 
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line);
+            byte[] buffer = new byte[4096];
+            int bytesRead;
+
+            while ((bytesRead = cipherInputStream.read(buffer)) != -1) {
+                // 복호화된 내용을 출력 파일에 작성
+                response.getOutputStream().write(buffer, 0, bytesRead);
             }
-            fileOutput.write(sb.toString().getBytes(StandardCharsets.UTF_8));
+
+            response.getOutputStream().flush();
+            response.getOutputStream().close();
+            return true;
         }catch (Exception e){
+            log.error(e.toString());
             return false;
         }
-        return true;
     }
     //endregion
 

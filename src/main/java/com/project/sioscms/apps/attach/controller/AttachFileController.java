@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+
 @RestController
 @RequestMapping("/api/attach")
 @RequiredArgsConstructor
@@ -26,5 +28,10 @@ public class AttachFileController {
     @PostMapping("/upload")
     public ResponseEntity upload(@RequestPart MultipartFile file) throws Exception {
         return ResponseEntity.ok(attachFileService.upload(file));
+    }
+
+    @GetMapping("/download/{fileName}")
+    public ResponseEntity download(@PathVariable("fileName") String fileName, HttpServletResponse response) throws Exception {
+        return ResponseEntity.ok(attachFileService.download(fileName, response));
     }
 }

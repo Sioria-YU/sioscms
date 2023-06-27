@@ -70,8 +70,8 @@ attach:
     delete:
         enabled: true
 aes:
-    secret-key: dhtkdwnsdi199503291045dhtkdwns12
-    iv-key: dhtkdwnsdi199503
+    secret-key: 01234567890123456789012345678901
+    iv-key: 0123456789012345
     spec-name: AES/CBC/PKCS5Padding
 ---
 spring:
@@ -98,6 +98,6 @@ attach:
     delete:
         enabled: true
 aes:
-    secret-key: dhtkdwnsdi199503291045dhtkdwns12
-    iv-key: dhtkdwnsdi199503
+    secret-key: 01234567890123456789012345678901
+    iv-key: 0123456789012345
     spec-name: AES/CBC/PKCS5Padding
