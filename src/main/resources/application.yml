@@ -58,6 +58,10 @@ spring:
     jpa:
         hibernate:
             ddl-auto: update
+        defer-datasource-initialization: true
+    sql:
+        init:
+            mode: always
     devtools:
         livereload:
             enabled: true
@@ -85,7 +89,11 @@ spring:
         password: 1q2w3e4r
     jpa:
         hibernate:
-            ddl-auto: update
+            ddl-auto: none
+        defer-datasource-initialization: true
+    sql:
+        init:
+            mode: never
     devtools:
         livereload:
             enabled: true

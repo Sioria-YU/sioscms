@@ -113,6 +113,10 @@ public class AesCryptoUtil {
 
             response.getOutputStream().flush();
             response.getOutputStream().close();
+
+            inputStream.close();
+            cipherInputStream.close();
+
             return true;
         }catch (Exception e){
             log.error(e.toString());
