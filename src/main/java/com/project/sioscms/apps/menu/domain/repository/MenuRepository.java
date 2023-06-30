@@ -17,12 +17,13 @@ public interface MenuRepository extends CommonJpaRepository<Menu,Long> {
     Long countByUpperMenu_IdAndIsDeleted(long upperMenuId, boolean isDeleted);
 
     @Modifying
-    @Query(value =
+    /*@Query(value =
             "UPDATE Menu m " +
             "SET m.orderNum = m.orderNum + (:increaseNum) " +
             "WHERE m.orderNum >= :startOrderNum " +
             "AND m.orderNum <= :endOrderNum " +
             "AND m.orderNum <> :nowOrderNum " +
-            "AND m.isDeleted = :isDeleted")
+            "AND m.isDeleted = :isDeleted")*/
+    @Query(name = "updateByOrders")
     void updateByOrders(Long nowOrderNum, Long startOrderNum, Long endOrderNum, Boolean isDeleted, Long increaseNum);
 }

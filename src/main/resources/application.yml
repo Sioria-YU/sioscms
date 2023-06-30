@@ -59,9 +59,12 @@ spring:
         hibernate:
             ddl-auto: update
         defer-datasource-initialization: true
+        mapping-resources: #application.yml에서는 sql xml파일을 *로 가져올 수 없고, 단일 지정해야함...
+            - sqlmap/postgres/orm.xml
+            - sqlmap/postgres/menu_sql.xml
     sql:
         init:
-            mode: always
+            mode: never
     devtools:
         livereload:
             enabled: true

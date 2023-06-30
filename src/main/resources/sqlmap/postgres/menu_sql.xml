@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm
+                                     http://xmlns.jcp.org/xml/ns/persistence/orm_2_2.xsd"
+                 version="2.2">
+
+    <!--<named-native-query name="Menu.updateByOrders" result-class="com.project.sioscms.apps.menu.domain.entity.Menu">-->
+    <named-query name="updateByOrders"> <!-- 도메인클래스명이 리턴 클래스이다. -->
+        <query>
+        <![CDATA[
+            UPDATE Menu m
+            SET m.orderNum = m.orderNum + (:increaseNum)
+            WHERE m.orderNum >= :startOrderNum
+            AND m.orderNum <= :endOrderNum
+            AND m.orderNum <> :nowOrderNum
+            AND m.isDeleted = :isDeleted
+            ]]>
+    </query>
+    </named-query>
+</entity-mappings>
