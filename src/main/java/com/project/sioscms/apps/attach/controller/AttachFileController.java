@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/attach")
@@ -30,8 +31,23 @@ public class AttachFileController {
         return ResponseEntity.ok(attachFileService.upload(file));
     }
 
+    @PostMapping("/multi-upload")
+    public ResponseEntity multUpload(@RequestPart List<MultipartFile> files) throws Exception {
+        return null;
+    }
+
     @GetMapping("/download/{fileName}")
     public void download(@PathVariable("fileName") String fileName, HttpServletResponse response) throws Exception {
         attachFileService.download(fileName, response);
+    }
+
+    @DeleteMapping("/delete/{fileName}")
+    public void delete(@PathVariable("fileName") String fileName) throws Exception{
+        attachFileService.delete(fileName);
+    }
+
+    @DeleteMapping("/delete")
+    public void delete(@RequestParam("fileName") String fileName, @RequestParam("deleteMode") String deleteMode) throws Exception{
+        attachFileService.delete(fileName, deleteMode);
     }
 }

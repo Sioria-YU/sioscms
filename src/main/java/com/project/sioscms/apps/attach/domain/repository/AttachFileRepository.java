@@ -4,6 +4,9 @@ import com.project.sioscms.apps.attach.domain.entity.AttachFile;
 import com.project.sioscms.common.domain.repository.CommonJpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface AttachFileRepository extends CommonJpaRepository<AttachFile, Long> {
+    Optional<AttachFile> findByFileName(String fileName);
 }

@@ -46,6 +46,7 @@ public class AttachFileService {
         return aesCryptoService.decrypt(inputText);
     }
 
+    //region file upload
     @Transactional
     public ResponseEntity upload(MultipartFile file) throws Exception {
         String originalFileName = file.getOriginalFilename();
@@ -67,7 +68,8 @@ public class AttachFileService {
 
         //암호화 하여 저장할 파일을 생성한다.
         String destinationFileName = System.nanoTime() + "_" + originalFileName;
-        File destination = new File(filePath + Base64.encodeBase64URLSafeString(destinationFileName.getBytes(StandardCharsets.UTF_8)));
+        String encryptFileName = Base64.encodeBase64URLSafeString(destinationFileName.getBytes(StandardCharsets.UTF_8));
+        File destination = new File(filePath + encryptFileName);
         if(!destination.createNewFile()){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(originalFileName);
         }
@@ -82,7 +84,7 @@ public class AttachFileService {
             //파일 정보 db 저장
             AttachFile attachFile = new AttachFile();
             attachFile.setAttachFileGroup(attachFileGroup);
-            attachFile.setFileName(destinationFileName);
+            attachFile.setFileName(encryptFileName);
             attachFile.setOriginFileName(originalFileName);
             attachFile.setFileExtension(originalFileName.substring(originalFileName.lastIndexOf(".")+1, originalFileName.length()));
             attachFile.setFilePath(filePath);
@@ -114,7 +116,9 @@ public class AttachFileService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(originalFileName);
         }
     }
+    //endregion
 
+    //region file download
     public void download(String fileName, HttpServletResponse response) throws Exception{
         //파일명으로 파일 조회
         //암호화 파일 경로, 복호화 파일명 얻어옴
@@ -137,4 +141,32 @@ public class AttachFileService {
             log.error(e.toString());
         }
     }
+    //endregion
+
+    //region file delete
+    @Transactional
+    public void delete(String fileName) throws Exception{
+        this.delete(fileName, null);
+    }
+
+    @Transactional
+    public void delete(String fileName, String deleteMode) throws Exception{
+        //deleteMode : 삭제 모드(N 안함, D 삭제)
+        //attachDeleteEnabled : 삭제 허용 설정
+        if(attachDeleteEnabled && "D".equals(deleteMode)) {
+            //파일 삭제 처리
+            File originFile = new File(attachPath + File.separator + fileName);
+            if(originFile.isFile()){
+                originFile.delete();
+            }
+        }
+        //db 파일 삭제처리
+        this.deleteAttachFile(fileName);
+    }
+
+    @Transactional
+    protected void deleteAttachFile(String fileName){
+        attachFileRepository.findByFileName(fileName).ifPresent(attachFile -> attachFile.setIsDeleted(true));
+    }
+    //endregion
 }
