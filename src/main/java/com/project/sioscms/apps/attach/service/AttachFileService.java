@@ -164,4 +164,26 @@ public class AttachFileService {
         attachFileRepository.findByFileName(fileName).ifPresent(attachFile -> attachFile.setIsDeleted(true));
     }
     //endregion
+
+    //region getImage
+    public void getImage(String fileName, HttpServletResponse response){
+        //파일명으로 파일 조회
+        //암호화 파일 경로, 복호화 파일명 얻어옴
+
+        //파일을 읽어옴(inputStream)
+        File encryptFile = new File(attachPath + File.separator + fileName);    //파일 조회 시 들어있는 경로로 변경해야함
+
+        try {
+            //response output
+            response.setHeader("Content-Type", "image/jpeg");   //이미지 타입 확장자에따라 바뀌도록 변경해야함
+
+            //파일 복호화 및 전송
+            if(!aesCryptoService.decryptFile(encryptFile, response)) {
+                log.error("file decrypting failed!!!");
+            }
+        }catch (Exception e){
+            log.error(e.toString());
+        }
+    }
+    //endregion
 }

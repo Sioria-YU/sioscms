@@ -17,12 +17,12 @@ public class AttachFileController {
     private final AttachFileService attachFileService;
 
     @PostMapping("/upload")
-    public ResponseEntity upload(@RequestPart MultipartFile file) throws Exception {
+    public ResponseEntity<?> upload(@RequestPart MultipartFile file) throws Exception {
         return ResponseEntity.ok(attachFileService.upload(file));
     }
 
     @PostMapping("/multi-upload")
-    public ResponseEntity multUpload(@RequestPart List<MultipartFile> files) throws Exception {
+    public ResponseEntity<?> multUpload(@RequestPart List<MultipartFile> files) throws Exception {
         return null;
     }
 
@@ -39,5 +39,10 @@ public class AttachFileController {
     @DeleteMapping("/delete")
     public void delete(@RequestParam("fileName") String fileName, @RequestParam("deleteMode") String deleteMode) throws Exception{
         attachFileService.delete(fileName, deleteMode);
+    }
+
+    @GetMapping("/get-image/{fileName}")
+    public void getImage(@PathVariable("fileName") String fileName, HttpServletResponse response){
+        attachFileService.getImage(fileName, response);
     }
 }

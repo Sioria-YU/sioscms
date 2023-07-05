@@ -72,6 +72,7 @@
             <button type="button" class="btn btn-dark mb-2" onclick="encryptTestEvent();">encryptTest</button>
             <button type="button" class="btn btn-success mb-2" onclick="decryptTestEvent();">decryptTest</button>
             <button type="button" class="btn btn-info mb-2" onclick="clearEvent();">clear</button>
+            <img src="/api/attach/get-image/MzMxODkyOTA3MjA3ODc1X2tpbWlfbm9fbmFtYWVfd2FfOC5qcGVn" alt="이미지"/>
             <div class="row">
                 <div class="col-xl-3 col-md-6">
                     <div class="card bg-primary text-white mb-4">
