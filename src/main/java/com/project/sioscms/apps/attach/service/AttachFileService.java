@@ -38,17 +38,9 @@ public class AttachFileService {
     @Value("${attach.path}")
     private String attachPath;
 
-    public String encryptTest(String inputText) throws Exception {
-        return aesCryptoService.encrypt(inputText);
-    }
-
-    public String decryptTest(String inputText) throws Exception {
-        return aesCryptoService.decrypt(inputText);
-    }
-
     //region file upload
     @Transactional
-    public ResponseEntity upload(MultipartFile file) throws Exception {
+    public ResponseEntity<?> upload(MultipartFile file) throws Exception {
         String originalFileName = file.getOriginalFilename();
         if(originalFileName == null || originalFileName.isEmpty()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(originalFileName);
@@ -58,7 +50,9 @@ public class AttachFileService {
         File originFile = new File(attachPath + File.separator + "tmp" + File.separator + originalFileName);
         //파일 생성 경로 확인
         if(!originFile.exists()){
-            originFile.mkdir();
+            if(!originFile.mkdir()){
+                log.error("Directory create failed!!!!!");
+            }
         }
         //업로드 임시파일 생성
         file.transferTo(originFile);
@@ -74,19 +68,18 @@ public class AttachFileService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(originalFileName);
         }
 
-        boolean isWrited = aesCryptoService.encryptFile(originFile, destination);
+        boolean isWrite = aesCryptoService.encryptFile(originFile, destination);
 
-        if(isWrited){
+        if(isWrite){
             AttachFileGroup attachFileGroup = new AttachFileGroup();
             attachFileGroup.setIsDeleted(false);
-
 
             //파일 정보 db 저장
             AttachFile attachFile = new AttachFile();
             attachFile.setAttachFileGroup(attachFileGroup);
             attachFile.setFileName(encryptFileName);
             attachFile.setOriginFileName(originalFileName);
-            attachFile.setFileExtension(originalFileName.substring(originalFileName.lastIndexOf(".")+1, originalFileName.length()));
+            attachFile.setFileExtension(originalFileName.substring(originalFileName.lastIndexOf(".")+1));
             attachFile.setFilePath(filePath);
             attachFile.setFileOrderNum(0L);
             attachFile.setIsDeleted(false);
@@ -99,7 +92,7 @@ public class AttachFileService {
             attachFileGroup.setCreatedBy(1L);
             attachFileGroup.setUpdatedBy(1L);
 
-            List attachFileList = Lists.newArrayList(attachFile);
+            List<AttachFile> attachFileList = Lists.newArrayList(attachFile);
 
             attachFileGroup.setAttachFile(attachFileList);
 
@@ -119,7 +112,7 @@ public class AttachFileService {
     //endregion
 
     //region file download
-    public void download(String fileName, HttpServletResponse response) throws Exception{
+    public void download(String fileName, HttpServletResponse response){
         //파일명으로 파일 조회
         //암호화 파일 경로, 복호화 파일명 얻어옴
 
@@ -157,7 +150,9 @@ public class AttachFileService {
             //파일 삭제 처리
             File originFile = new File(attachPath + File.separator + fileName);
             if(originFile.isFile()){
-                originFile.delete();
+                if(!originFile.delete()){
+                    log.error("File delete failed!!!!!");
+                }
             }
         }
         //db 파일 삭제처리

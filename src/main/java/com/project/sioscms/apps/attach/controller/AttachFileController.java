@@ -16,16 +16,6 @@ public class AttachFileController {
 
     private final AttachFileService attachFileService;
 
-    @GetMapping("/encrypt-test")
-    public ResponseEntity<String> encryptTest(@RequestParam("inputText") String inputText) throws Exception {
-        return ResponseEntity.ok(attachFileService.encryptTest(inputText));
-    }
-
-    @GetMapping("/decrypt-test")
-    public ResponseEntity<String> decryptTest(@RequestParam("inputText") String inputText) throws Exception {
-        return ResponseEntity.ok(attachFileService.decryptTest(inputText));
-    }
-
     @PostMapping("/upload")
     public ResponseEntity upload(@RequestPart MultipartFile file) throws Exception {
         return ResponseEntity.ok(attachFileService.upload(file));

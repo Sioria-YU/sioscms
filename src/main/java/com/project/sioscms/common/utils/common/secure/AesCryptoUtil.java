@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @Component
@@ -31,7 +32,7 @@ public class AesCryptoUtil {
         IvParameterSpec ivParamSpec = new IvParameterSpec(ivKey.getBytes());
         cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivParamSpec);
 
-        byte[] encrypted = cipher.doFinal(inputText.getBytes("UTF-8"));
+        byte[] encrypted = cipher.doFinal(inputText.getBytes(StandardCharsets.UTF_8));
 
         //base64 encode
         return new String(Base64.encodeBase64(encrypted));
@@ -55,7 +56,7 @@ public class AesCryptoUtil {
         byte[] decodedBytes = Base64.decodeBase64(inputText);
         byte[] decrypted = cipher.doFinal(decodedBytes);
 
-        return new String(decrypted, "UTF-8");
+        return new String(decrypted, StandardCharsets.UTF_8);
     }
     //endregion
 
