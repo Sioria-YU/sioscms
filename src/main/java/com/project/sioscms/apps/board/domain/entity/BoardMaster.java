@@ -1,4 +1,31 @@
 package com.project.sioscms.apps.board.domain.entity;
 
-public class BoardMaster {
+import com.project.sioscms.apps.code.domain.entity.Code;
+import com.project.sioscms.common.domain.entity.CommonEntityWithIdAndDate;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Comment;
+
+import javax.persistence.Entity;
+import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
+
+@Entity
+@Getter
+@Setter
+public class BoardMaster extends CommonEntityWithIdAndDate {
+
+    @NotNull
+    @Comment("게시판 이름")
+    private String boardName;
+
+    @OneToOne
+    @NotNull
+    @Comment("게시판 유형 코드")
+    private Code boardTypeCode;
+
+    @ColumnDefault(value = "FALSE")
+    @Comment("삭제여부")
+    private Boolean isDeleted = false;
 }
