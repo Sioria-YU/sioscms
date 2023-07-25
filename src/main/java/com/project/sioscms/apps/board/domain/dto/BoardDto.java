@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 public class BoardDto {
 
@@ -38,6 +39,8 @@ public class BoardDto {
         private Long imageFileGroupId;
 
         private Long attachFileGroupId;
+
+        private Set<String> hashtagList;
 
         private Boolean isDeleted;
     }
@@ -78,6 +81,8 @@ public class BoardDto {
         private AttachFileGroup imageFileGroup;
 
         private AttachFileGroup attachFileGroup;
+
+        private Set<String> hashtagList;
 
         private Boolean isDeleted;
     }

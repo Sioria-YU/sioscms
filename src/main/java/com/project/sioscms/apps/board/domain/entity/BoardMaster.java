@@ -1,5 +1,7 @@
 package com.project.sioscms.apps.board.domain.entity;
 
+import com.project.sioscms.apps.board.domain.dto.BoardMasterDto;
+import com.project.sioscms.apps.board.mapper.BoardMasterMapper;
 import com.project.sioscms.apps.code.domain.entity.Code;
 import com.project.sioscms.common.domain.entity.CommonEntityWithIdAndDate;
 import lombok.Getter;
@@ -28,4 +30,6 @@ public class BoardMaster extends CommonEntityWithIdAndDate {
     @ColumnDefault(value = "FALSE")
     @Comment("삭제여부")
     private Boolean isDeleted = false;
+
+    public BoardMasterDto.Response toResponse() {return BoardMasterMapper.mapper.toResponse(this);}
 }
