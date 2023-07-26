@@ -14,7 +14,7 @@ public class BoardMasterDto {
     public static class Request extends CommonSearchDto {
         private String boardName;
 
-        private String boardTypeCode;
+        private Code boardTypeCode;
 
         private Boolean isDeleted;
     }

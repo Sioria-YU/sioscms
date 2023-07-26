@@ -2,6 +2,7 @@ package com.project.sioscms.apps.code.domain.entity;
 
 import com.project.sioscms.apps.code.domain.dto.CodeDto;
 import com.project.sioscms.apps.code.mapper.CodeMapper;
+import com.project.sioscms.common.domain.entity.CommonEntityWithIdAndDate;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
@@ -14,6 +15,7 @@ import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters.LocalDa
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -21,21 +23,18 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @EntityListeners(AuditingEntityListener.class)
-public class Code {
-    @Getter
-    @Setter
-    public static class CodePk implements Serializable{
-        @Comment("코드 아이디")
-        @Column(length = 100)
-        private String codeId;
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"code_group_code_group_id","codeId"})
+})
+public class Code extends CommonEntityWithIdAndDate {
+    @NotNull
+    @Comment("코드 아이디")
+    @Column(length = 100)
+    private String codeId;
 
-        @ManyToOne
-        @Comment("코드그룹 아이디")
-        private CodeGroup codeGroup;
-    }
-
-    @EmbeddedId
-    CodePk codePk;
+    @ManyToOne
+    @Comment("코드그룹 아이디")
+    private CodeGroup codeGroup;
 
     @Comment("코드 명")
     @Column(length = 100)
@@ -71,21 +70,6 @@ public class Code {
     @Comment("등록자 pk")
     @CreatedBy
     private Long createdBy;
-
-    @Comment("수정자 pk")
-    @LastModifiedBy
-    private Long updatedBy;
-
-    @Comment("등록일시")
-    @CreatedDate
-    @Convert(converter = LocalDateTimeConverter.class)
-    @Column(updatable = false)
-    private LocalDateTime createdDateTime = LocalDateTime.now();
-
-    @Comment("수정일시")
-    @LastModifiedDate
-    @Convert(converter = LocalDateTimeConverter.class)
-    private LocalDateTime updatedDateTime = LocalDateTime.now();
 
     public CodeDto.Response toResponse() { return CodeMapper.mapper.toResponse(this); }
 }

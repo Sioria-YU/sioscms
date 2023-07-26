@@ -12,16 +12,16 @@ import java.util.Optional;
 public interface CodeRepository extends CommonJpaRepository<Code, Long> {
 
     //코드그룹, 코드아이디로 조회
-    Optional<Code> findByCodePk_CodeGroupAndCodePk_CodeId(CodeGroup codeGroup, String codeId);
+    Optional<Code> findByCodeGroupAndCodeId(CodeGroup codeGroup, String codeId);
 
     //코드그룹 아이디, 코드 아이디로 조회
-    Optional<Code> findByCodePk_CodeGroup_CodeGroupIdAndCodePk_CodeId(String codeGroupId, String codeId);
+    Optional<Code> findByCodeGroup_CodeGroupIdAndCodeId(String codeGroupId, String codeId);
 
     //코드 그룹 하위 코드 개수 조회
-    Long countByCodePk_CodeGroup_CodeGroupIdAndIsDeleted(String codeGroupId, boolean isDeleted);
+    Long countByCodeGroup_CodeGroupIdAndIsDeleted(String codeGroupId, boolean isDeleted);
 
-    Optional<Code> findDistinctTop1ByCodePk_CodeGroup_CodeGroupIdOrderByOrderNumDesc(String codeGroupId);
+    Optional<Code> findDistinctTop1ByCodeGroup_CodeGroupIdOrderByOrderNumDesc(String codeGroupId);
 
     //코드그룹으로 전체 조회
-    List<Code> findAllByCodePk_CodeGroup(CodeGroup codeGroup);
+    List<Code> findAllByCodeGroup(CodeGroup codeGroup);
 }

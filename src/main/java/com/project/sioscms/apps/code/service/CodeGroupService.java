@@ -118,7 +118,7 @@ public class CodeGroupService {
                 CodeGroup codeGroup = codeGroupRepository.findByCodeGroupId(codeGroupId).orElse(null);
                 if(codeGroup != null){
                     //코드 그룹 하위 자식들을 먼저 삭제한다.
-                    List<Code> codeList = codeRepository.findAllByCodePk_CodeGroup(codeGroup);
+                    List<Code> codeList = codeRepository.findAllByCodeGroup(codeGroup);
                     if(codeList != null){
                         codeRepository.deleteAll(codeList);
                     }

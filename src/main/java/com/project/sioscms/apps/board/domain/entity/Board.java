@@ -1,11 +1,9 @@
 package com.project.sioscms.apps.board.domain.entity;
 
-import com.google.common.collect.Lists;
 import com.project.sioscms.apps.attach.domain.entity.AttachFileGroup;
 import com.project.sioscms.apps.board.domain.dto.BoardDto;
 import com.project.sioscms.apps.board.mapper.BoardMapper;
 import com.project.sioscms.apps.hashtag.domain.entity.BoardHashtag;
-import com.project.sioscms.apps.hashtag.domain.entity.Hashtag;
 import com.project.sioscms.common.domain.entity.CommonEntityWithIdAndDate;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +12,6 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Entity

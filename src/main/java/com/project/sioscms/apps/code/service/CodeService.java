@@ -72,7 +72,7 @@ public class CodeService {
             entity.setIsDeleted(false);
 
             int orderNum = 0;
-            Code topOrderCode = codeRepository.findDistinctTop1ByCodePk_CodeGroup_CodeGroupIdOrderByOrderNumDesc(dto.getCodeGroupId()).orElse(null);
+            Code topOrderCode = codeRepository.findDistinctTop1ByCodeGroup_CodeGroupIdOrderByOrderNumDesc(dto.getCodeGroupId()).orElse(null);
             if(topOrderCode != null){
                 orderNum = topOrderCode.getOrderNum() + 1;
             }
@@ -80,10 +80,7 @@ public class CodeService {
 
             CodeGroup codeGroup = codeGroupRepository.findByCodeGroupId(dto.getCodeGroupId()).orElse(null);
             if(codeGroup != null){
-                Code.CodePk pk = new Code.CodePk();
-                pk.setCodeGroup(codeGroup);
-                pk.setCodeId(dto.getCodeId());
-                entity.setCodePk(pk);
+                entity.setCodeGroup(codeGroup);
             }else{
                 return null;
             }
@@ -99,7 +96,7 @@ public class CodeService {
     @Transactional
     public CodeDto.Response updateCode(CodeDto.Request dto){
         if(dto != null && dto.getCodeId() != null && dto.getCodeGroupId() != null && dto.getCodeLabel() != null){
-            Code entity = codeRepository.findByCodePk_CodeGroup_CodeGroupIdAndCodePk_CodeId(dto.getCodeGroupId(), dto.getCodeId()).orElse(null);
+            Code entity = codeRepository.findByCodeGroup_CodeGroupIdAndCodeId(dto.getCodeGroupId(), dto.getCodeId()).orElse(null);
 
             if(entity != null){
                 entity.setCodeLabel(dto.getCodeLabel());
@@ -127,7 +124,7 @@ public class CodeService {
     public Boolean multipleDeleteCode(String codeGroupId, String[] codeIdList){
         if(codeGroupId != null && codeIdList != null && codeIdList.length > 0){
             for (String cd : codeIdList) {
-                Code code = codeRepository.findByCodePk_CodeGroup_CodeGroupIdAndCodePk_CodeId(codeGroupId, cd).orElse(null);
+                Code code = codeRepository.findByCodeGroup_CodeGroupIdAndCodeId(codeGroupId, cd).orElse(null);
                 if (code != null) {
                     codeRepository.delete(code);
                 } else {
@@ -148,7 +145,7 @@ public class CodeService {
      */
     public Boolean duplicationCheck(String codeGroupId, String codeId){
         if(codeGroupId != null && codeId != null && !codeId.isEmpty()){
-            Code code = codeRepository.findByCodePk_CodeGroup_CodeGroupIdAndCodePk_CodeId(codeGroupId, codeId).orElse(null);
+            Code code = codeRepository.findByCodeGroup_CodeGroupIdAndCodeId(codeGroupId, codeId).orElse(null);
             return code == null;
         }else{
             return false;
@@ -161,8 +158,8 @@ public class CodeService {
             CodeGroup codeGroup = codeGroupRepository.findByCodeGroupId(codeGroupId).orElse(null);
 
             if(codeGroup != null){
-                Code code1 = codeRepository.findByCodePk_CodeGroupAndCodePk_CodeId(codeGroup, codeId1).orElse(null);
-                Code code2 = codeRepository.findByCodePk_CodeGroupAndCodePk_CodeId(codeGroup, codeId2).orElse(null);
+                Code code1 = codeRepository.findByCodeGroupAndCodeId(codeGroup, codeId1).orElse(null);
+                Code code2 = codeRepository.findByCodeGroupAndCodeId(codeGroup, codeId2).orElse(null);
 
                 //정렬 순번 스왑
                 if(code1 != null && code2 != null){

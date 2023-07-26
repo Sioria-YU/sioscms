@@ -11,6 +11,8 @@ public class CodeDto {
 
     @Data
     public static class Request extends CommonSearchDto{
+        private Long id;
+
         private String codeId;
 
         private String codeGroupId;
@@ -42,7 +44,9 @@ public class CodeDto {
 
     @Data
     public static class Response{
-        private Code.CodePk codePk;
+        private Long id;
+
+        private String codeId;
 
         private String codeLabel;
 

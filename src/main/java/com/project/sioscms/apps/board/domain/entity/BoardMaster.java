@@ -10,7 +10,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -22,7 +22,7 @@ public class BoardMaster extends CommonEntityWithIdAndDate {
     @Comment("게시판 이름")
     private String boardName;
 
-    @OneToOne
+    @ManyToOne
     @NotNull
     @Comment("게시판 유형 코드")
     private Code boardTypeCode;

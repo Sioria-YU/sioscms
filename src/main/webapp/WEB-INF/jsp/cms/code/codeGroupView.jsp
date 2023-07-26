@@ -389,15 +389,15 @@
                             <fmt:parseDate var="createdDateTime" value="${result.createdDateTime}" pattern="yyyy-MM-dd" type="both"/>
                             <tr class="move-item" draggable="true">
                                 <td><i class="bi bi-list toggle-sidebar-btn"></i></td>
-                                <td><input type="checkbox" class="form-check-input checkItem" name="codeCheck" value="${result.codePk.codeId}"></td>
+                                <td><input type="checkbox" class="form-check-input checkItem" name="codeCheck" value="${result.codeId}"></td>
                                 <th scope="row">${status.count}</th>
                                 <td>
                                     <a href="#"
-                                       onclick="modifyModalOpenEvent('${result.codeLabel}', '${result.codePk.codeId}', '${result.option1}', '${result.option2}' ,'${result.option3}' ,'${result.option4}' ,${result.isUsed});">
+                                       onclick="modifyModalOpenEvent('${result.codeLabel}', '${result.codeId}', '${result.option1}', '${result.option2}' ,'${result.option3}' ,'${result.option4}' ,${result.isUsed});">
                                         ${result.codeLabel}
                                     </a>
                                 </td>
-                                <td>${result.codePk.codeId}</td>
+                                <td>${result.codeId}</td>
                                 <td>${result.option1}</td>
                                 <td>${result.option2}</td>
                                 <td>${result.option3}</td>
