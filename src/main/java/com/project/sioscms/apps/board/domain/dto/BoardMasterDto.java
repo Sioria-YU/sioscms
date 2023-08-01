@@ -12,6 +12,8 @@ public class BoardMasterDto {
     @Getter
     @Setter
     public static class Request extends CommonSearchDto {
+        private Long id;
+
         private String boardName;
 
         private Code boardTypeCode;

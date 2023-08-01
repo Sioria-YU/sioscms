@@ -58,4 +58,29 @@ public class BoardMasterService {
         return entity.toResponse();
     }
 
+    @Transactional
+    public BoardMasterDto.Response updateBoardMaster(BoardMasterDto.Request requestDto){
+        BoardMaster entity = boardMasterRepository.findById(requestDto.getId()).orElse(null);
+        if(entity != null){
+            Code code = codeRepository.findById(requestDto.getBoardTypeCode().getId()).orElse(null);
+
+            entity.setBoardName(requestDto.getBoardName());
+            entity.setBoardTypeCode(code);
+
+            boardMasterRepository.save(entity);
+            return entity.toResponse();
+        }else{
+            return null;
+        }
+    }
+
+    @Transactional
+    public void deleteBoardMaster(Long id){
+        BoardMaster entity = boardMasterRepository.findById(id).orElse(null);
+        if(entity != null){
+            entity.setIsDeleted(true);
+        }else{
+            throw new NullPointerException("BoardMaster is null, request id : [" + id + "]");
+        }
+    }
 }
