@@ -1,6 +1,5 @@
 package com.project.sioscms.apps.board.service;
 
-import com.project.sioscms.apps.attach.domain.entity.AttachFileGroup;
 import com.project.sioscms.apps.attach.domain.repository.AttachFileGroupRepository;
 import com.project.sioscms.apps.board.domain.dto.BoardDto;
 import com.project.sioscms.apps.board.domain.entity.Board;
@@ -74,10 +73,7 @@ public class BoardService {
 
         //첨부파일 등록 로직
         if(requestDto.getAttachFileGroupId() != null){
-            AttachFileGroup attachFileGroup = attachFileGroupRepository.findById(requestDto.getAttachFileGroupId()).orElse(null);
-            if(attachFileGroup != null){
-                board.setAttachFileGroup(attachFileGroup);
-            }
+            attachFileGroupRepository.findById(requestDto.getAttachFileGroupId()).ifPresent(board::setAttachFileGroup);
         }
 
         //해시태그 등록 로직
@@ -116,14 +112,42 @@ public class BoardService {
 
         board.setTitle(requestDto.getTitle());
         board.setContent(requestDto.getContent());
-//        board.setContentWithoutHtml(requestDto.getContent().replace());
+        board.setContentWithoutHtml(HtmlParseUtil.escapeHtmlTag(requestDto.getContent()));
         board.setOption1(requestDto.getOption1());
         board.setOption2(requestDto.getOption2());
         board.setOption3(requestDto.getOption3());
         board.setOption4(requestDto.getOption4());
         board.setOption5(requestDto.getOption5());
+
         //해시태그 등록 로직
-//        board.setBoardHashtagSet();
+        //기존 해시태그 삭제
+        boardHashtagRepository.deleteAllByBoard(board);
+        if(requestDto.getHashtagList() != null && requestDto.getHashtagList().size() > 0){
+            for (String tag : requestDto.getHashtagList()) {
+                if(tag.replace(" ", "").length() == 0){
+                    continue;
+                }
+                tag = tag.replace(" ", "");
+
+                Hashtag hashtag = hashtagRepository.findByHashtagNameAndIsDeleted(tag, false).orElse(null);
+                //해시 태그가 없을 경우 새로 생성
+                if(hashtag == null){
+                    hashtag = new Hashtag();
+                    hashtag.setHashtagName(tag);
+                    hashtag.setIsDeleted(false);
+                    hashtag.setIsDisplay(true);
+                    hashtagRepository.save(hashtag);
+                    hashtagRepository.flush();
+                }
+
+                //게시판 해시태그 매핑 테이블 저장
+                BoardHashtag boardHashtag = new BoardHashtag();
+                boardHashtag.setBoard(board);
+                boardHashtag.setHashtag(hashtag);
+
+                boardHashtagRepository.save(boardHashtag);
+            }
+        }
 
         boardRepository.flush();
         return board.toResponse();
