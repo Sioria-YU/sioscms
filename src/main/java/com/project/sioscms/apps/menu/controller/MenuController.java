@@ -40,4 +40,9 @@ public class MenuController {
     public ResponseEntity<Boolean> updateUpdownOrder(MenuRequestDto request) throws Exception{
         return ResponseEntity.ok(menuService.updateUpdownOrder(request));
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Boolean> deleteMenu(@PathVariable Long id){
+        return ResponseEntity.ok(menuService.deleteMenu(id));
+    }
 }

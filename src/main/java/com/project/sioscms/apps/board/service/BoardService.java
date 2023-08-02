@@ -36,6 +36,10 @@ public class BoardService {
         ChangSolJpaRestriction rs = new ChangSolJpaRestriction(ChangSolJpaRestrictionType.AND);
         rs.equals("isDeleted", false);
 
+        if(requestDto.getBoardMasterId() != null){
+            rs.equals("boardMaster.id", requestDto.getBoardMasterId());
+        }
+
         if(requestDto.getTitle() != null){
             rs.like("title", "%" + requestDto.getTitle() + "%");
         }

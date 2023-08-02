@@ -139,8 +139,8 @@
                                 <tr>
                                     <td><input type="checkbox" class="form-check-input checkItem" name="boardMasterCheck" value="${result.id}"></td>
                                     <th scope="row">${pageInfo.totalCount - ((pageInfo.pageNumber-1) * pageInfo.pageOffset + status.index)}</th>
-                                    <td><a href="/cms/board/master-view/${result.id}">${result.boardName}</a></td>
-                                    <td><a href="/cms/board/master-view/${result.id}">${result.boardTypeCode.codeLabel}</a></td>
+                                    <td><a href="/cms/board/list?boardMaster.id=${result.id}">${result.boardName}</a></td>
+                                    <td><a href="/cms/board/list?boardMaster.id=${result.id}">${result.boardTypeCode.codeLabel}</a></td>
                                     <td>${result.createdBy}</td>
                                     <td><fmt:formatDate value="${createdDateTime}" pattern="yyyy-MM-dd"/></td>
                                 </tr>

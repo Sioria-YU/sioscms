@@ -95,7 +95,7 @@
                                 <div class="form-btn-set text-center">
                                     <button type="button" class="btn btn-success" id="saveButton" onclick="saveMenu()">저장</button>
                                     <button type="button" class="btn btn-success" id="modifyButton" onclick="saveMenu()" style="display: none;">수정</button>
-                                    <button type="button" class="btn btn-danger" id="deleteButton" onclick="" style="display: none;">삭제</button>
+                                    <button type="button" class="btn btn-danger" id="deleteButton" onclick="deleteMenu()" style="display: none;">삭제</button>
                                 </div>
                             </form>
                         </div>
@@ -336,9 +336,31 @@
     }
 
     const deleteMenu = () =>{
-        let form = document.getElementById("menuEditForm");
-        form.action = "./delete-menu";
-        form.submit();
+        let menuId = $("#menuId").val();
+        if(!menuId){
+            alert("삭제할 메뉴를 선택하세요.");
+            return false;
+        }
+
+        if(confirm("삭제하시겠습니까?")){
+            $.ajax({
+                url: '/cms/api/menu/delete/' + menuId,
+                type: 'DELETE',
+                async: false,
+                success: function (data) {
+                    if (!!data) {
+                        alert("정상 처리 되었습니다.");
+                        location.reload();
+                    } else {
+                        alert("오류가 발생하였습니다.");
+                    }
+                },
+                error: function (request, status, error) {
+                    console.error(error);
+                    alert("오류가 발생하였습니다.");
+                }
+            });
+        }
     }
 
     /**

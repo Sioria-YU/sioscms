@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class BoardMasterManagementService {
+public class BoardManagementService {
     private final BoardMasterRepository boardMasterRepository;
     private final CodeGroupRepository codeGroupRepository;
     private final CodeRepository codeRepository;

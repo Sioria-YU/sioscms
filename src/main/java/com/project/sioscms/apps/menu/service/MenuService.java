@@ -176,4 +176,27 @@ public class MenuService {
             return false;
         }
     }
+
+    @Transactional
+    public boolean deleteMenu(Long id){
+        //1. 메뉴 조회
+        Menu menu = menuRepository.findById(id).orElse(null);
+
+        if(menu == null){
+            return false;
+        }
+
+        //2. 메뉴 순서 취득
+        long orderNum = menu.getOrderNum();
+
+        //3. 메뉴 삭제
+        menu.setIsUsed(false);
+        menu.setIsDeleted(true);
+
+        //4. 메뉴 순서 업데이트
+        menuRepository.updateByOrders(orderNum, orderNum, Long.MAX_VALUE, false, -1L);
+        menuRepository.flush();
+
+        return true;
+    }
 }
