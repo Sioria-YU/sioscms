@@ -1,5 +1,6 @@
 package com.project.sioscms.apps.board.domain.dto;
 
+import com.project.sioscms.apps.account.domain.entity.Account;
 import com.project.sioscms.apps.attach.domain.entity.AttachFileGroup;
 import com.project.sioscms.apps.board.domain.entity.BoardMaster;
 import com.project.sioscms.common.domain.dto.CommonSearchDto;
@@ -50,9 +51,9 @@ public class BoardDto {
     public static class Response{
         private Long id;
 
-        private Long createdBy;
+        private Account createdBy;
 
-        private Long updatedBy;
+        private Account updatedBy;
 
         private LocalDateTime createdDateTime;
 

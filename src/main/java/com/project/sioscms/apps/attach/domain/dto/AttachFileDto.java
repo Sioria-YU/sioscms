@@ -1,5 +1,6 @@
 package com.project.sioscms.apps.attach.domain.dto;
 
+import com.project.sioscms.apps.account.domain.entity.Account;
 import com.project.sioscms.common.domain.dto.CommonSearchDto;
 import lombok.Data;
 import java.time.LocalDateTime;
@@ -18,8 +19,6 @@ public class AttachFileDto {
         private Long fileOrder;
         private Boolean isDeleted;
         private Boolean isUsed;
-        private Long createdBy;
-        private Long updatedBy;
     }
 
     @Data
@@ -34,8 +33,8 @@ public class AttachFileDto {
         private Long fileOrder;
         private Boolean isDeleted;
         private Boolean isUsed;
-        private Long createdBy;
-        private Long updatedBy;
+        private Account createdBy;
+        private Account updatedBy;
         private LocalDateTime createdDateTime;
         private LocalDateTime updatedDateTine;
     }

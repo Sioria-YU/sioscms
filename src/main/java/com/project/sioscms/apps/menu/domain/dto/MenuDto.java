@@ -1,5 +1,6 @@
 package com.project.sioscms.apps.menu.domain.dto;
 
+import com.project.sioscms.apps.account.domain.entity.Account;
 import com.project.sioscms.apps.menu.domain.entity.Menu;
 import com.project.sioscms.common.domain.dto.CommonSearchDto;
 import lombok.Data;
@@ -13,8 +14,6 @@ public class MenuDto {
     @Data
     public static class Request extends CommonSearchDto {
         private Long id;
-        private Long createdBy;
-        private Long updatedBy;
         private LocalDateTime createdDateTime;
         private LocalDateTime updatedDateTine;
         private String menuName;
@@ -30,8 +29,8 @@ public class MenuDto {
     @Data
     public static class Response{
         private Long id;
-        private Long createdBy;
-        private Long updatedBy;
+        private Account createdBy;
+        private Account updatedBy;
         private LocalDateTime createdDateTime;
         private LocalDateTime updatedDateTine;
         private String menuName;

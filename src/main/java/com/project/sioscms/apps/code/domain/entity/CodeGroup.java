@@ -1,5 +1,6 @@
 package com.project.sioscms.apps.code.domain.entity;
 
+import com.project.sioscms.apps.account.domain.entity.Account;
 import com.project.sioscms.apps.code.domain.dto.CodeGroupDto;
 import com.project.sioscms.apps.code.mapper.CodeGroupMapper;
 import lombok.Getter;
@@ -47,11 +48,13 @@ public class CodeGroup {
 
     @Comment("등록자 pk")
     @CreatedBy
-    private Long createdBy;
+    @ManyToOne
+    private Account createdBy;
 
     @Comment("수정자 pk")
     @LastModifiedBy
-    private Long updatedBy;
+    @ManyToOne
+    private Account updatedBy;
 
     @Comment("등록일시")
     @CreatedDate

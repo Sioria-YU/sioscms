@@ -1,5 +1,6 @@
 package com.project.sioscms.apps.board.domain.dto;
 
+import com.project.sioscms.apps.account.domain.entity.Account;
 import com.project.sioscms.apps.code.domain.entity.Code;
 import com.project.sioscms.common.domain.dto.CommonSearchDto;
 import lombok.Getter;
@@ -26,9 +27,9 @@ public class BoardMasterDto {
     public static class Response{
         private Long id;
 
-        private Long createdBy;
+        private Account createdBy;
 
-        private Long updatedBy;
+        private Account updatedBy;
 
         private LocalDateTime createdDateTime;
 

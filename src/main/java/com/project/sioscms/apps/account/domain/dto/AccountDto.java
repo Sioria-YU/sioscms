@@ -10,8 +10,6 @@ public class AccountDto {
     @Data
     public static class Request{
         private Long id;
-        private Long createdBy;
-        private Long updatedBy;
         private LocalDateTime createdDateTime;
         private LocalDateTime updatedDateTine;
         private String userId;
@@ -33,8 +31,8 @@ public class AccountDto {
     @Data
     public static class Response{
         private Long id;
-        private Long createdBy;
-        private Long updatedBy;
+        private Account createdBy;
+        private Account updatedBy;
         private LocalDateTime createdDateTime;
         private LocalDateTime updatedDateTime;
         private String userId;

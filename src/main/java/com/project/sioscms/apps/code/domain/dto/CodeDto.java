@@ -1,5 +1,6 @@
 package com.project.sioscms.apps.code.domain.dto;
 
+import com.project.sioscms.apps.account.domain.entity.Account;
 import com.project.sioscms.apps.code.domain.entity.Code;
 import com.project.sioscms.apps.code.domain.entity.CodeGroup;
 import com.project.sioscms.common.domain.dto.CommonSearchDto;
@@ -33,10 +34,6 @@ public class CodeDto {
 
         private Boolean isUsed;
 
-        private Long createdBy;
-
-        private Long updatedBy;
-
         private LocalDateTime createdDateTime;
 
         private LocalDateTime updatedDateTime;
@@ -64,9 +61,9 @@ public class CodeDto {
 
         private Boolean isUsed;
 
-        private Long createdBy;
+        private Account createdBy;
 
-        private Long updatedBy;
+        private Account updatedBy;
 
         private LocalDateTime createdDateTime;
 

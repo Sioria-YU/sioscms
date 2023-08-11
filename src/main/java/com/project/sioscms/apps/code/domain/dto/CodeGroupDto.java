@@ -1,5 +1,6 @@
 package com.project.sioscms.apps.code.domain.dto;
 
+import com.project.sioscms.apps.account.domain.entity.Account;
 import com.project.sioscms.common.domain.dto.CommonSearchDto;
 import lombok.Data;
 
@@ -14,8 +15,6 @@ public class CodeGroupDto {
         private String codeGroupNote;
         private Boolean isDeleted;
         private Boolean isUsed;
-        private Long createdBy;
-        private Long updatedBy;
         private LocalDateTime createdDateTime;
         private LocalDateTime updatedDateTine;
     }
@@ -27,8 +26,8 @@ public class CodeGroupDto {
         private String codeGroupNote;
         private Boolean isDeleted;
         private Boolean isUsed;
-        private Long createdBy;
-        private Long updatedBy;
+        private Account createdBy;
+        private Account updatedBy;
         private LocalDateTime createdDateTime;
         private LocalDateTime updatedDateTine;
     }

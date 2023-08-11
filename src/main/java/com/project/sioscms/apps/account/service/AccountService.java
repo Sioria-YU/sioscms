@@ -62,8 +62,8 @@ public class AccountService {
             accountRepository.flush();
 
             //회원 가입 기본 시퀀스 세팅
-            account.setCreatedBy(account.getId());
-            account.setUpdatedBy(account.getId());
+            account.setCreatedBy(account);
+            account.setUpdatedBy(account);
             account.setState("T");
             return account;
         }else{

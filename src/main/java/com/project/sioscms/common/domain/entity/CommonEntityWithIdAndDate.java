@@ -1,5 +1,6 @@
 package com.project.sioscms.common.domain.entity;
 
+import com.project.sioscms.apps.account.domain.entity.Account;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Comment;
@@ -22,24 +23,26 @@ public class CommonEntityWithIdAndDate {
     @Comment("고유번호")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //시퀀스 생성 규칙
-    Long id;
+    private Long id;
 
     @Comment("등록자 pk")
     @CreatedBy
-    Long createdBy;
+    @ManyToOne
+    private Account createdBy;
 
     @Comment("수정자 pk")
     @LastModifiedBy
-    Long updatedBy;
+    @ManyToOne
+    private Account updatedBy;
 
     @Comment("등록일시")
     @CreatedDate
     @Convert(converter = LocalDateTimeConverter.class)
     @Column(updatable = false)  //데이터 수정 방지
-    LocalDateTime createdDateTime = LocalDateTime.now();
+    private LocalDateTime createdDateTime = LocalDateTime.now();
 
     @Comment("수정일시")
     @LastModifiedDate
     @Convert(converter = LocalDateTimeConverter.class)
-    LocalDateTime updatedDateTime = LocalDateTime.now();
+    private LocalDateTime updatedDateTime = LocalDateTime.now();
 }

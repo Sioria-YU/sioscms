@@ -87,10 +87,10 @@ public class AttachFileService {
             attachFile.setFileSize(file.getSize());
 
             //권한 처리 후 제거
-            attachFile.setCreatedBy(1L);
-            attachFile.setUpdatedBy(1L);
-            attachFileGroup.setCreatedBy(1L);
-            attachFileGroup.setUpdatedBy(1L);
+//            attachFile.setCreatedBy(1L);
+//            attachFile.setUpdatedBy(1L);
+//            attachFileGroup.setCreatedBy(1L);
+//            attachFileGroup.setUpdatedBy(1L);
 
             List<AttachFile> attachFileList = Lists.newArrayList(attachFile);
 

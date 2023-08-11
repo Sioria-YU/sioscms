@@ -1,5 +1,6 @@
 package com.project.sioscms.common.domain.entity;
 
+import com.project.sioscms.apps.account.domain.entity.Account;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Comment;
@@ -17,13 +18,15 @@ public class CommonEntityWithId {
     @Comment("고유번호")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
     @Comment("등록자 pk")
     @CreatedBy
-    Long createdBy;
+    @ManyToOne
+    private Account createdBy;
 
     @Comment("수정자 pk")
     @LastModifiedBy
-    Long updatedBy;
+    @ManyToOne
+    private Account updatedBy;
 }

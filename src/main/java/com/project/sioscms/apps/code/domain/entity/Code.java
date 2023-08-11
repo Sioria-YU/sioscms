@@ -1,5 +1,6 @@
 package com.project.sioscms.apps.code.domain.entity;
 
+import com.project.sioscms.apps.account.domain.entity.Account;
 import com.project.sioscms.apps.code.domain.dto.CodeDto;
 import com.project.sioscms.apps.code.mapper.CodeMapper;
 import com.project.sioscms.common.domain.entity.CommonEntityWithIdAndDate;
@@ -69,7 +70,8 @@ public class Code extends CommonEntityWithIdAndDate {
 
     @Comment("등록자 pk")
     @CreatedBy
-    private Long createdBy;
+    @ManyToOne
+    private Account createdBy;
 
     public CodeDto.Response toResponse() { return CodeMapper.mapper.toResponse(this); }
 }

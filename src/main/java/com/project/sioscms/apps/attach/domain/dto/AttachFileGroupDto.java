@@ -1,5 +1,6 @@
 package com.project.sioscms.apps.attach.domain.dto;
 
+import com.project.sioscms.apps.account.domain.entity.Account;
 import com.project.sioscms.common.domain.dto.CommonSearchDto;
 import lombok.Data;
 
@@ -11,8 +12,6 @@ public class AttachFileGroupDto {
     public static class Request extends CommonSearchDto{
         private Long id;
         private Boolean isDeleted;
-        private Long createdBy;
-        private Long updatedBy;
         private LocalDateTime createdDateTime;
         private LocalDateTime updatedDateTine;
     }
@@ -21,8 +20,8 @@ public class AttachFileGroupDto {
     public static class Response{
         private Long id;
         private Boolean isDeleted;
-        private Long createdBy;
-        private Long updatedBy;
+        private Account createdBy;
+        private Account updatedBy;
         private LocalDateTime createdDateTime;
         private LocalDateTime updatedDateTine;
     }
