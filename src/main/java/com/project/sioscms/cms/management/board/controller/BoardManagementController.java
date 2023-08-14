@@ -47,4 +47,12 @@ public class BoardManagementController {
 
         return mav;
     }
+
+    @RequestMapping("/regist")
+    public ModelAndView boardRegist(BoardDto.Request requestDto){
+        ModelAndView mav = new ModelAndView("cms/board/boardRegist");
+        mav.addObject("boardMasterId", requestDto.getBoardMasterId());
+        return mav;
+    }
+
 }

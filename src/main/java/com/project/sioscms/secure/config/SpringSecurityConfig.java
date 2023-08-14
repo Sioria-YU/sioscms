@@ -36,6 +36,9 @@ public class SpringSecurityConfig {
                 ).logout(logout -> logout
                         .logoutSuccessUrl("/")  //로그이웃시 이동할 페이지
                         .invalidateHttpSession(true));    //로그아웃 기본설(/logout 호출시 로그아웃처리)
+
+        http.headers().frameOptions().sameOrigin(); //Iframe 접근 가능(스마트 에디터)
+
         return http.build();
     }
 }

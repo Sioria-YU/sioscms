@@ -67,7 +67,7 @@
                         <th><label for="checkAll"><input type="checkbox" class="form-check-input" id="checkAll"/></label></th>
                         <th scope="col">순번</th>
                         <th scope="col">제목</th>
-                        <th scope="col">조회 수</th>
+                        <th scope="col">조회수</th>
                         <th scope="col">작성자</th>
                         <th scope="col">작성일</th>
                     </tr>
@@ -82,7 +82,7 @@
                                     <th scope="row">${pageInfo.totalCount - ((pageInfo.pageNumber-1) * pageInfo.pageOffset + status.index)}</th>
                                     <td><a href="/cms/board/view/${result.id}">${result.title}</a></td>
                                     <td>${result.viewCount}</td>
-                                    <td>${result.createdBy}</td>
+                                    <td>${result.createdBy.name}</td>
                                     <td><fmt:formatDate value="${createdDateTime}" pattern="yyyy-MM-dd"/></td>
                                 </tr>
                             </c:forEach>
@@ -99,7 +99,7 @@
 
                 <div class="form-btn-set text-end">
                     <button type="button" class="btn btn-danger btn-lg" onclick="">선택 삭제</button>
-                    <button type="button" class="btn btn-success btn-lg" onclick="">등록</button>
+                    <button type="button" class="btn btn-success btn-lg" onclick="location.href='./regist?boardMasterId=${param.boardMasterId}';">등록</button>
                 </div>
             </div>
         </div>
