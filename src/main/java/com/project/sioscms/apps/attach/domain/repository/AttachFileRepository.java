@@ -12,4 +12,7 @@ import java.util.Optional;
 public interface AttachFileRepository extends CommonJpaRepository<AttachFile, Long> {
     Optional<AttachFile> findByFileName(String fileName);
     List<AttachFile> findAllByAttachFileGroupAndIsDeleted(AttachFileGroup attachFileGroup, boolean isDeleted);
+
+    //파일 순번 채번용
+    Long countByAttachFileGroupAndIsDeleted(AttachFileGroup attachFileGroup, boolean isDeleted);
 }

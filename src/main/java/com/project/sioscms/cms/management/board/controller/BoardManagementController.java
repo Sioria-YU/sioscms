@@ -1,5 +1,8 @@
 package com.project.sioscms.cms.management.board.controller;
 
+import com.project.sioscms.apps.attach.domain.dto.AttachFileGroupDto;
+import com.project.sioscms.apps.attach.domain.entity.AttachFileGroup;
+import com.project.sioscms.apps.attach.service.AttachFileService;
 import com.project.sioscms.apps.board.domain.dto.BoardDto;
 import com.project.sioscms.apps.board.domain.dto.BoardMasterDto;
 import com.project.sioscms.apps.board.service.BoardMasterService;
@@ -25,6 +28,7 @@ public class BoardManagementController {
     private final BoardMasterService boardMasterService;
     private final BoardManagementService boardManagementService;
     private final BoardService boardService;
+    private final AttachFileService attachFileService;
 
     @RequestMapping("/master-list")
     public ModelAndView boardMasterList(BoardMasterDto.Request requestDto){
@@ -73,6 +77,14 @@ public class BoardManagementController {
 
     @RequestMapping("/save")
     public ModelAndView boardSave(BoardDto.Request requsetDto, @RequestPart List<MultipartFile> files){
+        //첨부파일을 등록하여 attachFileGroupId를 requestDto에 set하여 게시판 저장으로 넘긴다.
+        //최초 저장이기 때문에 attachFileGroup = null
+        AttachFileGroupDto.Response attachFileGroupDto = attachFileService.multiUpload(files, null);
+
+        if(attachFileGroupDto != null){
+            requsetDto.setAttachFileGroupId(attachFileGroupDto.getId());
+        }
+
         BoardDto.Response dto = boardService.saveBoard(requsetDto);
 
         RedirectView rv = new RedirectView("/cms/board/list?boardMasterId=" + requsetDto.getBoardMasterId());
@@ -87,6 +99,14 @@ public class BoardManagementController {
 
     @RequestMapping("/update")
     public ModelAndView boardUpdate(BoardDto.Request requsetDto, @RequestPart List<MultipartFile> files){
+        //첨부파일을 등록하여 attachFileGroupId를 requestDto에 set하여 게시판 저장으로 넘긴다.
+        AttachFileGroupDto.Response attachFileGroupDto = attachFileService.multiUpload(files, requsetDto.getAttachFileGroupId());
+
+        //기존 첨부파일이 없었다면 등록, 있다면 파일 구성만 업데이트
+        if(attachFileGroupDto != null && requsetDto.getAttachFileGroupId() == null){
+            requsetDto.setAttachFileGroupId(attachFileGroupDto.getId());
+        }
+
         BoardDto.Response dto = boardService.updateBoard(requsetDto);
 
         RedirectView rv = new RedirectView("/cms/board/list?boardMasterId=" + requsetDto.getBoardMasterId());

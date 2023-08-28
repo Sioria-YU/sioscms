@@ -23,7 +23,7 @@ public class AttachFileGroup extends CommonEntityWithIdAndDate {
     private Boolean isDeleted = false;
 
     @OneToMany(mappedBy = "attachFileGroup")
-    private List<AttachFile> attachFile = Lists.newArrayList();
+    private List<AttachFile> attachFileList = Lists.newArrayList();
 
     public AttachFileGroupDto.Response toResponse() {return AttachFileGroupMapper.mapper.toResponse(this);}
 }

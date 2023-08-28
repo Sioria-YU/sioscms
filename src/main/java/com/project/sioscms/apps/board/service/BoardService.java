@@ -64,17 +64,18 @@ public class BoardService {
 
     @Transactional
     public BoardDto.Response saveBoard(BoardDto.Request requestDto){
-        Board board = BoardMapper.mapper.toEntity(requestDto);
         BoardMaster boardMaster = boardMasterRepository.findById(requestDto.getBoardMasterId()).orElse(null);
 
         if(boardMaster == null){
             return null;
         }
 
+        Board board = BoardMapper.mapper.toEntity(requestDto);
         board.setBoardMaster(boardMaster);
         board.setIsDeleted(false);
+        board.setViewCount(0L);
         //content에서 html태그 및 공백을 제거하고 입력
-        board.setContentWithoutHtml(HtmlParseUtil.escapeHtmlTag(board.getContent()));
+        board.setContentWithoutHtml(HtmlParseUtil.escapeHtmlTag(board.getContent()).replaceAll(" ",""));
 
         //첨부파일 등록 로직
         if(requestDto.getAttachFileGroupId() != null){
@@ -118,7 +119,7 @@ public class BoardService {
 
         board.setTitle(requestDto.getTitle());
         board.setContent(requestDto.getContent());
-        board.setContentWithoutHtml(HtmlParseUtil.escapeHtmlTag(requestDto.getContent()));
+        board.setContentWithoutHtml(HtmlParseUtil.escapeHtmlTag(requestDto.getContent()).replaceAll(" ",""));
         board.setOption1(requestDto.getOption1());
         board.setOption2(requestDto.getOption2());
         board.setOption3(requestDto.getOption3());

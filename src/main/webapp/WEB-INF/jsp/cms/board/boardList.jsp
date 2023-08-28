@@ -99,6 +99,7 @@
 
                 <div class="form-btn-set text-end">
                     <button type="button" class="btn btn-danger btn-lg" onclick="">선택 삭제</button>
+                    <button type="button" class="btn btn-secondary btn-lg" onclick="location.href='./master-list';">목록</button>
                     <button type="button" class="btn btn-success btn-lg" onclick="location.href='./regist?boardMasterId=${param.boardMasterId}';">등록</button>
                 </div>
             </div>

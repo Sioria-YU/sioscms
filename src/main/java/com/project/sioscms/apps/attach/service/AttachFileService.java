@@ -1,6 +1,7 @@
 package com.project.sioscms.apps.attach.service;
 
 import com.google.common.collect.Lists;
+import com.project.sioscms.apps.attach.domain.dto.AttachFileGroupDto;
 import com.project.sioscms.apps.attach.domain.entity.AttachFile;
 import com.project.sioscms.apps.attach.domain.entity.AttachFileGroup;
 import com.project.sioscms.apps.attach.domain.repository.AttachFileGroupRepository;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -36,7 +38,7 @@ public class AttachFileService {
     private boolean attachDeleteEnabled;
 
     @Value("${attach.path}")
-    private String attachPath;
+    private String ATTACH_PATH;
 
     //region file upload
     @Transactional
@@ -52,7 +54,7 @@ public class AttachFileService {
         }
 
         //원본 파일을 얻어온다.
-        File originFile = new File(attachPath + File.separator + "tmp" + File.separator + originalFileName);
+        File originFile = new File(ATTACH_PATH + File.separator + "tmp" + File.separator + originalFileName);
         //파일 생성 경로 확인
         if(!originFile.exists()){
             if(!originFile.mkdir()){
@@ -63,7 +65,7 @@ public class AttachFileService {
         file.transferTo(originFile);
 
         //파일 저장 경로 세분화 로직 추가 필요
-        String filePath = attachPath + File.separator;
+        String filePath = ATTACH_PATH + File.separator;
 
         //암호화 하여 저장할 파일을 생성한다.
         String destinationFileName = System.nanoTime() + "_" + originalFileName;
@@ -76,8 +78,15 @@ public class AttachFileService {
         boolean isWrite = aesCryptoService.encryptFile(originFile, destination);
 
         if(isWrite){
+            long fileOrderNum = 0L;
             if(attachFileGroup == null) {
                 attachFileGroup = new AttachFileGroup();
+            }else{
+                //파일 순서 채번(현재 등록 개수(1개이상) + 1)
+                fileOrderNum = attachFileRepository.countByAttachFileGroupAndIsDeleted(attachFileGroup, false);
+                if(fileOrderNum > 0){
+                    fileOrderNum++;
+                }
             }
             attachFileGroup.setIsDeleted(false);
 
@@ -88,7 +97,7 @@ public class AttachFileService {
             attachFile.setOriginFileName(originalFileName);
             attachFile.setFileExtension(originalFileName.substring(originalFileName.lastIndexOf(".")+1));
             attachFile.setFilePath(filePath);
-            attachFile.setFileOrderNum(0L);
+            attachFile.setFileOrderNum(fileOrderNum);
             attachFile.setIsDeleted(false);
             attachFile.setIsUsed(true);
             attachFile.setFileSize(file.getSize());
@@ -101,7 +110,7 @@ public class AttachFileService {
             }
 
             attachFileList.add(attachFile);
-            attachFileGroup.setAttachFile(attachFileList);
+            attachFileGroup.setAttachFileList(attachFileList);
 
             //Entity save
             attachFileGroupRepository.save(attachFileGroup);
@@ -116,6 +125,34 @@ public class AttachFileService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(originalFileName);
         }
     }
+    //endregion
+
+    //region multiUpload
+    @Transactional
+    public AttachFileGroupDto.Response multiUpload(List<MultipartFile> files, Long attachFileGroupId){
+        AttachFileGroup attachFileGroup = null;
+        if(attachFileGroupId != null) {
+            attachFileGroup = attachFileGroupRepository.findById(attachFileGroupId).orElse(null);
+        }
+        if(attachFileGroup == null){
+            attachFileGroup = new AttachFileGroup();
+            attachFileGroup.setIsDeleted(false);
+            attachFileGroupRepository.save(attachFileGroup);
+        }
+
+        try {
+            for (MultipartFile file : files) {
+                if (!file.isEmpty()) {
+                    upload(file, attachFileGroup);
+                }
+            }
+            return attachFileGroup.toResponse();
+        }catch (Exception e) {
+            log.error(e.toString());
+            return null;
+        }
+    }
+
     //endregion
 
     //region file download
@@ -135,7 +172,7 @@ public class AttachFileService {
         try {
             //response output
             response.setContentType("application/octet-stream; charset=utf-8");
-            response.setHeader("Content-Disposition", "attachment; fileName='" + URLEncoder.encode(originalFileName, StandardCharsets.UTF_8) + "'");
+            response.setHeader("Content-Disposition", "attachment; fileName=" + URLEncoder.encode(originalFileName, StandardCharsets.UTF_8));
             response.setHeader("Content-Transfer-Encoding", "binary");
 
             //파일 복호화 및 전송
@@ -160,7 +197,7 @@ public class AttachFileService {
         //attachDeleteEnabled : 삭제 허용 설정
         if(attachDeleteEnabled && "D".equals(deleteMode)) {
             //파일 삭제 처리
-            File originFile = new File(attachPath + File.separator + fileName);
+            File originFile = new File(ATTACH_PATH + File.separator + fileName);
             if(originFile.isFile()){
                 if(!originFile.delete()){
                     log.error("File delete failed!!!!!");

@@ -3,8 +3,12 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <script>
-    const moveUpdateEvent = () =>{
+    const moveUpdateEvent = () => {
         location.href='/cms/board/regist?boardMasterId=${result.boardMaster.id}&id=${result.id}';
+    }
+
+    const attachFileDownload = (fileName) => {
+        window.open("/api/attach/download/"+fileName);
     }
 </script>
 
@@ -42,7 +46,16 @@
                         </tr>
                         <tr>
                             <th class="table-title">첨부파일</th>
-                            <td></td>
+                            <td>
+                                <c:if test="${not empty result.attachFileGroup and not empty result.attachFileGroup.attachFileList}">
+                                    <c:forEach var="attachfile" items="${result.attachFileGroup.attachFileList}" varStatus="index">
+                                        <a href="#" onclick="attachFileDownload('${attachfile.fileName}');" aria-label="첨부파일1 다운로드">${attachfile.originFileName}</a>
+                                        <c:if test="${!index.last}">
+                                            <br>
+                                        </c:if>
+                                    </c:forEach>
+                                </c:if>
+                            </td>
                         </tr>
                         <tr>
                             <th class="table-title">옵션1</th>
