@@ -48,12 +48,12 @@ public class CodeGroup {
 
     @Comment("등록자 pk")
     @CreatedBy
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Account createdBy;
 
     @Comment("수정자 pk")
     @LastModifiedBy
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Account updatedBy;
 
     @Comment("등록일시")

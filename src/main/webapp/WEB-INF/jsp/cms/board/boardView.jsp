@@ -2,6 +2,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
+<script>
+    const moveUpdateEvent = () =>{
+        location.href='/cms/board/regist?boardMasterId=${result.boardMaster.id}&id=${result.id}';
+    }
+</script>
+
 <div id="layoutSidenav_content">
     <main>
         <div class="container-fluid px-4">

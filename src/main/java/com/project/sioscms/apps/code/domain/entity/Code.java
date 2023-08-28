@@ -68,10 +68,5 @@ public class Code extends CommonEntityWithIdAndDate {
     @ColumnDefault(value = "TRUE")
     private Boolean isUsed = true;
 
-    @Comment("등록자 pk")
-    @CreatedBy
-    @ManyToOne
-    private Account createdBy;
-
     public CodeDto.Response toResponse() { return CodeMapper.mapper.toResponse(this); }
 }

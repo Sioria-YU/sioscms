@@ -22,11 +22,11 @@ public class CommonEntityWithId {
 
     @Comment("등록자 pk")
     @CreatedBy
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Account createdBy;
 
     @Comment("수정자 pk")
     @LastModifiedBy
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Account updatedBy;
 }

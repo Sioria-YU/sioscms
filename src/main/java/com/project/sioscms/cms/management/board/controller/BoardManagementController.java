@@ -54,10 +54,20 @@ public class BoardManagementController {
         return mav;
     }
 
+    @RequestMapping("/view/{boardId}")
+    public ModelAndView boardView(@PathVariable Long boardId){
+        ModelAndView mav = new ModelAndView("cms/board/boardView");
+        mav.addObject("result", boardService.getBoard(boardId));
+        return mav;
+    }
+
     @RequestMapping("/regist")
     public ModelAndView boardRegist(BoardDto.Request requestDto){
         ModelAndView mav = new ModelAndView("cms/board/boardRegist");
         mav.addObject("boardMasterId", requestDto.getBoardMasterId());
+        if(requestDto.getId() != null){
+            mav.addObject("result", boardService.getBoard(requestDto.getId()));
+        }
         return mav;
     }
 
@@ -75,11 +85,18 @@ public class BoardManagementController {
         return new ModelAndView(rv);
     }
 
-    @RequestMapping("/view/{boardId}")
-    public ModelAndView boardView(@PathVariable Long boardId){
-        ModelAndView mav = new ModelAndView("cms/board/boardView");
-        mav.addObject("result", boardService.getBoard(boardId));
-        return mav;
+    @RequestMapping("/update")
+    public ModelAndView boardUpdate(BoardDto.Request requsetDto, @RequestPart List<MultipartFile> files){
+        BoardDto.Response dto = boardService.updateBoard(requsetDto);
+
+        RedirectView rv = new RedirectView("/cms/board/list?boardMasterId=" + requsetDto.getBoardMasterId());
+        if (dto != null) {
+            rv.addStaticAttribute("msg", "정상 처리되었습니다.");
+        } else {
+            rv.addStaticAttribute("msg", "처리 실패하였습니다.");
+        }
+
+        return new ModelAndView(rv);
     }
 
 }
