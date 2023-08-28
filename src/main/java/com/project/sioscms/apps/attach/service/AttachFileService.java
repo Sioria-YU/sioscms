@@ -41,6 +41,11 @@ public class AttachFileService {
     //region file upload
     @Transactional
     public ResponseEntity<?> upload(MultipartFile file) throws Exception {
+        return upload(file, null);
+    }
+
+    @Transactional
+    public ResponseEntity<?> upload(MultipartFile file, AttachFileGroup attachFileGroup) throws Exception {
         String originalFileName = file.getOriginalFilename();
         if(originalFileName == null || originalFileName.isEmpty()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(originalFileName);
@@ -71,7 +76,9 @@ public class AttachFileService {
         boolean isWrite = aesCryptoService.encryptFile(originFile, destination);
 
         if(isWrite){
-            AttachFileGroup attachFileGroup = new AttachFileGroup();
+            if(attachFileGroup == null) {
+                attachFileGroup = new AttachFileGroup();
+            }
             attachFileGroup.setIsDeleted(false);
 
             //파일 정보 db 저장
@@ -86,14 +93,14 @@ public class AttachFileService {
             attachFile.setIsUsed(true);
             attachFile.setFileSize(file.getSize());
 
-            //권한 처리 후 제거
-//            attachFile.setCreatedBy(1L);
-//            attachFile.setUpdatedBy(1L);
-//            attachFileGroup.setCreatedBy(1L);
-//            attachFileGroup.setUpdatedBy(1L);
+            //attachFileGroup을 새로 만든 경우 건너뛰어야함
+            List<AttachFile> attachFileList = attachFileRepository.findAllByAttachFileGroupAndIsDeleted(attachFileGroup, false);
 
-            List<AttachFile> attachFileList = Lists.newArrayList(attachFile);
+            if(attachFileList == null){
+                attachFileList = Lists.newArrayList();
+            }
 
+            attachFileList.add(attachFile);
             attachFileGroup.setAttachFile(attachFileList);
 
             //Entity save
@@ -115,10 +122,15 @@ public class AttachFileService {
     public void download(String fileName, HttpServletResponse response){
         //파일명으로 파일 조회
         //암호화 파일 경로, 복호화 파일명 얻어옴
+        AttachFile attachFile = attachFileRepository.findByFileName(fileName).orElse(null);
+
+        if(attachFile == null){
+            return;
+        }
 
         //파일을 읽어옴(inputStream)
-        File encryptFile = new File(attachPath + File.separator + fileName);    //파일 조회 시 들어있는 경로로 변경해야함
-        String originalFileName = new String(Base64.decodeBase64(fileName), StandardCharsets.UTF_8);
+        File encryptFile = new File(attachFile.getFilePath() + attachFile.getFileName());    //파일 조회 시 들어있는 경로로 변경해야함
+        String originalFileName = attachFile.getOriginFileName();
 
         try {
             //response output
@@ -169,9 +181,14 @@ public class AttachFileService {
     public void getImage(String fileName, HttpServletResponse response){
         //파일명으로 파일 조회
         //암호화 파일 경로, 복호화 파일명 얻어옴
+        AttachFile attachFile = attachFileRepository.findByFileName(fileName).orElse(null);
+
+        if(attachFile == null){
+            return;
+        }
 
         //파일을 읽어옴(inputStream)
-        File encryptFile = new File(attachPath + File.separator + fileName);    //파일 조회 시 들어있는 경로로 변경해야함
+        File encryptFile = new File(attachFile.getFilePath() + attachFile.getFileName());    //파일 조회 시 들어있는 경로로 변경해야함
 
         try {
             //response output

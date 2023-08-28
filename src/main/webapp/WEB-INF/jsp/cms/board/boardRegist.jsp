@@ -7,9 +7,9 @@
     const formSubmitEvent = () => {
         //에디터 내용을 textarea에 적용
         oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
-
         //입력 값 검증
 
+        $("#registForm").submit();
     }
 
 </script>
@@ -33,7 +33,8 @@
                 <i class="bi bi-record-circle-fill"></i><h4 class="card-title">게시글 등록</h4>
             </div>
 
-            <form id="registForm" name="registForm" method="post" enctype="multipart/form-data" action="">
+            <form id="registForm" name="registForm" method="post" enctype="multipart/form-data" action="./save">
+                <input type="hidden" name="boardMasterId" value="${param.boardMasterId}">
                 <table class="table">
                     <tr>
                         <th class="table-title"><label for="title">제목</label></th>
@@ -85,7 +86,7 @@
                 </table>
                 <div class="form-btn-set text-center">
                     <button type="button" class="btn btn-secondary btn-lg" onclick="location.href='./list?boardMasterId=${param.boardMasterId}';">취소</button>
-                    <button type="submit" class="btn btn-success btn-lg">등록</button>
+                    <button type="button" class="btn btn-success btn-lg" onclick="formSubmitEvent();">등록</button>
                 </div>
             </form>
         </div>

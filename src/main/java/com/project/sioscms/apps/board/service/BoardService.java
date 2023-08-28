@@ -62,6 +62,7 @@ public class BoardService {
         }
     }
 
+    @Transactional
     public BoardDto.Response saveBoard(BoardDto.Request requestDto){
         Board board = BoardMapper.mapper.toEntity(requestDto);
         BoardMaster boardMaster = boardMasterRepository.findById(requestDto.getBoardMasterId()).orElse(null);
@@ -107,6 +108,7 @@ public class BoardService {
         return board.toResponse();
     }
 
+    @Transactional
     public BoardDto.Response updateBoard(BoardDto.Request requestDto){
         Board board = boardRepository.findById(requestDto.getId()).orElse(null);
 
@@ -169,6 +171,7 @@ public class BoardService {
         }
     }
 
+    @Transactional
     public boolean deleteBoard(Long id){
         Board board = boardRepository.findById(id).orElse(null);
         if(board == null){

@@ -8,8 +8,14 @@ import com.project.sioscms.cms.management.board.service.BoardManagementService;
 import com.project.sioscms.common.utils.jpa.page.SiosPage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/cms/board")
@@ -52,6 +58,27 @@ public class BoardManagementController {
     public ModelAndView boardRegist(BoardDto.Request requestDto){
         ModelAndView mav = new ModelAndView("cms/board/boardRegist");
         mav.addObject("boardMasterId", requestDto.getBoardMasterId());
+        return mav;
+    }
+
+    @RequestMapping("/save")
+    public ModelAndView boardSave(BoardDto.Request requsetDto, @RequestPart List<MultipartFile> files){
+        BoardDto.Response dto = boardService.saveBoard(requsetDto);
+
+        RedirectView rv = new RedirectView("/cms/board/list?boardMasterId=" + requsetDto.getBoardMasterId());
+        if (dto != null) {
+            rv.addStaticAttribute("msg", "정상 처리되었습니다.");
+        } else {
+            rv.addStaticAttribute("msg", "처리 실패하였습니다.");
+        }
+
+        return new ModelAndView(rv);
+    }
+
+    @RequestMapping("/view/{boardId}")
+    public ModelAndView boardView(@PathVariable Long boardId){
+        ModelAndView mav = new ModelAndView("cms/board/boardView");
+        mav.addObject("result", boardService.getBoard(boardId));
         return mav;
     }
 

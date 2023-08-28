@@ -8,8 +8,8 @@
             <ol class="breadcrumb mb-4">
                 <li class="breadcrumb-item active">Dashboard</li>
             </ol>
-            <br>
-            <img class="mb-2" src="/api/attach/get-image/MzMxODkyOTA3MjA3ODc1X2tpbWlfbm9fbmFtYWVfd2FfOC5qcGVn" alt="이미지" width="80%"/>
+<%--            이미지 출력 예시--%>
+<%--            <img class="mb-2" src="/api/attach/get-image/MzMxODkyOTA3MjA3ODc1X2tpbWlfbm9fbmFtYWVfd2FfOC5qcGVn" alt="이미지" width="80%"/>--%>
             <div class="row">
                 <div class="col-xl-3 col-md-6">
                     <div class="card bg-primary text-white mb-4">
