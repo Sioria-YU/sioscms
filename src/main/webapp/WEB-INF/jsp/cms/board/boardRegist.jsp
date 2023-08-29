@@ -9,7 +9,7 @@
         oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
         //입력 값 검증
         <c:if test="${not empty result}">
-        $("#registForm").action("./update");
+            $("#registForm").attr("action", "./update");
         </c:if>
 
         $("#registForm").submit();
@@ -60,6 +60,9 @@
 
             <form id="registForm" name="registForm" method="post" enctype="multipart/form-data" action="./save">
                 <input type="hidden" name="boardMasterId" value="${param.boardMasterId}">
+                <c:if test="${not empty result}">
+                    <input type="hidden" name="id" value="${result.id}">
+                </c:if>
                 <table class="table">
                     <tr>
                         <th class="table-title"><label for="title">제목</label></th>

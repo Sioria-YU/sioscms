@@ -55,6 +55,10 @@ public class BoardManagementController {
             mav.addObject("pageInfo", siosPage.getPageInfo());
         }
 
+        if (requestDto.getMsg() != null && !requestDto.getMsg().isEmpty()) {
+            mav.addObject("msg", requestDto.getMsg());
+        }
+
         return mav;
     }
 
@@ -62,6 +66,7 @@ public class BoardManagementController {
     public ModelAndView boardView(@PathVariable Long boardId){
         ModelAndView mav = new ModelAndView("cms/board/boardView");
         mav.addObject("result", boardService.getBoard(boardId));
+
         return mav;
     }
 
