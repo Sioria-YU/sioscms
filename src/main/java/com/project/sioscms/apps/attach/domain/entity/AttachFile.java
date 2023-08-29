@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
+import org.hibernate.annotations.JoinFormula;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +17,7 @@ import javax.persistence.ManyToOne;
 @Entity
 @Getter
 @Setter
+@Where(clause = "is_deleted = false")
 public class AttachFile  extends CommonEntityWithIdAndDate {
 
     @ManyToOne

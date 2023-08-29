@@ -15,6 +15,28 @@
         $("#registForm").submit();
     }
 
+    const attachFileDelete = (fileName, selector) => {
+        if(confirm("삭제된 파일은 복구되지 않습니다.\n삭제하시겠습니까?")) {
+            $.ajax({
+                url: '/api/attach/delete',
+                type: 'DELETE',
+                async: false,
+                data: {
+                    fileName     : fileName,
+                    deleteMode : 'D'
+                },
+                success: function (data) {
+                    $("#"+selector).remove();
+                    alert("삭제 처리되었습니다.");
+                },
+                error: function (request, status, error) {
+                    console.error(error);
+                    alert("오류가 발생하였습니다.");
+                }
+            });
+        }
+    }
+
 </script>
 <div id="layoutSidenav_content">
     <main>
@@ -49,7 +71,18 @@
                     </tr>
                     <tr>
                         <th class="table-title"><label for="files">첨부파일</label></th>
-                        <td><input type="file" class="form-control" id="files" name="files" multiple></td>
+                        <td>
+                            <c:if test="${not empty result.attachFileGroup and not empty result.attachFileGroup.attachFileList}">
+                                <input type="hidden" name="attachFileGroupId" value="${result.attachFileGroup.id}">
+                                <c:forEach var="attachfile" items="${result.attachFileGroup.attachFileList}" varStatus="status">
+                                    <div class="block mb-1" id="attachFileWrap_${status.count}">
+                                        <a href="#" class="me-1" onclick="attachFileDownload('${attachfile.fileName}');" aria-label="첨부파일${status.count} 다운로드">${attachfile.originFileName}</a>
+                                        <i class="bi bi-x-circle-fill" onclick="attachFileDelete('${attachfile.fileName}', 'attachFileWrap_${status.count}');" aria-label="첨부파일${status.count} 삭제"></i>
+                                    </div>
+                                </c:forEach>
+                            </c:if>
+                            <input type="file" class="form-control" id="files" name="files" multiple>
+                        </td>
                     </tr>
                     <tr>
                         <th class="table-title"><label for="option1">옵션1</label></th>

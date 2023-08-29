@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
+import org.hibernate.annotations.JoinFormula;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;

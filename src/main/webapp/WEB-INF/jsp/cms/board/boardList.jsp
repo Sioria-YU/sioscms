@@ -28,13 +28,13 @@
                             <input type="hidden" id="pageSize" name="pageSize" value="${empty param.pageSize? 5:param.pageSize}">
                             <div class="row mb-3">
                                 <label for="title" class="col-sm-2 col-form-label">제목</label>
-                                <div class="col-sm-3">
+                                <div class="col-sm-9">
                                     <input type="text" class="form-control" id="title" name="title" value="${param.title}" placeholder="제목을 입력하세요." aria-label="제목을 입력하세요.">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label for="keyword" class="col-sm-2 col-form-label">내용</label>
-                                <div class="col-sm-3">
+                                <div class="col-sm-9">
                                     <input type="text" class="form-control" id="keyword" name="keyword" value="${param.keyword}" placeholder="내용을 입력하세요." aria-label="내용을 입력하세요.">
                                 </div>
                             </div>

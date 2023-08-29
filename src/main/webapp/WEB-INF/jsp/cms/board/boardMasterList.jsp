@@ -82,13 +82,13 @@
                             <input type="hidden" id="pageSize" name="pageSize" value="${empty param.pageSize? 5:param.pageSize}">
                             <div class="row mb-3">
                                 <label for="boardName" class="col-sm-2 col-form-label">게시판 명</label>
-                                <div class="col-sm-3">
+                                <div class="col-sm-9">
                                     <input type="text" class="form-control" id="boardName" name="boardName" value="${param.boardName}" placeholder="게시판 명을 입력하세요." aria-label="게시판 명을 입력하세요.">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label for="boardTypeCode.id" class="col-sm-2 col-form-label">게시판 유형</label>
-                                <div class="col-sm-3">
+                                <div class="col-sm-9">
                                     <select class="form-select" id="boardTypeCode.id" name="boardTypeCode.id" aria-label="게시판 유형을 선택하세요.">
                                         <option value="">전체</option>
                                         <c:forEach var="cd" items="${boardTypeCodeList}">
