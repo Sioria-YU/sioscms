@@ -40,11 +40,11 @@ public class BoardService {
             rs.equals("boardMaster.id", requestDto.getBoardMasterId());
         }
 
-        if(requestDto.getTitle() != null){
+        if(requestDto.getTitle() != null && !requestDto.getTitle().isEmpty()){
             rs.like("title", "%" + requestDto.getTitle() + "%");
         }
 
-        if(requestDto.getKeyword() != null){
+        if(requestDto.getKeyword() != null && !requestDto.getKeyword().isEmpty()){
             rs.like("contentWithoutHtml", "%" + requestDto.getKeyword().replace(" ", "") + "%");
         }
 
