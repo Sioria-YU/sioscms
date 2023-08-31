@@ -3,6 +3,7 @@ package com.project.sioscms.apps.board.domain.dto;
 import com.project.sioscms.apps.account.domain.entity.Account;
 import com.project.sioscms.apps.attach.domain.entity.AttachFileGroup;
 import com.project.sioscms.apps.board.domain.entity.BoardMaster;
+import com.project.sioscms.apps.hashtag.domain.entity.BoardHashtag;
 import com.project.sioscms.common.domain.dto.CommonSearchDto;
 import lombok.Getter;
 import lombok.Setter;
@@ -83,7 +84,7 @@ public class BoardDto {
 
         private AttachFileGroup attachFileGroup;
 
-        private Set<String> hashtagList;
+        private Set<BoardHashtag> boardHashtagSet;
 
         private Boolean isDeleted;
     }

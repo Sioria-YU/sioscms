@@ -42,7 +42,13 @@
                         </tr>
                         <tr>
                             <th class="table-title">해시태그</th>
-                            <td></td>
+                            <td>
+                                <c:if test="${not empty result.boardHashtagSet}">
+                                    <c:forEach var="boardHashtag" items="${result.boardHashtagSet}">
+                                        <span>${boardHashtag.hashtag.hashtagName}</span>
+                                    </c:forEach>
+                                </c:if>
+                            </td>
                         </tr>
                         <tr>
                             <th class="table-title">첨부파일</th>
