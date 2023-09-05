@@ -1,5 +1,6 @@
 package com.project.sioscms.apps.board.service;
 
+import com.google.common.collect.Lists;
 import com.project.sioscms.apps.attach.domain.repository.AttachFileGroupRepository;
 import com.project.sioscms.apps.board.domain.dto.BoardDto;
 import com.project.sioscms.apps.board.domain.entity.Board;
@@ -20,6 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -127,32 +131,107 @@ public class BoardService {
         board.setOption5(requestDto.getOption5());
 
         //해시태그 등록 로직
-        //기존 해시태그 삭제
-        boardHashtagRepository.deleteAllByBoard(board);
-        if(requestDto.getHashtagList() != null && requestDto.getHashtagList().size() > 0){
-            for (String tag : requestDto.getHashtagList()) {
-                if(tag.replace(" ", "").length() == 0){
-                    continue;
+        /*
+        - 입력한 해시태그가 있을 경우
+        1.기존 등록한 해시태그가 있는 경우
+            1.1.기존 해시태그 리스트를 불러옴
+            1.2.입력한 해시태그와 비교하여 추가,삭제 목록 추출
+            1.3.삭제 목록 삭제처리
+            1.4.추가 목록이 해시태그로 등록되어 있는지 확인
+                1.4.1.추가 목록이 해시태그로 등록되어 있는 경우
+                    1.4.1.1.게시판 해시태그 등록
+                1.4.2.추가 목록이 해시태그로 등록되지 않은 경우
+                    1.4.2.1.해시태그 등록
+                    1.4.2.2.게시판 해시태그 등록
+        2.기존 등록한 해시태그가 없는 경우
+            2.1.추가 목록이 해시태그로 등록되어 있는지 확인
+                2.1.1.추가 목록이 해시태그로 등록되어 있는 경우
+                    2.1.1.1.게시판 해시태그 등록
+                2.1.2.추가 목록이 해시태그로 등록되지 않은 경우
+                    2.1.2.1.해시태그 등록
+                    2.1.2.2.게시판 해시태그 등록
+         */
+        //기존 해시태그가 있었고, 수정하여 모두 삭제했을 경우
+        if(board.getBoardHashtagSet() != null && !board.getBoardHashtagSet().isEmpty() && (requestDto.getHashtagList() == null || requestDto.getHashtagList().isEmpty())) {
+            boardHashtagRepository.deleteAllByBoard(board);
+            board.setBoardHashtagSet(null);
+        }//입력한 해시태그가 있을 경우
+        else if(requestDto.getHashtagList() != null && requestDto.getHashtagList().size() > 0){
+            //기존 해시태그가 있을 때
+            if(board.getBoardHashtagSet() != null && !board.getBoardHashtagSet().isEmpty()){
+                List<BoardHashtag> removeTagList = Lists.newArrayList();
+                List<String> appendTagList = Lists.newArrayList();
+
+                removeTagList = board.getBoardHashtagSet()
+                        .stream()
+                        .filter(boardHashtag -> requestDto.getHashtagList().stream().noneMatch(tag -> boardHashtag.getHashtag().getHashtagName().equals(tag)))
+                        .collect(Collectors.toList());
+
+                appendTagList = requestDto.getHashtagList()
+                        .stream()
+                        .filter(tag -> board.getBoardHashtagSet().stream().noneMatch(boardHashtag -> boardHashtag.getHashtag().getHashtagName().equals(tag)))
+                        .collect(Collectors.toList());
+
+                //삭제태그
+                if(!removeTagList.isEmpty()){
+                    boardHashtagRepository.deleteAll(removeTagList);
                 }
-                tag = tag.replace(" ", "");
 
-                Hashtag hashtag = hashtagRepository.findByHashtagNameAndIsDeleted(tag, false).orElse(null);
-                //해시 태그가 없을 경우 새로 생성
-                if(hashtag == null){
-                    hashtag = new Hashtag();
-                    hashtag.setHashtagName(tag);
-                    hashtag.setIsDeleted(false);
-                    hashtag.setIsDisplay(true);
-                    hashtagRepository.save(hashtag);
-                    hashtagRepository.flush();
+                if(!appendTagList.isEmpty()){
+                    for (String tag : appendTagList) {
+                        tag = tag.replaceAll(" ", "");
+
+                        if(tag.length() == 0){
+                            continue;
+                        }
+
+                        Hashtag hashtag = hashtagRepository.findByHashtagNameAndIsDeleted(tag, false).orElse(null);
+                        //해시 태그가 없을 경우 새로 생성
+                        if(hashtag == null){
+                            hashtag = new Hashtag();
+                            hashtag.setHashtagName(tag);
+                            hashtag.setIsDeleted(false);
+                            hashtag.setIsDisplay(true);
+                            hashtagRepository.save(hashtag);
+                            hashtagRepository.flush();
+                        }
+
+                        //게시판 해시태그 매핑 테이블 저장
+                        BoardHashtag boardHashtag = new BoardHashtag();
+                        boardHashtag.setBoard(board);
+                        boardHashtag.setHashtag(hashtag);
+
+                        boardHashtagRepository.save(boardHashtag);
+                    }
                 }
 
-                //게시판 해시태그 매핑 테이블 저장
-                BoardHashtag boardHashtag = new BoardHashtag();
-                boardHashtag.setBoard(board);
-                boardHashtag.setHashtag(hashtag);
+            }//기존 해시 태그가 없을 때
+            else{
+                for (String tag : requestDto.getHashtagList()) {
+                    tag = tag.replaceAll(" ", "");
 
-                boardHashtagRepository.save(boardHashtag);
+                    if(tag.length() == 0){
+                        continue;
+                    }
+
+                    Hashtag hashtag = hashtagRepository.findByHashtagNameAndIsDeleted(tag, false).orElse(null);
+                    //해시 태그가 없을 경우 새로 생성
+                    if(hashtag == null){
+                        hashtag = new Hashtag();
+                        hashtag.setHashtagName(tag);
+                        hashtag.setIsDeleted(false);
+                        hashtag.setIsDisplay(true);
+                        hashtagRepository.save(hashtag);
+                        hashtagRepository.flush();
+                    }
+
+                    //게시판 해시태그 매핑 테이블 저장
+                    BoardHashtag boardHashtag = new BoardHashtag();
+                    boardHashtag.setBoard(board);
+                    boardHashtag.setHashtag(hashtag);
+
+                    boardHashtagRepository.save(boardHashtag);
+                }
             }
         }
 
