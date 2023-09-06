@@ -57,10 +57,12 @@ public class Board extends CommonEntityWithIdAndDate {
 
     @OneToOne
     @Comment("이미지파일 그룹 아이디")
+    @OrderBy(value = "id asc")
     private AttachFileGroup imageFileGroup;
 
     @OneToOne
     @Comment("첨부파일 그룹 아이디")
+    @OrderBy(value = "id asc")
     private AttachFileGroup attachFileGroup;
 
     //댓글 oneToMany 필요할 경우 추가
@@ -68,6 +70,7 @@ public class Board extends CommonEntityWithIdAndDate {
 
     @OneToMany(mappedBy = "board")
     @ToString.Exclude
+    @OrderBy(value = "id asc")
     private Set<BoardHashtag> boardHashtagSet;
 
     @ColumnDefault(value = "FALSE")

@@ -45,7 +45,7 @@
                             <td>
                                 <c:if test="${not empty result.boardHashtagSet}">
                                     <c:forEach var="boardHashtag" items="${result.boardHashtagSet}">
-                                        <span>${boardHashtag.hashtag.hashtagName}</span>
+                                        <span class="hashtag-item">${boardHashtag.hashtag.hashtagName}</span>
                                     </c:forEach>
                                 </c:if>
                             </td>
