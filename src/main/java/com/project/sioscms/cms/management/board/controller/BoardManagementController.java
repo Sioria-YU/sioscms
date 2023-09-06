@@ -9,6 +9,7 @@ import com.project.sioscms.apps.board.service.BoardMasterService;
 import com.project.sioscms.apps.board.service.BoardService;
 import com.project.sioscms.cms.management.board.service.BoardManagementService;
 import com.project.sioscms.common.utils.jpa.page.SiosPage;
+import com.project.sioscms.secure.domain.Auth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,7 @@ public class BoardManagementController {
     private final BoardService boardService;
     private final AttachFileService attachFileService;
 
+    @Auth(role = Auth.Role.ADMIN)
     @RequestMapping("/master-list")
     public ModelAndView boardMasterList(BoardMasterDto.Request requestDto){
         ModelAndView mav = new ModelAndView("cms/board/boardMasterList");
@@ -45,6 +47,7 @@ public class BoardManagementController {
         return mav;
     }
 
+    @Auth(role = Auth.Role.ADMIN)
     @RequestMapping("/list")
     public ModelAndView boardList(BoardDto.Request requestDto){
         ModelAndView mav = new ModelAndView("cms/board/boardList");
@@ -62,6 +65,7 @@ public class BoardManagementController {
         return mav;
     }
 
+    @Auth(role = Auth.Role.ADMIN)
     @RequestMapping("/view/{boardId}")
     public ModelAndView boardView(@PathVariable Long boardId){
         ModelAndView mav = new ModelAndView("cms/board/boardView");
@@ -70,6 +74,7 @@ public class BoardManagementController {
         return mav;
     }
 
+    @Auth(role = Auth.Role.ADMIN)
     @RequestMapping("/regist")
     public ModelAndView boardRegist(BoardDto.Request requestDto){
         ModelAndView mav = new ModelAndView("cms/board/boardRegist");
@@ -80,6 +85,7 @@ public class BoardManagementController {
         return mav;
     }
 
+    @Auth(role = Auth.Role.ADMIN)
     @RequestMapping("/save")
     public ModelAndView boardSave(BoardDto.Request requsetDto, @RequestPart List<MultipartFile> files){
         //첨부파일을 등록하여 attachFileGroupId를 requestDto에 set하여 게시판 저장으로 넘긴다.
@@ -102,6 +108,7 @@ public class BoardManagementController {
         return new ModelAndView(rv);
     }
 
+    @Auth(role = Auth.Role.ADMIN)
     @RequestMapping("/update")
     public ModelAndView boardUpdate(BoardDto.Request requsetDto, @RequestPart List<MultipartFile> files){
         //첨부파일을 등록하여 attachFileGroupId를 requestDto에 set하여 게시판 저장으로 넘긴다.

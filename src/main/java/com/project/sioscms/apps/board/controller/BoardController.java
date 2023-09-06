@@ -3,10 +3,10 @@ package com.project.sioscms.apps.board.controller;
 import com.project.sioscms.apps.board.domain.dto.BoardDto;
 import com.project.sioscms.apps.board.service.BoardService;
 import com.project.sioscms.common.utils.jpa.page.SiosPage;
+import com.project.sioscms.secure.domain.Auth;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,11 +43,13 @@ public class BoardController {
         return ResponseEntity.ok(boardService.updateBoardViewCount(id));
     }
 
+    @Auth(role = Auth.Role.USER)
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Boolean> deleteBoard(@PathVariable Long id){
         return ResponseEntity.ok(boardService.deleteBoard(id));
     }
 
+    @Auth(role = Auth.Role.ADMIN)
     @DeleteMapping("/multi-delete")
     public ResponseEntity<Boolean> multiDeleteBoards(@RequestParam("ids[]") List<Long> ids){
         if(ids != null && ids.size() > 0){
