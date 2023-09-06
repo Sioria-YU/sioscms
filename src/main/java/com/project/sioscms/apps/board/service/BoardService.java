@@ -89,23 +89,7 @@ public class BoardService {
         //해시태그 등록 로직
         if(requestDto.getHashtagList() != null && requestDto.getHashtagList().size() > 0){
             for (String tag : requestDto.getHashtagList()) {
-                Hashtag hashtag = hashtagRepository.findByHashtagNameAndIsDeleted(tag, false).orElse(null);
-                //해시 태그가 없을 경우 새로 생성
-                if(hashtag == null){
-                    hashtag = new Hashtag();
-                    hashtag.setHashtagName(tag);
-                    hashtag.setIsDeleted(false);
-                    hashtag.setIsDisplay(true);
-                    hashtagRepository.save(hashtag);
-                    hashtagRepository.flush();
-                }
-
-                //게시판 해시태그 매핑 테이블 저장
-                BoardHashtag boardHashtag = new BoardHashtag();
-                boardHashtag.setBoard(board);
-                boardHashtag.setHashtag(hashtag);
-
-                boardHashtagRepository.save(boardHashtag);
+                saveBoardHashTag(board, tag);
             }
         }
 
@@ -131,27 +115,65 @@ public class BoardService {
         board.setOption5(requestDto.getOption5());
 
         //해시태그 등록 로직
-        /*
-        - 입력한 해시태그가 있을 경우
-        1.기존 등록한 해시태그가 있는 경우
-            1.1.기존 해시태그 리스트를 불러옴
-            1.2.입력한 해시태그와 비교하여 추가,삭제 목록 추출
-            1.3.삭제 목록 삭제처리
-            1.4.추가 목록이 해시태그로 등록되어 있는지 확인
-                1.4.1.추가 목록이 해시태그로 등록되어 있는 경우
-                    1.4.1.1.게시판 해시태그 등록
-                1.4.2.추가 목록이 해시태그로 등록되지 않은 경우
-                    1.4.2.1.해시태그 등록
-                    1.4.2.2.게시판 해시태그 등록
-        2.기존 등록한 해시태그가 없는 경우
-            2.1.추가 목록이 해시태그로 등록되어 있는지 확인
-                2.1.1.추가 목록이 해시태그로 등록되어 있는 경우
-                    2.1.1.1.게시판 해시태그 등록
-                2.1.2.추가 목록이 해시태그로 등록되지 않은 경우
-                    2.1.2.1.해시태그 등록
-                    2.1.2.2.게시판 해시태그 등록
-         */
+
         //기존 해시태그가 있었고, 수정하여 모두 삭제했을 경우
+        hashtagUpdate(board, requestDto);
+
+        boardRepository.flush();
+        return board.toResponse();
+    }
+
+    public boolean updateBoardViewCount(Long id){
+        Board board = boardRepository.findById(id).orElse(null);
+
+        if(board == null){
+            return false;
+        }else{
+            board.setViewCount(board.getViewCount() + 1);
+            boardRepository.flush();
+            return true;
+        }
+    }
+
+    @Transactional
+    public boolean deleteBoard(Long id){
+        Board board = boardRepository.findById(id).orElse(null);
+        if(board == null){
+            return false;
+        }else{
+            board.setIsDeleted(true);
+            boardRepository.flush();
+            return true;
+        }
+    }
+
+
+    /**
+     * 게시판 해시태그 업데이트 로직
+     * @param board
+     * @param requestDto
+     * @implNote
+     * - 입력한 해시태그가 있을 경우
+     *         1.기존 등록한 해시태그가 있는 경우
+     *             1.1.기존 해시태그 리스트를 불러옴
+     *             1.2.입력한 해시태그와 비교하여 추가,삭제 목록 추출
+     *             1.3.삭제 목록 삭제처리
+     *             1.4.추가 목록이 해시태그로 등록되어 있는지 확인
+     *                 1.4.1.추가 목록이 해시태그로 등록되어 있는 경우
+     *                     1.4.1.1.게시판 해시태그 등록
+     *                 1.4.2.추가 목록이 해시태그로 등록되지 않은 경우
+     *                     1.4.2.1.해시태그 등록
+     *                     1.4.2.2.게시판 해시태그 등록
+     *         2.기존 등록한 해시태그가 없는 경우
+     *             2.1.추가 목록이 해시태그로 등록되어 있는지 확인
+     *                 2.1.1.추가 목록이 해시태그로 등록되어 있는 경우
+     *                     2.1.1.1.게시판 해시태그 등록
+     *                 2.1.2.추가 목록이 해시태그로 등록되지 않은 경우
+     *                     2.1.2.1.해시태그 등록
+     *                     2.1.2.2.게시판 해시태그 등록
+     */
+    @Transactional
+    protected void hashtagUpdate(Board board, BoardDto.Request requestDto){
         if(board.getBoardHashtagSet() != null && !board.getBoardHashtagSet().isEmpty() && (requestDto.getHashtagList() == null || requestDto.getHashtagList().isEmpty())) {
             boardHashtagRepository.deleteAllByBoard(board);
             board.setBoardHashtagSet(null);
@@ -208,58 +230,36 @@ public class BoardService {
             }//기존 해시 태그가 없을 때
             else{
                 for (String tag : requestDto.getHashtagList()) {
-                    tag = tag.replaceAll(" ", "");
-
-                    if(tag.length() == 0){
-                        continue;
-                    }
-
-                    Hashtag hashtag = hashtagRepository.findByHashtagNameAndIsDeleted(tag, false).orElse(null);
-                    //해시 태그가 없을 경우 새로 생성
-                    if(hashtag == null){
-                        hashtag = new Hashtag();
-                        hashtag.setHashtagName(tag);
-                        hashtag.setIsDeleted(false);
-                        hashtag.setIsDisplay(true);
-                        hashtagRepository.save(hashtag);
-                        hashtagRepository.flush();
-                    }
-
-                    //게시판 해시태그 매핑 테이블 저장
-                    BoardHashtag boardHashtag = new BoardHashtag();
-                    boardHashtag.setBoard(board);
-                    boardHashtag.setHashtag(hashtag);
-
-                    boardHashtagRepository.save(boardHashtag);
+                    saveBoardHashTag(board, tag);
                 }
             }
-        }
-
-        boardRepository.flush();
-        return board.toResponse();
-    }
-
-    public boolean updateBoardViewCount(Long id){
-        Board board = boardRepository.findById(id).orElse(null);
-
-        if(board == null){
-            return false;
-        }else{
-            board.setViewCount(board.getViewCount() + 1);
-            boardRepository.flush();
-            return true;
         }
     }
 
     @Transactional
-    public boolean deleteBoard(Long id){
-        Board board = boardRepository.findById(id).orElse(null);
-        if(board == null){
-            return false;
+    protected void saveBoardHashTag(Board board, String tag){
+        if(board == null || tag == null || tag.isEmpty()){
+            return;
         }else{
-            board.setIsDeleted(true);
-            boardRepository.flush();
-            return true;
+            tag = tag.replaceAll(" ", "");
         }
+
+        Hashtag hashtag = hashtagRepository.findByHashtagNameAndIsDeleted(tag, false).orElse(null);
+        //해시 태그가 없을 경우 새로 생성
+        if(hashtag == null){
+            hashtag = new Hashtag();
+            hashtag.setHashtagName(tag);
+            hashtag.setIsDeleted(false);
+            hashtag.setIsDisplay(true);
+            hashtagRepository.save(hashtag);
+            hashtagRepository.flush();
+        }
+
+        //게시판 해시태그 매핑 테이블 저장
+        BoardHashtag boardHashtag = new BoardHashtag();
+        boardHashtag.setBoard(board);
+        boardHashtag.setHashtag(hashtag);
+
+        boardHashtagRepository.save(boardHashtag);
     }
 }
