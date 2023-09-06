@@ -6,10 +6,14 @@ import com.project.sioscms.common.utils.jpa.page.SiosPage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
-@RestController("/api/board")
+@RestController
+@RequestMapping("/api/board")
 @RequiredArgsConstructor
 public class BoardController {
     private final BoardService boardService;
@@ -44,4 +48,15 @@ public class BoardController {
         return ResponseEntity.ok(boardService.deleteBoard(id));
     }
 
+    @DeleteMapping("/multi-delete")
+    public ResponseEntity<Boolean> multiDeleteBoards(@RequestParam("ids[]") List<Long> ids){
+        if(ids != null && ids.size() > 0){
+            for (Long id : ids) {
+                boardService.deleteBoard(id);
+            }
+            return ResponseEntity.ok(true);
+        }else{
+            return ResponseEntity.ok(false);
+        }
+    }
 }
