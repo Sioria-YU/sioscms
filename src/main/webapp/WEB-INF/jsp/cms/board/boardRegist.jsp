@@ -90,7 +90,7 @@
                         <tr>
                             <th class="table-title"><label for="hashTagBoard">해시태그</label></th>
                             <td>
-                                <input type="text" class="form-control" id="hashTagBoard" name="hashTagBoard" placeholder="#해시태그를 입력하세요."
+                                <input type="text" class="form-control" id="hashTagBoard" name="hashTagBoard" placeholder="#해시태그를 입력하세요.(최대 5개)"
                                     <c:if test="${not empty result.boardHashtagSet}">
                                         value="<c:forEach var="boardHashtag" items="${result.boardHashtagSet}" varStatus="status">
                                                     ${boardHashtag.hashtag.hashtagName}
