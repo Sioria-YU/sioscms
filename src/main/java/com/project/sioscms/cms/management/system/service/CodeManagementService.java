@@ -10,6 +10,7 @@ import com.project.sioscms.cms.management.system.domain.dto.CodeSearchDto;
 import com.project.sioscms.common.utils.jpa.page.SiosPage;
 import com.project.sioscms.common.utils.jpa.restriction.ChangSolJpaRestriction;
 import lombok.RequiredArgsConstructor;
+import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class CodeManagementService {
+public class CodeManagementService extends EgovAbstractServiceImpl {
     private final CodeGroupRepository codeGroupRepository;
     private final CodeRepository codeRepository;
 

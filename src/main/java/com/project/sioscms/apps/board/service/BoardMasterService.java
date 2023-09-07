@@ -11,6 +11,7 @@ import com.project.sioscms.common.utils.jpa.restriction.ChangSolJpaRestriction;
 import com.project.sioscms.common.utils.jpa.restriction.ChangSolJpaRestrictionType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class BoardMasterService {
+public class BoardMasterService extends EgovAbstractServiceImpl {
     private final BoardMasterRepository boardMasterRepository;
     private final CodeRepository codeRepository;
 

@@ -7,6 +7,7 @@ import com.project.sioscms.apps.account.mapper.AccountMapper;
 import com.project.sioscms.secure.domain.UserAccount;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,7 +22,7 @@ import java.util.Optional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class AccountService {
+public class AccountService extends EgovAbstractServiceImpl {
 
     public final AccountRepository accountRepository;
 

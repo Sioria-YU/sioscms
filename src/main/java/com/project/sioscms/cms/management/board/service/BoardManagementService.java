@@ -8,6 +8,7 @@ import com.project.sioscms.apps.code.domain.repository.CodeGroupRepository;
 import com.project.sioscms.apps.code.domain.repository.CodeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class BoardManagementService {
+public class BoardManagementService extends EgovAbstractServiceImpl {
     private final BoardMasterRepository boardMasterRepository;
     private final CodeGroupRepository codeGroupRepository;
     private final CodeRepository codeRepository;

@@ -10,6 +10,7 @@ import com.project.sioscms.common.service.AesCryptoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class AttachFileService {
+public class AttachFileService extends EgovAbstractServiceImpl {
     private final AttachFileGroupRepository attachFileGroupRepository;
     private final AttachFileRepository attachFileRepository;
 

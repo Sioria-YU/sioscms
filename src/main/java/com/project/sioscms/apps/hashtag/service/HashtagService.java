@@ -6,6 +6,7 @@ import com.project.sioscms.apps.hashtag.domain.repository.HashtagRepository;
 import com.project.sioscms.apps.hashtag.mapper.HashtagMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class HashtagService {
+public class HashtagService extends EgovAbstractServiceImpl {
     private final HashtagRepository hashtagRepository;
 
     public HashtagDto.Response saveHashtag(HashtagDto.Request requestDto){

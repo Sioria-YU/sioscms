@@ -3,6 +3,7 @@ package com.project.sioscms.common.service;
 import com.project.sioscms.common.utils.common.secure.AesCryptoUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,7 @@ import java.io.File;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class AesCryptoService {
+public class AesCryptoService extends EgovAbstractServiceImpl {
 
     @Value("${aes.secret-key}")
     private String SECRET_KEY;

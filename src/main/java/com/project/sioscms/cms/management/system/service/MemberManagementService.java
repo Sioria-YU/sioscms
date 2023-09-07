@@ -9,6 +9,7 @@ import com.project.sioscms.common.utils.jpa.page.SiosPage;
 import com.project.sioscms.common.utils.jpa.restriction.ChangSolJpaRestriction;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class MemberManagementService {
+public class MemberManagementService extends EgovAbstractServiceImpl {
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 

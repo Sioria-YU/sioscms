@@ -9,6 +9,7 @@ import com.project.sioscms.common.utils.jpa.page.SiosPage;
 import com.project.sioscms.common.utils.jpa.restriction.ChangSolJpaRestriction;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MenuManagementService {
+public class MenuManagementService extends EgovAbstractServiceImpl {
     private final MenuRepository menuRepository;
 
     public SiosPage<MenuDto.Response> getMenuList(CommonSearchDto requestDto){
