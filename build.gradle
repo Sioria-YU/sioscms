@@ -16,9 +16,15 @@ configurations {
 }
 
 repositories {
+    mavenLocal() // maven 로컬 캐시 저장소
     mavenCentral()
     maven { url 'https://repo.spring.io/milestone' }
     maven { url 'https://repo.spring.io/snapshot' }
+    maven { url "https://maven.egovframe.go.kr/maven/"
+        metadataSources {
+            artifact()
+        }
+    } // maven 원격 저장소
 }
 
 dependencies {
@@ -47,6 +53,16 @@ dependencies {
     implementation("org.hibernate:hibernate-validator:8.0.0.Final")
 
     /*===========================  End of add Implementaions ===========================*/
+
+    /*===============================  Add egovframe ===============================*/
+    compileOnly(group: 'org.egovframe.rte', name: 'org.egovframe.rte.ptl.mvc', version:'4.1.0')
+    compileOnly(group: 'org.egovframe.rte', name: 'org.egovframe.rte.psl.dataaccess', version:'4.1.0')
+    compileOnly(group: 'org.egovframe.rte', name: 'org.egovframe.rte.fdl.idgnr', version:'4.1.0')
+    compileOnly(group: 'org.egovframe.rte', name: 'org.egovframe.rte.fdl.property', version:'4.1.0')
+    compileOnly(group: 'org.egovframe.rte', name: 'org.egovframe.rte.fdl.string', version:'4.1.0')
+    compileOnly(group: 'org.egovframe.rte', name: 'org.egovframe.rte.fdl.cmmn', version:'4.1.0')
+    compileOnly(group: 'org.egovframe.rte', name: 'org.egovframe.rte.fdl.logging', version:'4.1.0')
+    /*===============================  End of egovframe ===============================*/
 
     /*===============================  Add annotation ===============================*/
     annotationProcessor("org.mapstruct:mapstruct-processor:1.5.3.Final")
