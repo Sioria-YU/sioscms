@@ -4,6 +4,7 @@ import com.project.sioscms.apps.account.domain.dto.AccountDto;
 import com.project.sioscms.cms.management.system.domain.dto.MemberSearchDto;
 import com.project.sioscms.cms.management.system.service.MemberManagementService;
 import com.project.sioscms.common.utils.jpa.page.SiosPage;
+import com.project.sioscms.secure.domain.Auth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,7 @@ public class MemberManagementController {
      * @return ModelAndView resultList,pageInfo
      * @throws Exception
      */
+    @Auth(role = Auth.Role.ADMIN)
     @RequestMapping("/admin-list")
     public ModelAndView adminList(MemberSearchDto requestDto) throws Exception {
         ModelAndView mav = new ModelAndView("cms/member/adminList");
@@ -51,6 +53,7 @@ public class MemberManagementController {
      * @return ModelAndView result
      * @throws Exception
      */
+    @Auth(role = Auth.Role.ADMIN)
     @RequestMapping("/admin-view/{id}")
     public ModelAndView adminView(@PathVariable long id) throws Exception {
         ModelAndView mav = new ModelAndView("cms/member/adminView");
@@ -101,6 +104,7 @@ public class MemberManagementController {
      * @return ModelAndView url, message
      * @throws Exception
      */
+    @Auth(role = Auth.Role.ADMIN)
     @RequestMapping("/admin-update")
     public ModelAndView adminUpdate(AccountDto.Request dto) {
         AccountDto.Response accountDto = memberManagementService.modifyAdmin(dto);
@@ -126,6 +130,7 @@ public class MemberManagementController {
      * @return ModelAndView resultList, pageInfo
      * @throws Exception
      */
+    @Auth(role = Auth.Role.ADMIN)
     @RequestMapping("/user-list")
     public ModelAndView userList(MemberSearchDto requestDto) throws Exception {
         ModelAndView mav = new ModelAndView("cms/member/userList");
@@ -148,6 +153,7 @@ public class MemberManagementController {
      * @return ModelAndView result
      * @throws Exception
      */
+    @Auth(role = Auth.Role.ADMIN)
     @RequestMapping("/user-view/{id}")
     public ModelAndView userView(@PathVariable long id) throws Exception {
         ModelAndView mav = new ModelAndView("cms/member/userView");
@@ -198,6 +204,7 @@ public class MemberManagementController {
      * @return ModelAndView url, message
      * @throws Exception
      */
+    @Auth(role = Auth.Role.USER)
     @RequestMapping("/user-update")
     public ModelAndView userUpdate(AccountDto.Request dto) {
         AccountDto.Response accountDto = memberManagementService.modifyUser(dto);

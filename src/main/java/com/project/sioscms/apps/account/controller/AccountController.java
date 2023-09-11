@@ -2,6 +2,7 @@ package com.project.sioscms.apps.account.controller;
 
 import com.project.sioscms.apps.account.domain.dto.AccountDto;
 import com.project.sioscms.apps.account.service.AccountService;
+import com.project.sioscms.secure.domain.Auth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,11 +26,13 @@ public class AccountController {
         return ResponseEntity.ok(userService.userIdDuplicationCheck(userId));
     }
 
+    @Auth(role = Auth.Role.ADMIN)
     @PutMapping("/delete")
     public ResponseEntity<Boolean> userDelete(@RequestParam(value = "idList[]", defaultValue = "") List<Long> idList){
         return ResponseEntity.ok(userService.daleteUsers(idList));
     }
 
+    @Auth(role = Auth.Role.ADMIN)
     @PutMapping("/password-change")
     public ResponseEntity<Boolean> passwordChange(@RequestParam(value = "userId") String userId, @RequestParam(value = "userPwd") String userPwd){
         return ResponseEntity.ok(userService.passwordChange(userId, userPwd));

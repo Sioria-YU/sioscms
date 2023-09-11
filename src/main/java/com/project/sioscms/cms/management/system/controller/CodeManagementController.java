@@ -5,6 +5,7 @@ import com.project.sioscms.apps.code.domain.dto.CodeGroupDto;
 import com.project.sioscms.cms.management.system.domain.dto.CodeSearchDto;
 import com.project.sioscms.cms.management.system.service.CodeManagementService;
 import com.project.sioscms.common.utils.jpa.page.SiosPage;
+import com.project.sioscms.secure.domain.Auth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,7 @@ public class CodeManagementController {
 
     private final CodeManagementService codeManagementService;
 
+    @Auth(role = Auth.Role.ADMIN)
     @RequestMapping("/code-group/list")
     public ModelAndView codeGrouplist(CodeSearchDto dto) throws Exception{
         ModelAndView mav = new ModelAndView("cms/code/codeGroupList");
@@ -33,6 +35,7 @@ public class CodeManagementController {
         return mav;
     }
 
+    @Auth(role = Auth.Role.ADMIN)
     @RequestMapping("/code-group/view/{codeGroupId}")
     public ModelAndView codeGroupView(@PathVariable(value = "codeGroupId") String codeGroupId){
         ModelAndView mav = new ModelAndView("cms/code/codeGroupView");

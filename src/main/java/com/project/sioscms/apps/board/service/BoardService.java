@@ -50,7 +50,7 @@ public class BoardService extends EgovAbstractServiceImpl {
         }
 
         if(requestDto.getKeyword() != null && !requestDto.getKeyword().isEmpty()){
-            rs.like("contentWithoutHtml", "%" + requestDto.getKeyword().replace(" ", "") + "%");
+            rs.like("contentWithoutHtml", "%" + requestDto.getKeyword().replaceAll(" ", "") + "%");
         }
 
         return new SiosPage<>(boardRepository.findAll(rs.toSpecification()
