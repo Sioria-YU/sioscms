@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 @Slf4j
 @Service
@@ -38,13 +39,13 @@ public class MemberManagementService extends EgovAbstractServiceImpl {
         restriction.equals("role", Account.Role_Type.ADMIN);
 
         //검색 조건 추가
-        if(requestDto.getUserId() != null && !requestDto.getUserId().isEmpty()){
+        if(!ObjectUtils.isEmpty(requestDto.getUserId())){
             restriction.equals("userId", requestDto.getUserId());
         }
-        if(requestDto.getName() != null && !requestDto.getName().isEmpty()){
+        if(!ObjectUtils.isEmpty(requestDto.getName())){
             restriction.equals("name", requestDto.getName());
         }
-        if(requestDto.getGender() != null && !requestDto.getGender().isEmpty()){
+        if(!ObjectUtils.isEmpty(requestDto.getGender())){
             restriction.equals("gender", requestDto.getGender());
         }
 
@@ -128,13 +129,13 @@ public class MemberManagementService extends EgovAbstractServiceImpl {
         restriction.equals("role", Account.Role_Type.USER);
 
         //검색 조건 추가
-        if(requestDto.getUserId() != null && !requestDto.getUserId().isEmpty()){
+        if(!ObjectUtils.isEmpty(requestDto.getUserId())){
             restriction.equals("userId", requestDto.getUserId());
         }
-        if(requestDto.getName() != null && !requestDto.getName().isEmpty()){
+        if(!ObjectUtils.isEmpty(requestDto.getName())){
             restriction.equals("name", requestDto.getName());
         }
-        if(requestDto.getGender() != null && !requestDto.getGender().isEmpty()){
+        if(!ObjectUtils.isEmpty(requestDto.getGender())){
             restriction.equals("gender", requestDto.getGender());
         }
 

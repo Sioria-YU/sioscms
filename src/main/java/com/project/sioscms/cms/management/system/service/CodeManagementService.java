@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,10 +28,10 @@ public class CodeManagementService extends EgovAbstractServiceImpl {
         ChangSolJpaRestriction rs = new ChangSolJpaRestriction();  //기본 값 AND 조건으로 적용됨.
         rs.equals("isDeleted", false);
 
-        if(requestDto.getCodeGroupId() != null && !requestDto.getCodeGroupId().isEmpty()){
+        if(!ObjectUtils.isEmpty(requestDto.getCodeGroupId())){
             rs.like("codeGroupId", "%" + requestDto.getCodeGroupId() + "%");
         }
-        if(requestDto.getCodeGroupLabel() != null && !requestDto.getCodeGroupLabel().isEmpty()){
+        if(!ObjectUtils.isEmpty(requestDto.getCodeGroupLabel())){
             rs.like("codeGroupLabel", "%" + requestDto.getCodeGroupLabel() + "%");
         }
 

@@ -8,6 +8,7 @@ import com.project.sioscms.common.utils.jpa.page.SiosPage;
 import com.project.sioscms.secure.domain.Auth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -40,7 +41,7 @@ public class CodeManagementController {
     public ModelAndView codeGroupView(@PathVariable(value = "codeGroupId") String codeGroupId){
         ModelAndView mav = new ModelAndView("cms/code/codeGroupView");
 
-        if (codeGroupId == null || codeGroupId.isEmpty()){
+        if (ObjectUtils.isEmpty(codeGroupId)){
             mav.setViewName("cms/code/codeGroupList");
             mav.addObject("msg","잘못 된 페이지입니다.");
             return mav;

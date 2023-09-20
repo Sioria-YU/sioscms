@@ -135,7 +135,7 @@ public class MemberManagementController {
     public ModelAndView userList(MemberSearchDto requestDto) throws Exception {
         ModelAndView mav = new ModelAndView("cms/member/userList");
         SiosPage<AccountDto.Response> siosPage = memberManagementService.getUserList(requestDto);
-        if (!siosPage.isEmpty()) {
+        if (siosPage != null && !siosPage.isEmpty()) {
             mav.addObject("resultList", siosPage.getContents());
             mav.addObject("pageInfo", siosPage.getPageInfo());
         }
