@@ -17,4 +17,5 @@ VALUES (1,1,CURRENT_TIMESTAMP,1,CURRENT_TIMESTAMP,false,true,'/cms/main','Root',
      ,(8,1,CURRENT_TIMESTAMP,1,CURRENT_TIMESTAMP,false,true,'/cms/member/user-list','사용자 관리','LINK',2,false,6)
      ,(9,1,CURRENT_TIMESTAMP,1,CURRENT_TIMESTAMP,false,true,'','게시판 관리','LINK',4,false,8)
      ,(10,1,CURRENT_TIMESTAMP,3,CURRENT_TIMESTAMP,false,true,'','접속 통계 관리','LINK',5,false,10)
-     ,(11,1,CURRENT_TIMESTAMP,1,CURRENT_TIMESTAMP,false,true,'/cms/code/code-group/list','공통코드관리','LINK',2,false,11);
+     ,(11,1,CURRENT_TIMESTAMP,1,CURRENT_TIMESTAMP,false,true,'/cms/code/code-group/list','공통코드관리','LINK',2,false,11)
+     ,(12,1,CURRENT_TIMESTAMP,1,CURRENT_TIMESTAMP,false,true,'/cms/board/list','게시글 관리','LINK',4,false,12);

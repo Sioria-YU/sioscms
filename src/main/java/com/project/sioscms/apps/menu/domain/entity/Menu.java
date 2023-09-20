@@ -1,6 +1,5 @@
 package com.project.sioscms.apps.menu.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.sioscms.apps.menu.domain.dto.MenuDto;
 import com.project.sioscms.apps.menu.mapper.MenuMapper;
 import com.project.sioscms.common.domain.entity.CommonEntityWithIdAndDate;
