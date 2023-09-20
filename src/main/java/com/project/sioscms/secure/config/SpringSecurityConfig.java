@@ -39,6 +39,9 @@ public class SpringSecurityConfig {
 
         http.headers().frameOptions().sameOrigin(); //Iframe 접근 가능(스마트 에디터)
 
+        http.headers().xssProtection(); //Xss 방지 옵션
+//        http.headers().xssProtection().and().contentSecurityPolicy("script-src 'self'"); //Xss 방지 옵션
+
         return http.build();
     }
 }
