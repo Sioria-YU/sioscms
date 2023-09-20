@@ -15,6 +15,7 @@ import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 @Slf4j
 @Service
@@ -28,11 +29,11 @@ public class BoardMasterService extends EgovAbstractServiceImpl {
         ChangSolJpaRestriction rs = new ChangSolJpaRestriction(ChangSolJpaRestrictionType.AND);
         rs.equals("isDeleted", false);
 
-        if(requestDto.getBoardName() != null && !requestDto.getBoardName().isEmpty()){
+        if(!ObjectUtils.isEmpty(requestDto.getBoardName())){
             rs.like("boardName", "%" + requestDto.getBoardName() + "%");
         }
 
-        if(requestDto.getBoardTypeCode() != null && requestDto.getBoardTypeCode().getId() != null){
+        if(!ObjectUtils.isEmpty(requestDto.getBoardTypeCode()) && !ObjectUtils.isEmpty(requestDto.getBoardTypeCode().getId())){
             rs.equals("boardTypeCode.id", requestDto.getBoardTypeCode().getId());
         }
 

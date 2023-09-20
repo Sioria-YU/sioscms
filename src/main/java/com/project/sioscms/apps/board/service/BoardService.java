@@ -22,6 +22,7 @@ import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,11 +46,11 @@ public class BoardService extends EgovAbstractServiceImpl {
             rs.equals("boardMaster.id", requestDto.getBoardMasterId());
         }
 
-        if(requestDto.getTitle() != null && !requestDto.getTitle().isEmpty()){
+        if(!ObjectUtils.isEmpty(requestDto.getTitle())){
             rs.like("title", "%" + requestDto.getTitle() + "%");
         }
 
-        if(requestDto.getKeyword() != null && !requestDto.getKeyword().isEmpty()){
+        if(!ObjectUtils.isEmpty(requestDto.getKeyword())){
             rs.like("contentWithoutHtml", "%" + requestDto.getKeyword().replaceAll(" ", "") + "%");
         }
 
@@ -88,7 +89,7 @@ public class BoardService extends EgovAbstractServiceImpl {
         }
 
         //해시태그 등록 로직
-        if(requestDto.getHashtagList() != null && requestDto.getHashtagList().size() > 0){
+        if(!ObjectUtils.isEmpty(requestDto.getHashtagList())){
             for (String tag : requestDto.getHashtagList()) {
                 saveBoardHashTag(board, tag);
             }
@@ -115,9 +116,7 @@ public class BoardService extends EgovAbstractServiceImpl {
         board.setOption4(requestDto.getOption4());
         board.setOption5(requestDto.getOption5());
 
-        //해시태그 등록 로직
-
-        //기존 해시태그가 있었고, 수정하여 모두 삭제했을 경우
+        //해시태그 등록/삭제 로직
         hashtagUpdate(board, requestDto);
 
         boardRepository.flush();
@@ -175,13 +174,13 @@ public class BoardService extends EgovAbstractServiceImpl {
      */
     @Transactional
     protected void hashtagUpdate(Board board, BoardDto.Request requestDto){
-        if(board.getBoardHashtagSet() != null && !board.getBoardHashtagSet().isEmpty() && (requestDto.getHashtagList() == null || requestDto.getHashtagList().isEmpty())) {
+        if(!ObjectUtils.isEmpty(board.getBoardHashtagSet()) && !ObjectUtils.isEmpty(requestDto.getHashtagList())) {
             boardHashtagRepository.deleteAllByBoard(board);
             board.setBoardHashtagSet(null);
         }//입력한 해시태그가 있을 경우
-        else if(requestDto.getHashtagList() != null && requestDto.getHashtagList().size() > 0){
+        else if(!ObjectUtils.isEmpty(requestDto.getHashtagList())){
             //기존 해시태그가 있을 때
-            if(board.getBoardHashtagSet() != null && !board.getBoardHashtagSet().isEmpty()){
+            if(!ObjectUtils.isEmpty(board.getBoardHashtagSet())){
                 List<BoardHashtag> removeTagList = Lists.newArrayList();
                 List<String> appendTagList = Lists.newArrayList();
 
