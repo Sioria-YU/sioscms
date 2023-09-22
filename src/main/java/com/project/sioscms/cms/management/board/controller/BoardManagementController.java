@@ -1,7 +1,6 @@
 package com.project.sioscms.cms.management.board.controller;
 
 import com.project.sioscms.apps.attach.domain.dto.AttachFileGroupDto;
-import com.project.sioscms.apps.attach.domain.entity.AttachFileGroup;
 import com.project.sioscms.apps.attach.service.AttachFileService;
 import com.project.sioscms.apps.board.domain.dto.BoardDto;
 import com.project.sioscms.apps.board.domain.dto.BoardMasterDto;
