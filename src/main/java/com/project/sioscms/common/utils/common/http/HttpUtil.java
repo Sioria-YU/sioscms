@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -14,7 +15,11 @@ import java.util.Objects;
 @Slf4j
 @Component
 public class HttpUtil {
-    public static void alertAndRedirect(HttpServletResponse response, String url, String message, ModelMap model){
+    public static void alertAndRedirect(HttpServletResponse response, String url, String message, ModelMap model) {
+        if(response == null){
+            throw new NullPointerException();
+        }
+
         response.setContentType("text/html; charset=UTF-8");
 
         PrintWriter out = null;
@@ -25,24 +30,26 @@ public class HttpUtil {
 
             sb.append("<form name='redirect_form' method='post' action='").append(url).append("'>");
             sb.append("</form>");
-            if(!model.isEmpty()) {
+            if (!model.isEmpty()) {
                 Iterator<String> it = model.keySet().iterator();
-                if(it.hasNext()){
+                if (it.hasNext()) {
                     String key = it.next();
-                    if(!ObjectUtils.isEmpty(model.getAttribute(key))) {
+                    if (!ObjectUtils.isEmpty(model.getAttribute(key))) {
                         String value = Objects.requireNonNull(model.getAttribute(key)).toString();
                         out.println("<input type='hidden' name='" + key.toLowerCase() + "' value='" + value + "' />");
                     }
                 }
             }
             sb.append("<script>");
-            sb.append("    alert('").append(message).append("');");
+            if (StringUtils.hasText(message)) sb.append("    alert('").append(message).append("');");
             sb.append("    document.redirect_form.submit();");
             sb.append("</script>");
 
             out.println(sb);
         } catch (IOException e) {
             log.error(e.toString());
+        }finally {
+            if(out != null) out.close();
         }
     }
 }
