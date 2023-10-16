@@ -7,10 +7,12 @@ import com.project.sioscms.apps.board.domain.dto.BoardMasterDto;
 import com.project.sioscms.apps.board.service.BoardMasterService;
 import com.project.sioscms.apps.board.service.BoardService;
 import com.project.sioscms.cms.management.board.service.BoardManagementService;
+import com.project.sioscms.common.utils.common.http.HttpUtil;
 import com.project.sioscms.common.utils.jpa.page.SiosPage;
 import com.project.sioscms.secure.domain.Auth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -18,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
@@ -86,7 +89,7 @@ public class BoardManagementController {
 
     @Auth(role = Auth.Role.ADMIN)
     @RequestMapping("/save")
-    public ModelAndView boardSave(BoardDto.Request requsetDto, @RequestPart List<MultipartFile> files){
+    public void boardSave(HttpServletResponse response, BoardDto.Request requsetDto, @RequestPart List<MultipartFile> files){
         //첨부파일을 등록하여 attachFileGroupId를 requestDto에 set하여 게시판 저장으로 넘긴다.
         //최초 저장이기 때문에 attachFileGroup = null
         AttachFileGroupDto.Response attachFileGroupDto = attachFileService.multiUpload(files, null);
@@ -97,19 +100,18 @@ public class BoardManagementController {
 
         BoardDto.Response dto = boardService.saveBoard(requsetDto);
 
-        RedirectView rv = new RedirectView("/cms/board/list?boardMasterId=" + requsetDto.getBoardMasterId());
+        ModelMap model = new ModelMap();
+        model.put("boardMasterId", requsetDto.getBoardMasterId());
         if (dto != null) {
-            rv.addStaticAttribute("msg", "정상 처리되었습니다.");
+            HttpUtil.alertAndRedirect(response, "/cms/board/list", "정상 처리되었습니다.", model);
         } else {
-            rv.addStaticAttribute("msg", "처리 실패하였습니다.");
+            HttpUtil.alertAndRedirect(response, "/cms/board/list", "처리 실패하였습니다.", model);
         }
-
-        return new ModelAndView(rv);
     }
 
     @Auth(role = Auth.Role.ADMIN)
     @RequestMapping("/update")
-    public ModelAndView boardUpdate(BoardDto.Request requsetDto, @RequestPart List<MultipartFile> files){
+    public void boardUpdate(HttpServletResponse response, BoardDto.Request requsetDto, @RequestPart List<MultipartFile> files){
         //첨부파일을 등록하여 attachFileGroupId를 requestDto에 set하여 게시판 저장으로 넘긴다.
         AttachFileGroupDto.Response attachFileGroupDto = attachFileService.multiUpload(files, requsetDto.getAttachFileGroupId());
 
@@ -120,14 +122,13 @@ public class BoardManagementController {
 
         BoardDto.Response dto = boardService.updateBoard(requsetDto);
 
-        RedirectView rv = new RedirectView("/cms/board/list?boardMasterId=" + requsetDto.getBoardMasterId());
+        ModelMap model = new ModelMap();
+        model.put("boardMasterId", requsetDto.getBoardMasterId());
         if (dto != null) {
-            rv.addStaticAttribute("msg", "정상 처리되었습니다.");
+            HttpUtil.alertAndRedirect(response, "/cms/board/list", "정상 처리되었습니다.", model);
         } else {
-            rv.addStaticAttribute("msg", "처리 실패하였습니다.");
+            HttpUtil.alertAndRedirect(response, "/cms/board/list", "처리 실패하였습니다.", model);
         }
-
-        return new ModelAndView(rv);
     }
 
 }
