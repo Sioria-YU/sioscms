@@ -16,7 +16,7 @@ import java.util.Objects;
 @Component
 public class HttpUtil {
     public static void alertAndRedirect(HttpServletResponse response, String url, String message, ModelMap model) {
-        if(response == null){
+        if (response == null) {
             throw new NullPointerException();
         }
 
@@ -34,12 +34,13 @@ public class HttpUtil {
                     String key = it.next();
                     if (!ObjectUtils.isEmpty(model.getAttribute(key))) {
                         String value = Objects.requireNonNull(model.getAttribute(key)).toString();
-                        out.println("<input type='hidden' name='" + key.toLowerCase() + "' value='" + value + "' />");
+                        sb.append("<input type='hidden' name='").append(key.toLowerCase()).append("' value='").append(value).append("' />");
                     }
                 }
             }
             sb.append("<script>");
-            if (StringUtils.hasText(message)) sb.append("    alert('").append(message).append("');");
+            if (StringUtils.hasText(message))
+                sb.append("    alert('").append(message).append("');");
             sb.append("    document.redirect_form.submit();");
             sb.append("</script>");
 
