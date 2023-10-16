@@ -22,9 +22,7 @@ public class HttpUtil {
 
         response.setContentType("text/html; charset=UTF-8");
 
-        PrintWriter out = null;
-        try {
-            out = response.getWriter();
+        try (PrintWriter out = response.getWriter()) {
 
             StringBuilder sb = new StringBuilder();
 
@@ -48,8 +46,6 @@ public class HttpUtil {
             out.println(sb);
         } catch (IOException e) {
             log.error(e.toString());
-        }finally {
-            if(out != null) out.close();
         }
     }
 }
