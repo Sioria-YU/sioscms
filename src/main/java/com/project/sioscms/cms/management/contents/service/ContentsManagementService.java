@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -26,6 +29,13 @@ public class ContentsManagementService {
 
         if (!ObjectUtils.isEmpty(requestDto.getTitle())) {
             restriction.like("title", "%" + requestDto.getTitle() + "%");
+        }
+        if(!ObjectUtils.isEmpty(requestDto.getStartDate())){
+            restriction.greaterThanEquals("createdDateTime", LocalDateTime.of(requestDto.getStartDate(), LocalTime.of(0, 0, 0)));
+        }
+
+        if(!ObjectUtils.isEmpty(requestDto.getEndDate())){
+            restriction.lessThanEquals("createdDateTime", LocalDateTime.of(requestDto.getStartDate(), LocalTime.of(23, 59, 59)));
         }
 
         return new SiosPage<>(contentsRepository.findAll(restriction.toSpecification(), requestDto.toPageableWithSortedByCreatedDateTime(Sort.Direction.DESC))

@@ -17,7 +17,7 @@
                 });
 
             $.ajax({
-                url: '/api/board/multi-delete',
+                url: '/api/contents/multi-delete',
                 type: 'DELETE',
                 async: false,
                 data: {
@@ -87,10 +87,14 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="keyword" class="col-sm-2 col-form-label">내용</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="keyword" name="keyword" value="${param.keyword}" placeholder="내용을 입력하세요." aria-label="내용을 입력하세요.">
+                                <label for="startDate" class="col-sm-2 col-form-label">기간</label>
+                                <div class="col-sm-1">
+                                    <input type="date" class="form-control" id="startDate" name="startDate" value="${param.startDate}" placeholder="시작일을 선택하세요." aria-label="시작일을 선택하세요.">
                                 </div>
+                                <div class="col-sm-1">
+                                    <input type="date" class="form-control" id="endDate" name="endDate" value="${param.endDate}" placeholder="종료일을 선택하세요." aria-label="종료일을 선택하세요.">
+                                </div>
+
                             </div>
                             <div class="form-btn-set text-center">
                                 <button type="submit" class="btn btn-primary">검색</button>
@@ -151,7 +155,6 @@
 
                 <div class="form-btn-set text-end">
                     <button type="button" class="btn btn-danger btn-lg" onclick="deleteBoards();">선택 삭제</button>
-                    <button type="button" class="btn btn-secondary btn-lg" onclick="location.href='./master-list';">목록</button>
                     <button type="button" class="btn btn-success btn-lg" onclick="location.href='./regist?boardMasterId=${param.boardMasterId}';">등록</button>
                 </div>
             </div>

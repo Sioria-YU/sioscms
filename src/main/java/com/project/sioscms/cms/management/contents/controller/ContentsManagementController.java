@@ -3,6 +3,7 @@ package com.project.sioscms.cms.management.contents.controller;
 import com.project.sioscms.apps.contents.domain.dto.ContentsDto;
 import com.project.sioscms.cms.management.contents.service.ContentsManagementService;
 import com.project.sioscms.common.utils.jpa.page.SiosPage;
+import com.project.sioscms.secure.domain.Auth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ public class ContentsManagementController {
 
     private final ContentsManagementService contentsManagementService;
 
+    @Auth(role = Auth.Role.ADMIN)
     @RequestMapping("/list")
     public ModelAndView list(ContentsDto.Request requestDto){
 
