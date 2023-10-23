@@ -1,5 +1,6 @@
 package com.project.sioscms.common.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.project.sioscms.apps.account.domain.entity.Account;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import javax.persistence.*;
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class CommonEntityWithId {
     @Comment("고유번호")
     @Id
