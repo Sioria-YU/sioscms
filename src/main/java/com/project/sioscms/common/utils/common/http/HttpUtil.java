@@ -28,7 +28,7 @@ public class HttpUtil {
 
             sb.append("<form name='redirect_form' method='post' action='").append(url).append("'>");
             sb.append("</form>");
-            if (!model.isEmpty()) {
+            if (model != null && !model.isEmpty()) {
                 Iterator<String> it = model.keySet().iterator();
                 if (it.hasNext()) {
                     String key = it.next();

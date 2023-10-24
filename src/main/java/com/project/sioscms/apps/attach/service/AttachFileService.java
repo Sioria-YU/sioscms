@@ -25,6 +25,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+//TODO : 파일 디렉토리 년월, 프로그램 구분 등 구조 변경 해야함.
 @Slf4j
 @Service
 @RequiredArgsConstructor

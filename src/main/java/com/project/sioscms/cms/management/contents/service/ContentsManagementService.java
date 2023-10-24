@@ -1,8 +1,11 @@
 package com.project.sioscms.cms.management.contents.service;
 
+import com.project.sioscms.apps.attach.domain.entity.AttachFileGroup;
+import com.project.sioscms.apps.attach.domain.repository.AttachFileGroupRepository;
 import com.project.sioscms.apps.contents.domain.dto.ContentsDto;
 import com.project.sioscms.apps.contents.domain.entity.Contents;
 import com.project.sioscms.apps.contents.domain.repository.ContentsRepository;
+import com.project.sioscms.apps.contents.mapper.ContentsMapper;
 import com.project.sioscms.common.utils.jpa.page.SiosPage;
 import com.project.sioscms.common.utils.jpa.restriction.ChangSolJpaRestriction;
 import com.project.sioscms.common.utils.jpa.restriction.ChangSolJpaRestrictionType;
@@ -23,6 +26,7 @@ import java.time.LocalTime;
 public class ContentsManagementService {
 
     private final ContentsRepository contentsRepository;
+    private final AttachFileGroupRepository attachFileGroupRepository;
 
     public SiosPage<ContentsDto.Response> getContentsList(ContentsDto.Request requestDto) {
         ChangSolJpaRestriction restriction = new ChangSolJpaRestriction(ChangSolJpaRestrictionType.AND);
@@ -41,5 +45,27 @@ public class ContentsManagementService {
         return new SiosPage<>(contentsRepository.findAll(restriction.toSpecification(), requestDto.toPageableWithSortedByCreatedDateTime(Sort.Direction.DESC))
                 .map(Contents::toResponse)
                 , requestDto.getPageSize());
+    }
+
+    public ContentsDto.Response getContents(Long id){
+        Contents contents = contentsRepository.findById(id).orElse(null);
+        return contents != null? contents.toResponse() : null;
+    }
+
+    @Transactional
+    public ContentsDto.Response saveContents(ContentsDto.Request requestDto){
+        Contents contents = ContentsMapper.mapper.toEntity(requestDto);
+        contents.setIsDeleted(false);
+
+        if(requestDto.getAttachFileGroupId() != null){
+            AttachFileGroup attachFileGroup = attachFileGroupRepository.findById(requestDto.getAttachFileGroupId()).orElse(null);
+
+            if(attachFileGroup != null){
+                contents.setAttachFileGroup(attachFileGroup);
+            }
+        }
+
+        contentsRepository.save(contents);
+        return contents.toResponse();
     }
 }

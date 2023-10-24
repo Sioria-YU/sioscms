@@ -3,11 +3,13 @@ package com.project.sioscms.apps.contents.service;
 import com.project.sioscms.apps.contents.domain.dto.ContentsDto;
 import com.project.sioscms.apps.contents.domain.entity.Contents;
 import com.project.sioscms.apps.contents.domain.repository.ContentsRepository;
+import com.project.sioscms.apps.contents.mapper.ContentsMapper;
 import com.project.sioscms.common.utils.jpa.restriction.ChangSolJpaRestriction;
 import com.project.sioscms.common.utils.jpa.restriction.ChangSolJpaRestrictionType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,9 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class ContentsService extends EgovAbstractServiceImpl {
 
+    @Value("${contents.path}")
+    private String CONTENTS_PATH;
+
     private final ContentsRepository contentsRepository;
 
     public List<ContentsDto.Response> getContentsList(ContentsDto.Request requestDto){
@@ -34,5 +39,14 @@ public class ContentsService extends EgovAbstractServiceImpl {
 
         return contentsRepository.findAll(restriction.toSpecification(), Sort.by(Sort.Direction.DESC, "createdDateTime"))
                 .stream().map(Contents::toResponse).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void save(ContentsDto.Request requestDto){
+        Contents entity = ContentsMapper.mapper.toEntity(requestDto);
+
+
+
+
     }
 }

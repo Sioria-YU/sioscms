@@ -89,19 +89,19 @@ public class BoardManagementController {
 
     @Auth(role = Auth.Role.ADMIN)
     @RequestMapping("/save")
-    public void boardSave(HttpServletResponse response, BoardDto.Request requsetDto, @RequestPart List<MultipartFile> files){
+    public void boardSave(HttpServletResponse response, BoardDto.Request requestDto, @RequestPart List<MultipartFile> files){
         //첨부파일을 등록하여 attachFileGroupId를 requestDto에 set하여 게시판 저장으로 넘긴다.
         //최초 저장이기 때문에 attachFileGroup = null
         AttachFileGroupDto.Response attachFileGroupDto = attachFileService.multiUpload(files, null);
 
         if(attachFileGroupDto != null){
-            requsetDto.setAttachFileGroupId(attachFileGroupDto.getId());
+            requestDto.setAttachFileGroupId(attachFileGroupDto.getId());
         }
 
-        BoardDto.Response dto = boardService.saveBoard(requsetDto);
+        BoardDto.Response dto = boardService.saveBoard(requestDto);
 
         ModelMap model = new ModelMap();
-        model.put("boardMasterId", requsetDto.getBoardMasterId());
+        model.put("boardMasterId", requestDto.getBoardMasterId());
         if (dto != null) {
             HttpUtil.alertAndRedirect(response, "/cms/board/list", "정상 처리되었습니다.", model);
         } else {
