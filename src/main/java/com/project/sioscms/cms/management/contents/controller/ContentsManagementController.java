@@ -1,6 +1,8 @@
 package com.project.sioscms.cms.management.contents.controller;
 
 import com.project.sioscms.apps.contents.domain.dto.ContentsDto;
+import com.project.sioscms.apps.contents.domain.dto.ContentsHistoryDto;
+import com.project.sioscms.apps.contents.service.ContentsHistoryService;
 import com.project.sioscms.cms.management.contents.service.ContentsManagementService;
 import com.project.sioscms.common.utils.common.http.HttpUtil;
 import com.project.sioscms.common.utils.jpa.page.SiosPage;
@@ -22,6 +24,7 @@ import java.util.List;
 public class ContentsManagementController {
 
     private final ContentsManagementService contentsManagementService;
+    private final ContentsHistoryService contentsHistoryService;
 
     @Auth(role = Auth.Role.ADMIN)
     @RequestMapping("/list")
@@ -43,9 +46,11 @@ public class ContentsManagementController {
     @RequestMapping("/view/{id}")
     public ModelAndView view(@PathVariable("id") Long id){
         ContentsDto.Response dto = contentsManagementService.getContents(id);
+        List<ContentsHistoryDto.Response> contentsHistoryList = contentsHistoryService.getContentsHistoryList(id);
 
         ModelAndView mav = new ModelAndView("cms/contents/view");
         mav.addObject("result", dto);
+        mav.addObject("contentsHistoryList", contentsHistoryList);
 
         return mav;
     }

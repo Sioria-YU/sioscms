@@ -39,13 +39,6 @@
         }
     }
 
-    //클립보드 복사
-    const copyToClipboard = (text) => {
-        navigator.clipboard.writeText(text).then(() => {
-            alert("복사되었습니다.");
-        });
-    }
-
     $(function () {
         $("#checkAll").on('click', function () {
             if ($("#checkAll").is(":checked")) {

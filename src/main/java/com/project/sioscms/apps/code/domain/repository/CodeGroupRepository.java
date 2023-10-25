@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface CodeGroupRepository extends CommonJpaRepository<CodeGroup, Long> {
+public interface CodeGroupRepository extends CommonJpaRepository<CodeGroup, String> {
 
     Optional<CodeGroup> findByCodeGroupId(String codeGroup);
 }

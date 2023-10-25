@@ -6,6 +6,8 @@ import com.project.sioscms.apps.attach.domain.repository.AttachFileGroupReposito
 import com.project.sioscms.apps.attach.service.AttachFileService;
 import com.project.sioscms.apps.contents.domain.dto.ContentsDto;
 import com.project.sioscms.apps.contents.domain.entity.Contents;
+import com.project.sioscms.apps.contents.domain.entity.ContentsHistory;
+import com.project.sioscms.apps.contents.domain.repository.ContentsHistoryRepository;
 import com.project.sioscms.apps.contents.domain.repository.ContentsRepository;
 import com.project.sioscms.apps.contents.mapper.ContentsMapper;
 import com.project.sioscms.common.utils.jpa.page.SiosPage;
@@ -30,6 +32,7 @@ import java.util.List;
 public class ContentsManagementService {
 
     private final ContentsRepository contentsRepository;
+    private final ContentsHistoryRepository contentsHistoryRepository;
     private final AttachFileGroupRepository attachFileGroupRepository;
 
     private final AttachFileService attachFileService;
@@ -72,14 +75,15 @@ public class ContentsManagementService {
         contents.setIsDeleted(false);
 
         if(requestDto.getAttachFileGroupId() != null){
-            AttachFileGroup attachFileGroup = attachFileGroupRepository.findById(requestDto.getAttachFileGroupId()).orElse(null);
-
-            if(attachFileGroup != null){
-                contents.setAttachFileGroup(attachFileGroup);
-            }
+            attachFileGroupRepository.findById(requestDto.getAttachFileGroupId()).ifPresent(contents::setAttachFileGroup);
         }
 
         contentsRepository.save(contents);
+
+        //히스토리 생성
+        ContentsHistory contentsHistory = new ContentsHistory(contents, contents.getContent(), 1L, true, false);
+        contentsHistoryRepository.save(contentsHistory);
+
         return contents.toResponse();
     }
 }

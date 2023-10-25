@@ -24,11 +24,11 @@
             </div>
         </div>
 
-        <div class="icon">
-            <i class="bi bi-record-circle-fill"></i><h4 class="card-title">콘텐츠 등록</h4>
-        </div>
-
         <div class="container-fluid px-4">
+            <div class="icon">
+                <i class="bi bi-record-circle-fill"></i><h4 class="card-title">콘텐츠 등록</h4>
+            </div>
+
             <form id="registForm" name="registForm" method="post" enctype="multipart/form-data" action="./save">
                 <table class="table">
                     <colgroup>

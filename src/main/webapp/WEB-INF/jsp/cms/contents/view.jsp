@@ -30,13 +30,6 @@
             });
         }
     }
-
-    //클립보드 복사
-    const copyToClipboard = (text) => {
-        navigator.clipboard.writeText(text).then(() => {
-            alert("복사되었습니다.");
-        });
-    }
 </script>
 
 <div id="layoutSidenav_content">
@@ -54,10 +47,11 @@
             </div>
         </div>
 
-        <div class="icon">
-            <i class="bi bi-record-circle-fill"></i><h4 class="card-title">콘텐츠 조회</h4>
-        </div>
         <div class="container-fluid px-4">
+            <div class="icon">
+                <i class="bi bi-record-circle-fill"></i><h4 class="card-title">콘텐츠 조회</h4>
+            </div>
+
             <form id="registForm" name="registForm" method="post" enctype="multipart/form-data" action="./update">
                 <table class="table">
                     <colgroup>
@@ -122,11 +116,38 @@
             </form>
         </div>
 
-        <div class="icon">
-            <i class="bi bi-record-circle-fill"></i><h4 class="card-title">히스토리 조회</h4>
-        </div>
         <div class="container-fluid px-4">
+            <div class="icon">
+                <i class="bi bi-record-circle-fill"></i><h4 class="card-title">히스토리 조회</h4>
+            </div>
+
             히스토리 버전, 적용여부, 생성일
+            <c:if test="${not empty contentsHistoryList}">
+            <table class="table text-center">
+                <thead>
+                <tr>
+                    <th scope="col">버전</th>
+                    <th scope="col">작성일</th>
+                    <th scope="col">사용여부</th>
+                    <th scope="col">사용/미사용 전환</th>
+                    <th scope="col">미리보기</th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach var="history" items="${contentsHistoryList}">
+                    <tr>
+                        <td>Ver. ${history.version}</td>
+                        <td>
+                            <fmt:parseDate var="createdDateTime" value="${history.createdDateTime}" pattern="yyyy-MM-dd" type="both"/>
+                            <fmt:formatDate value="${createdDateTime}" pattern="yyyy-MM-dd"/>
+                        </td>
+                        <td>${history.isUsed? '사용':'미사용'}</td>
+                        <td><button type="button" class="btn btn-danger btn-sm" onclick="">미사용</button></td>
+                        <td><button type="button" class="btn btn-success btn-sm" onclick="">미리보기</button></td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </c:if>
         </div>
     </main>
 </div>
