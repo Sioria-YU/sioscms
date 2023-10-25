@@ -1,7 +1,9 @@
 package com.project.sioscms.cms.management.contents.service;
 
+import com.project.sioscms.apps.attach.domain.dto.AttachFileGroupDto;
 import com.project.sioscms.apps.attach.domain.entity.AttachFileGroup;
 import com.project.sioscms.apps.attach.domain.repository.AttachFileGroupRepository;
+import com.project.sioscms.apps.attach.service.AttachFileService;
 import com.project.sioscms.apps.contents.domain.dto.ContentsDto;
 import com.project.sioscms.apps.contents.domain.entity.Contents;
 import com.project.sioscms.apps.contents.domain.repository.ContentsRepository;
@@ -15,9 +17,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -27,6 +31,8 @@ public class ContentsManagementService {
 
     private final ContentsRepository contentsRepository;
     private final AttachFileGroupRepository attachFileGroupRepository;
+
+    private final AttachFileService attachFileService;
 
     public SiosPage<ContentsDto.Response> getContentsList(ContentsDto.Request requestDto) {
         ChangSolJpaRestriction restriction = new ChangSolJpaRestriction(ChangSolJpaRestrictionType.AND);
@@ -53,7 +59,15 @@ public class ContentsManagementService {
     }
 
     @Transactional
-    public ContentsDto.Response saveContents(ContentsDto.Request requestDto){
+    public ContentsDto.Response saveContents(ContentsDto.Request requestDto, List<MultipartFile> files){
+        if(files != null && !files.isEmpty()) {
+            AttachFileGroupDto.Response attachFileGroupDto = attachFileService.multiUpload(files, null);
+
+            if (attachFileGroupDto != null) {
+                requestDto.setAttachFileGroupId(attachFileGroupDto.getId());
+            }
+        }
+
         Contents contents = ContentsMapper.mapper.toEntity(requestDto);
         contents.setIsDeleted(false);
 

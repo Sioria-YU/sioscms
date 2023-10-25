@@ -39,6 +39,13 @@
         }
     }
 
+    //클립보드 복사
+    const copyToClipboard = (text) => {
+        navigator.clipboard.writeText(text).then(() => {
+            alert("복사되었습니다.");
+        });
+    }
+
     $(function () {
         $("#checkAll").on('click', function () {
             if ($("#checkAll").is(":checked")) {
@@ -82,16 +89,16 @@
                             <input type="hidden" id="pageSize" name="pageSize" value="${empty param.pageSize? 5:param.pageSize}">
                             <div class="row mb-3">
                                 <label for="title" class="col-sm-2 col-form-label">제목</label>
-                                <div class="col-sm-9">
+                                <div class="col-sm-6">
                                     <input type="text" class="form-control" id="title" name="title" value="${param.title}" placeholder="제목을 입력하세요." aria-label="제목을 입력하세요.">
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="startDate" class="col-sm-2 col-form-label">기간</label>
-                                <div class="col-sm-1">
+                                <label for="startDate" class="col-sm-2 col-form-label">작성일</label>
+                                <div class="col-sm-3">
                                     <input type="date" class="form-control" id="startDate" name="startDate" value="${param.startDate}" placeholder="시작일을 선택하세요." aria-label="시작일을 선택하세요.">
                                 </div>
-                                <div class="col-sm-1">
+                                <div class="col-sm-3">
                                     <input type="date" class="form-control" id="endDate" name="endDate" value="${param.endDate}" placeholder="종료일을 선택하세요." aria-label="종료일을 선택하세요.">
                                 </div>
 
@@ -139,7 +146,16 @@
                                     <td><input type="checkbox" class="form-check-input checkItem" name="boardMasterCheck" value="${result.id}"></td>
                                     <th scope="row">${pageInfo.totalCount - ((pageInfo.pageNumber-1) * pageInfo.pageOffset + status.index)}</th>
                                     <td><a href="/cms/contents-manage/view/${result.id}">${result.title}</a></td>
-                                    <td><span>/static/contents/${result.contentsName}.html</span></td>
+                                    <td>
+                                        <span>/static/contents/${result.contentsName}.html</span>
+                                        <button
+                                                type="button"
+                                                class="btn btn-outline-dark btn-sm"
+                                                onclick="copyToClipboard('/static/contents/${result.contentsName}.html')"
+                                                aria-label="URL 복사하기"><i
+                                                class="bi bi-files"></i>복사
+                                        </button>
+                                    </td>
                                     <td>${result.createdBy.name}</td>
                                     <td><fmt:formatDate value="${createdDateTime}" pattern="yyyy-MM-dd"/></td>
                                 </tr>

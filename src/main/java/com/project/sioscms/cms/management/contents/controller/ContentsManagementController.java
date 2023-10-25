@@ -1,7 +1,5 @@
 package com.project.sioscms.cms.management.contents.controller;
 
-import com.project.sioscms.apps.attach.domain.dto.AttachFileGroupDto;
-import com.project.sioscms.apps.attach.service.AttachFileService;
 import com.project.sioscms.apps.contents.domain.dto.ContentsDto;
 import com.project.sioscms.cms.management.contents.service.ContentsManagementService;
 import com.project.sioscms.common.utils.common.http.HttpUtil;
@@ -24,7 +22,6 @@ import java.util.List;
 public class ContentsManagementController {
 
     private final ContentsManagementService contentsManagementService;
-    private final AttachFileService attachFileService;
 
     @Auth(role = Auth.Role.ADMIN)
     @RequestMapping("/list")
@@ -63,13 +60,7 @@ public class ContentsManagementController {
     @Auth(role = Auth.Role.ADMIN)
     @RequestMapping("/save")
     public void save(HttpServletResponse response, ContentsDto.Request requestDto, @RequestPart List<MultipartFile> files){
-        AttachFileGroupDto.Response attachFileGroupDto = attachFileService.multiUpload(files, null);
-
-        if(attachFileGroupDto != null){
-            requestDto.setAttachFileGroupId(attachFileGroupDto.getId());
-        }
-
-        ContentsDto.Response dto = contentsManagementService.saveContents(requestDto);
+        ContentsDto.Response dto = contentsManagementService.saveContents(requestDto, files);
 
         HttpUtil.alertAndRedirect(response, "/cms/contents-manage/view/" + dto.getId(), "정상 처리 되었습니다.", null);
     }
