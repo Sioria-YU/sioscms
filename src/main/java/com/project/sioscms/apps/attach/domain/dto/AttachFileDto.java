@@ -16,7 +16,7 @@ public class AttachFileDto {
         private String filePath;
         private Long fileSize;
         private String fileExtension;
-        private Long fileOrder;
+        private Long fileOrderNum;
         private Boolean isDeleted;
         private Boolean isUsed;
     }
@@ -27,10 +27,9 @@ public class AttachFileDto {
         private Long attachFileGroupId;
         private String fileName;
         private String originFileName;
-        private String filePath;
         private Long fileSize;
         private String fileExtension;
-        private Long fileOrder;
+        private Long fileOrderNum;
         private Boolean isDeleted;
         private Boolean isUsed;
         private Account createdBy;

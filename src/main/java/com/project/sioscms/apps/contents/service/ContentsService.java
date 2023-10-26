@@ -1,5 +1,12 @@
 package com.project.sioscms.apps.contents.service;
 
+import com.project.sioscms.apps.attach.domain.dto.AttachFileDto;
+import com.project.sioscms.apps.attach.domain.dto.AttachFileGroupDto;
+import com.project.sioscms.apps.attach.domain.entity.AttachFile;
+import com.project.sioscms.apps.attach.domain.entity.AttachFileGroup;
+import com.project.sioscms.apps.attach.domain.repository.AttachFileGroupRepository;
+import com.project.sioscms.apps.attach.domain.repository.AttachFileRepository;
+import com.project.sioscms.apps.attach.service.AttachFileService;
 import com.project.sioscms.apps.contents.domain.dto.ContentsDto;
 import com.project.sioscms.apps.contents.domain.entity.Contents;
 import com.project.sioscms.apps.contents.domain.repository.ContentsRepository;
@@ -14,6 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +35,11 @@ public class ContentsService extends EgovAbstractServiceImpl {
     @Value("${contents.path}")
     private String CONTENTS_PATH;
 
+    private final AttachFileService attachFileService;
     private final ContentsRepository contentsRepository;
+    private final AttachFileGroupRepository attachFileGroupRepository;
+    private final AttachFileRepository attachFileRepository;
+
 
     public List<ContentsDto.Response> getContentsList(ContentsDto.Request requestDto){
 
@@ -42,11 +54,32 @@ public class ContentsService extends EgovAbstractServiceImpl {
     }
 
     @Transactional
-    public void save(ContentsDto.Request requestDto){
-        Contents entity = ContentsMapper.mapper.toEntity(requestDto);
+    public List<AttachFileDto.Response> saveAttachFiles(ContentsDto.Request requestDto, List<MultipartFile> files){
+        if(ObjectUtils.isEmpty(requestDto.getId())){
+            return null;
+        }
 
+        Contents contents = contentsRepository.findById(requestDto.getId()).orElse(null);
 
+        if(contents != null) {
+            AttachFileGroupDto.Response attachFileGroupResponse = attachFileService.multiUpload(files, requestDto.getAttachFileGroupId());
+            AttachFileGroup attachFileGroup = attachFileGroupRepository.findById(attachFileGroupResponse.getId()).orElse(null);
+            if(attachFileGroup == null){
+                return null;
+            }
+            //첨부파일을 처음 등록할 경우
+            if(ObjectUtils.isEmpty(contents.getAttachFileGroup())){
+                contents.setAttachFileGroup(attachFileGroup);
+            }
 
+            List<AttachFile> attachFileList = attachFileRepository.findAllByAttachFileGroupAndIsDeletedOrderByFileOrderNumAsc(attachFileGroup, false);
+            if(!ObjectUtils.isEmpty(attachFileList)){
+                List<AttachFileDto.Response> resultList = attachFileList.stream().map(AttachFile::toResponse).toList();
+                resultList.forEach(v -> v.setAttachFileGroupId(attachFileGroup.getId()));
+                return resultList;
+            }
+        }
 
+        return null;
     }
 }

@@ -49,7 +49,7 @@
                     <tr>
                         <th class="table-title"><label for="files">이미지 첨부</label></th>
                         <td>
-                            <input type="file" class="form-control" id="files" name="files" multiple>
+                            <input type="file" class="form-control" id="files" name="files" accept="image/gif, image/jpeg, image/png" multiple>
                         </td>
                     </tr>
                     <tr>

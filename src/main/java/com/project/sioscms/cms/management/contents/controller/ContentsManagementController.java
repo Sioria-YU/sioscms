@@ -67,7 +67,17 @@ public class ContentsManagementController {
     public void save(HttpServletResponse response, ContentsDto.Request requestDto, @RequestPart List<MultipartFile> files){
         ContentsDto.Response dto = contentsManagementService.saveContents(requestDto, files);
 
+        //파일 생성 로직
+
         HttpUtil.alertAndRedirect(response, "/cms/contents-manage/view/" + dto.getId(), "정상 처리 되었습니다.", null);
     }
 
+    @Auth(role = Auth.Role.ADMIN)
+    @RequestMapping("/save-new-version")
+    public void saveNewVersion(HttpServletResponse response, ContentsDto.Request requestDto){
+        //히스토리 저장 후 콘텐츠 제목,내용 업데이트
+
+
+        HttpUtil.alertAndRedirect(response, "/cms/contents-manage/view/" + requestDto.getId(), "정상 처리 되었습니다.", null);
+    }
 }
