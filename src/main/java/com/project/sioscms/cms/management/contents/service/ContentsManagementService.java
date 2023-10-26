@@ -86,4 +86,31 @@ public class ContentsManagementService {
 
         return contents.toResponse();
     }
+
+    @Transactional
+    public Boolean saveNewVersion(ContentsDto.Request requestDto){
+        if(!ObjectUtils.isEmpty(requestDto.getId())){
+            Contents contents = contentsRepository.findById(requestDto.getId()).orElse(null);
+            if(contents != null){
+                contents.setContent(requestDto.getContent());
+                long lastVersion = 1L;
+
+                //마지막 버전을 구한다.
+                ContentsHistory topHistory = contentsHistoryRepository.findTopByContentsAndIsDeletedOrderByVersionDesc(contents, false).orElse(null);
+                if(topHistory != null){
+                    lastVersion = topHistory.getVersion() + 1;
+                }
+
+                //현재 사용중인 history를 미사용으로 변경
+                contentsHistoryRepository.findFirstByContentsAndIsUsedAndIsDeleted(contents, true, false).ifPresent(usedHistory -> usedHistory.setIsUsed(false));
+
+                ContentsHistory contentsHistory = new ContentsHistory(contents, contents.getContent(), lastVersion, true, false);
+                contentsHistoryRepository.save(contentsHistory);
+
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

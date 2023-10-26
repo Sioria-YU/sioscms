@@ -5,7 +5,11 @@
 <%--<script src="/static/js/clipboard.min.js"></script>--%>
 <script>
     const formSubmitEvent = () => {
-        document.registForm.action = "./save-new-version";
+        if($("#title").val() === ''){
+            alert("제목을 입력하세요.");
+            $("#title").focus();
+            return false;
+        }
 
         $("#registForm").submit();
     }
@@ -101,7 +105,7 @@
             <div class="icon">
                 <i class="bi bi-record-circle-fill"></i><h4 class="card-title">콘텐츠 조회</h4>
             </div>
-            <form id="registForm" name="registForm" method="post" enctype="multipart/form-data" action="">
+            <form id="registForm" name="registForm" method="post" action="/cms/contents-manage/save-new-version">
                 <input type="hidden" name="id" value="${result.id}">
                 <table class="table">
                     <colgroup>
@@ -115,7 +119,7 @@
                                    aria-label="제목" placeholder="제목을 입력하세요."></td>
                     </tr>
                     <tr>
-                        <th class="table-title"><label for="title">콘텐츠 파일명</label></th>
+                        <th class="table-title"><label for="contentsName">콘텐츠 파일명</label></th>
                         <td><input type="text" class="form-control" id="contentsName" name="contentsName"
                                    value="${result.contentsName}" aria-label="콘텐츠 파일명" placeholder="콘텐츠 파일명을 입력하세요."
                                    readonly>
@@ -196,7 +200,12 @@
                     <tbody>
                     <c:forEach var="history" items="${contentsHistoryList}">
                         <tr>
-                            <td>Ver. ${history.version}</td>
+                            <td>
+                                Ver. ${history.version}
+                                <c:if test="${history.isUsed}">
+                                    <span class="btn btn-danger btn-sm">현재버전</span>
+                                </c:if>
+                            </td>
                             <td>
                                 <fmt:parseDate var="createdDateTime" value="${history.createdDateTime}"
                                                pattern="yyyy-MM-dd"
@@ -207,7 +216,7 @@
                             <td>
                                 <c:choose>
                                     <c:when test="${!history.isUsed}">
-                                        <button type="button" class="btn btn-danger btn-sm" onclick="">미사용</button>
+                                        <button type="button" class="btn btn-success btn-sm" onclick="">사용</button>
                                     </c:when>
                                     <c:otherwise>-</c:otherwise>
                                 </c:choose>

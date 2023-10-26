@@ -76,8 +76,10 @@ public class ContentsManagementController {
     @RequestMapping("/save-new-version")
     public void saveNewVersion(HttpServletResponse response, ContentsDto.Request requestDto){
         //히스토리 저장 후 콘텐츠 제목,내용 업데이트
-
-
-        HttpUtil.alertAndRedirect(response, "/cms/contents-manage/view/" + requestDto.getId(), "정상 처리 되었습니다.", null);
+        if(contentsManagementService.saveNewVersion(requestDto)) {
+            HttpUtil.alertAndRedirect(response, "/cms/contents-manage/view/" + requestDto.getId(), "정상 처리 되었습니다.", null);
+        }else{
+            HttpUtil.alertAndRedirect(response, "/cms/contents-manage/view/" + requestDto.getId(), "처리 중 오류가 발생하였습니다.", null);
+        }
     }
 }
