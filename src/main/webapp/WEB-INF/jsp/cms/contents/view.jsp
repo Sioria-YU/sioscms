@@ -5,7 +5,7 @@
 <%--<script src="/static/js/clipboard.min.js"></script>--%>
 <script>
     const formSubmitEvent = () => {
-        if($("#title").val() === ''){
+        if ($("#title").val() === '') {
             alert("제목을 입력하세요.");
             $("#title").focus();
             return false;
@@ -54,6 +54,28 @@
                         appendHtml += '\n';
                     }
                     $("#attachFilesArea").html(appendHtml);
+                },
+                error: function (request, status, error) {
+                    console.error(error);
+                    alert("오류가 발생하였습니다.");
+                }
+            });
+        }
+    }
+
+    const onChangeUsed = (historyId) => {
+        if (confirm("현재 작성중인 내용은 저장되지 않습니다.\n선택한 버전으로 적용하시겠습니까?")) {
+            $.ajax({
+                url: '/api/contents/change-version',
+                type: 'PUT',
+                async: false,
+                data: {
+                    id: ${result.id},
+                    historyId: historyId
+                },
+                success: function (data) {
+                    alert("변경되었습니다.");
+                    location.reload();
                 },
                 error: function (request, status, error) {
                     console.error(error);
@@ -175,7 +197,7 @@
                         onclick="location.href='/cms/contents-manage/list';">취소
                 </button>
                 <button type="button" class="btn btn-success btn-lg" onclick="formSubmitEvent();">새 버전으로 저장</button>
-                <button type="button" class="btn btn-lg" style="background-color:#0b96b3;color:white"
+                <button type="button" class="btn btn-lg btn-outline-dark"
                         onclick="alert('미구현');"><i class="bi bi-cast"></i> 미리보기
                 </button>
             </div>
@@ -195,6 +217,7 @@
                         <th scope="col">사용여부</th>
                         <th scope="col">사용/미사용 전환</th>
                         <th scope="col">미리보기</th>
+                        <th scope="col">비교하기</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -202,9 +225,6 @@
                         <tr>
                             <td>
                                 Ver. ${history.version}
-                                <c:if test="${history.isUsed}">
-                                    <span class="btn btn-danger btn-sm">현재버전</span>
-                                </c:if>
                             </td>
                             <td>
                                 <fmt:parseDate var="createdDateTime" value="${history.createdDateTime}"
@@ -215,15 +235,21 @@
                             <td>${history.isUsed? '사용':'미사용'}</td>
                             <td>
                                 <c:choose>
-                                    <c:when test="${!history.isUsed}">
-                                        <button type="button" class="btn btn-success btn-sm" onclick="">사용</button>
+                                    <c:when test="${history.isUsed}">
+                                        <span class="btn btn-danger btn-sm">현재버전</span>
                                     </c:when>
-                                    <c:otherwise>-</c:otherwise>
+                                    <c:otherwise>
+                                        <button type="button" class="btn btn-success btn-sm" onclick="onChangeUsed(${history.id});">사용</button>
+                                    </c:otherwise>
                                 </c:choose>
                             </td>
                             <td>
-                                <button type="button" class="btn btn-sm" style="background-color:#0b96b3;color:white"
+                                <button type="button" class="btn btn-sm btn-outline-dark"
                                         onclick=""><i class="bi bi-cast"></i></button>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-success"
+                                        onclick=""><i class="bi bi-arrow-left-right"></i></button>
                             </td>
                         </tr>
                     </c:forEach>

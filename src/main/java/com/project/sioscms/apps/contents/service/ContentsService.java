@@ -9,8 +9,9 @@ import com.project.sioscms.apps.attach.domain.repository.AttachFileRepository;
 import com.project.sioscms.apps.attach.service.AttachFileService;
 import com.project.sioscms.apps.contents.domain.dto.ContentsDto;
 import com.project.sioscms.apps.contents.domain.entity.Contents;
+import com.project.sioscms.apps.contents.domain.entity.ContentsHistory;
+import com.project.sioscms.apps.contents.domain.repository.ContentsHistoryRepository;
 import com.project.sioscms.apps.contents.domain.repository.ContentsRepository;
-import com.project.sioscms.apps.contents.mapper.ContentsMapper;
 import com.project.sioscms.common.utils.jpa.restriction.ChangSolJpaRestriction;
 import com.project.sioscms.common.utils.jpa.restriction.ChangSolJpaRestrictionType;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,7 @@ public class ContentsService extends EgovAbstractServiceImpl {
 
     private final AttachFileService attachFileService;
     private final ContentsRepository contentsRepository;
+    private final ContentsHistoryRepository contentsHistoryRepository;
     private final AttachFileGroupRepository attachFileGroupRepository;
     private final AttachFileRepository attachFileRepository;
 
@@ -81,5 +83,28 @@ public class ContentsService extends EgovAbstractServiceImpl {
         }
 
         return null;
+    }
+
+    @Transactional
+    public Boolean changeVersion(final Long id, final Long historyId){
+        if(!ObjectUtils.isEmpty(id) && !ObjectUtils.isEmpty(historyId)){
+            Contents contents = contentsRepository.findById(id).orElse(null);
+
+            if(contents != null){
+                //현재 사용중인 히스토리 미사용 처리
+                contentsHistoryRepository.findFirstByContentsAndIsUsedAndIsDeleted(contents, true, false).ifPresent(contentsHistory -> contentsHistory.setIsUsed(false));
+                ContentsHistory contentsHistory = contentsHistoryRepository.findById(historyId).orElse(null);
+                if(contentsHistory != null){
+                    contentsHistory.setIsUsed(true);
+
+                    contents.setContent(contentsHistory.getContent());
+                    contentsRepository.flush();
+                    contentsHistoryRepository.flush();
+
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

@@ -6,10 +6,7 @@ import com.project.sioscms.apps.contents.service.ContentsService;
 import com.project.sioscms.secure.domain.Auth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -27,4 +24,9 @@ public class ContentsController {
         return ResponseEntity.ok(contentsService.saveAttachFiles(requestDto, files));
     }
 
+    @Auth(role = Auth.Role.ADMIN)
+    @PutMapping("/change-version")
+    public ResponseEntity<Boolean> changeVersion(@RequestParam("id") final Long id, @RequestParam("historyId") final Long historyId){
+        return ResponseEntity.ok(contentsService.changeVersion(id, historyId));
+    }
 }
