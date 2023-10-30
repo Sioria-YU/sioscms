@@ -19,11 +19,17 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -112,5 +118,39 @@ public class ContentsManagementService {
         }
 
         return false;
+    }
+
+    public void preView(HttpServletResponse response, String content){
+        if (response == null) {
+            throw new NullPointerException();
+        }
+        response.setContentType("text/html; charset=UTF-8");
+
+        try (PrintWriter out = response.getWriter()) {
+            out.println(content);
+        } catch (IOException e) {
+            log.error(e.toString());
+        }
+    }
+
+    public void preViewHistory(HttpServletResponse response, Long historyId){
+        if (response == null || ObjectUtils.isEmpty(historyId)) {
+            throw new NullPointerException();
+        }else {
+
+            ContentsHistory contentsHistory = contentsHistoryRepository.findById(historyId).orElse(null);
+
+            if (contentsHistory == null) {
+                throw new NullPointerException();
+            }else {
+                response.setContentType("text/html; charset=UTF-8");
+
+                try (PrintWriter out = response.getWriter()) {
+                    out.println(contentsHistory.getContent());
+                } catch (IOException e) {
+                    log.error(e.toString());
+                }
+            }
+        }
     }
 }

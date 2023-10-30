@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -81,5 +82,17 @@ public class ContentsManagementController {
         }else{
             HttpUtil.alertAndRedirect(response, "/cms/contents-manage/view/" + requestDto.getId(), "처리 중 오류가 발생하였습니다.", null);
         }
+    }
+
+    @Auth(role = Auth.Role.ADMIN)
+    @RequestMapping("/preview")
+    public void preView(HttpServletResponse response, @RequestParam("content") String content){
+        contentsManagementService.preView(response, content);
+    }
+
+    @Auth(role = Auth.Role.ADMIN)
+    @RequestMapping("/preview-history")
+    public void preViewHistory(HttpServletResponse response, @RequestParam("historyId") Long historyId){
+        contentsManagementService.preViewHistory(response, historyId);
     }
 }

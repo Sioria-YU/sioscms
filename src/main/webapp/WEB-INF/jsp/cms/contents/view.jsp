@@ -106,6 +106,36 @@
             });
         }
     }
+
+    const onPreview = () => {
+        if($("#content").val().replace(" ", "") === ''){
+            alert("콘텐츠 내용을 입력하세요.");
+            return false;
+        }
+
+        let form = document.previewForm;
+        window.open('', 'previewPop','width=1920,height=1080');
+
+        form.action = "/cms/contents-manage/preview";
+        form.target = "previewPop";
+        form.content.value = $("#content").val();
+        form.submit();
+    }
+
+    const onPreviewHistory = (historyId) => {
+        if($("#content").val().replace(" ", "") === ''){
+            alert("콘텐츠 내용을 입력하세요.");
+            return false;
+        }
+
+        let form = document.previewHistoryForm;
+        window.open('', 'previewHistoryPop','width=1920,height=1080');
+
+        form.action = "/cms/contents-manage/preview-history";
+        form.target = "previewHistoryPop";
+        form.historyId.value = historyId;
+        form.submit();
+    }
 </script>
 
 <div id="layoutSidenav_content">
@@ -198,7 +228,7 @@
                 </button>
                 <button type="button" class="btn btn-success btn-lg" onclick="formSubmitEvent();">새 버전으로 저장</button>
                 <button type="button" class="btn btn-lg btn-outline-dark"
-                        onclick="alert('미구현');"><i class="bi bi-cast"></i> 미리보기
+                        onclick="onPreview();"><i class="bi bi-cast"></i> 미리보기
                 </button>
             </div>
         </div>
@@ -228,9 +258,9 @@
                             </td>
                             <td>
                                 <fmt:parseDate var="createdDateTime" value="${history.createdDateTime}"
-                                               pattern="yyyy-MM-dd"
+                                               pattern="yyyy-MM-dd'T'HH:mm:ss"
                                                type="both"/>
-                                <fmt:formatDate value="${createdDateTime}" pattern="yyyy-MM-dd"/>
+                                <fmt:formatDate value="${createdDateTime}" pattern="yyyy-MM-dd hh:mm:ss"/>
                             </td>
                             <td>${history.isUsed? '사용':'미사용'}</td>
                             <td>
@@ -245,11 +275,11 @@
                             </td>
                             <td>
                                 <button type="button" class="btn btn-sm btn-outline-dark"
-                                        onclick=""><i class="bi bi-cast"></i></button>
+                                        onclick="onPreviewHistory(${history.id})"><i class="bi bi-cast"></i></button>
                             </td>
                             <td>
                                 <button type="button" class="btn btn-sm btn-success"
-                                        onclick=""><i class="bi bi-arrow-left-right"></i></button>
+                                        onclick="alert('비교하기')"><i class="bi bi-arrow-left-right"></i></button>
                             </td>
                         </tr>
                     </c:forEach>
@@ -257,5 +287,13 @@
                 </table>
             </c:if>
         </div>
+
+        <form id="previewForm" name="previewForm" method="post">
+            <input type="hidden" id="previewContent" name="content">
+        </form>
+
+        <form id="previewHistoryForm" name="previewHistoryForm" method="post">
+            <input type="hidden" id="historyId" name="historyId">
+        </form>
     </main>
 </div>
