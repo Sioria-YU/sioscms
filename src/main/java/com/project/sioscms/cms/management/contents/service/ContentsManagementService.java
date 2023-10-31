@@ -1,7 +1,6 @@
 package com.project.sioscms.cms.management.contents.service;
 
 import com.project.sioscms.apps.attach.domain.dto.AttachFileGroupDto;
-import com.project.sioscms.apps.attach.domain.entity.AttachFileGroup;
 import com.project.sioscms.apps.attach.domain.repository.AttachFileGroupRepository;
 import com.project.sioscms.apps.attach.service.AttachFileService;
 import com.project.sioscms.apps.contents.domain.dto.ContentsDto;
@@ -10,6 +9,7 @@ import com.project.sioscms.apps.contents.domain.entity.ContentsHistory;
 import com.project.sioscms.apps.contents.domain.repository.ContentsHistoryRepository;
 import com.project.sioscms.apps.contents.domain.repository.ContentsRepository;
 import com.project.sioscms.apps.contents.mapper.ContentsMapper;
+import com.project.sioscms.apps.contents.service.ContentsService;
 import com.project.sioscms.common.utils.jpa.page.SiosPage;
 import com.project.sioscms.common.utils.jpa.restriction.ChangSolJpaRestriction;
 import com.project.sioscms.common.utils.jpa.restriction.ChangSolJpaRestrictionType;
@@ -19,7 +19,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -27,9 +26,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @Service
@@ -42,6 +39,7 @@ public class ContentsManagementService {
     private final AttachFileGroupRepository attachFileGroupRepository;
 
     private final AttachFileService attachFileService;
+    private final ContentsService contentsService;
 
     public SiosPage<ContentsDto.Response> getContentsList(ContentsDto.Request requestDto) {
         ChangSolJpaRestriction restriction = new ChangSolJpaRestriction(ChangSolJpaRestrictionType.AND);
@@ -90,6 +88,9 @@ public class ContentsManagementService {
         ContentsHistory contentsHistory = new ContentsHistory(contents, contents.getContent(), 1L, true, false);
         contentsHistoryRepository.save(contentsHistory);
 
+        //파일을 새로 생성한다.
+        contentsService.contentsFileSave(contents.getContentsName(), contents.getContent());
+
         return contents.toResponse();
     }
 
@@ -112,6 +113,9 @@ public class ContentsManagementService {
 
                 ContentsHistory contentsHistory = new ContentsHistory(contents, contents.getContent(), lastVersion, true, false);
                 contentsHistoryRepository.save(contentsHistory);
+
+                //변경된 버전으로 파일을 새로 생성한다.
+                contentsService.contentsFileSave(contents.getContentsName(), contents.getContent());
 
                 return true;
             }

@@ -15,6 +15,7 @@ import com.project.sioscms.apps.contents.domain.repository.ContentsRepository;
 import com.project.sioscms.common.utils.jpa.restriction.ChangSolJpaRestriction;
 import com.project.sioscms.common.utils.jpa.restriction.ChangSolJpaRestrictionType;
 import lombok.RequiredArgsConstructor;
+import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +25,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,6 +108,8 @@ public class ContentsService extends EgovAbstractServiceImpl {
                     contentsRepository.flush();
                     contentsHistoryRepository.flush();
 
+                    //파일 생성 로직
+                    contentsFileSave(contents.getContentsName(), contents.getContent());
                     return true;
                 }
             }
@@ -123,5 +130,36 @@ public class ContentsService extends EgovAbstractServiceImpl {
             }
         }
         return null;
+    }
+
+    @Synchronized
+    public void contentsFileSave(final String fileName, final String content){
+        final String fileFullPath = CONTENTS_PATH + File.separator + fileName + ".html";
+
+        File file = new File(fileFullPath);
+
+        if(file.exists()){
+            //기존 파일이 있다면 삭제
+            if(!file.delete()){
+                log.error(fileName + " unable to delete");
+            }
+        }
+
+        try {
+            //파일 생성
+            if(!file.createNewFile()){
+                log.error(fileName + " created failed");
+            }else{
+                //파일 내용 쓰기
+                FileWriter fw = new FileWriter(file);
+                BufferedWriter writer = new BufferedWriter(fw);
+
+                writer.write(content);
+                writer.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }
