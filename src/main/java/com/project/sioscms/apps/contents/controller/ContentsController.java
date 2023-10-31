@@ -37,4 +37,16 @@ public class ContentsController {
         return ResponseEntity.ok(contentsService.changeVersion(id, historyId));
     }
 
+    @DeleteMapping("multi-delete")
+    public ResponseEntity<Boolean> multiDelete(@RequestParam("ids[]") List<Long> ids){
+        if(ids != null && ids.size() > 0){
+            for (Long id : ids) {
+                contentsService.deleteContents(id);
+            }
+            return ResponseEntity.ok(true);
+        }else{
+            return ResponseEntity.ok(false);
+        }
+    }
+
 }

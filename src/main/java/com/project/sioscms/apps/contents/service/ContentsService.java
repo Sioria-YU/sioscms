@@ -93,6 +93,11 @@ public class ContentsService extends EgovAbstractServiceImpl {
     }
 
     @Transactional
+    public void deleteContents(final Long id){
+        contentsRepository.findById(id).ifPresent(contents -> contents.setIsDeleted(true));
+    }
+
+    @Transactional
     public Boolean changeVersion(final Long id, final Long historyId){
         if(!ObjectUtils.isEmpty(id) && !ObjectUtils.isEmpty(historyId)){
             Contents contents = contentsRepository.findById(id).orElse(null);

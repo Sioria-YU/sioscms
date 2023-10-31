@@ -44,6 +44,7 @@ public class ContentsManagementService {
     public SiosPage<ContentsDto.Response> getContentsList(ContentsDto.Request requestDto) {
         ChangSolJpaRestriction restriction = new ChangSolJpaRestriction(ChangSolJpaRestrictionType.AND);
 
+        restriction.equals("isDeleted", false);
         if (!ObjectUtils.isEmpty(requestDto.getTitle())) {
             restriction.like("title", "%" + requestDto.getTitle() + "%");
         }
