@@ -49,3 +49,31 @@
       - spring:
           datasource:
             driver-class-name: oracle.jdbc.driver.OracleDriver
+
+2. Project
+   1. 개발서버 : xten/master branch checkout
+   2. server edit
+      1. edit configurations
+      2. Active profiles : local or dev(로컬 또는 개발서버 선택)
+      
+   3. application.yml
+      1. ddl-auto
+         1. ddl-auto: create-drop(로컬 최초 실행 시에만)
+         2. ddl-auto: update(로컬 최초 실행 후 수정 create-drop -> update)
+         3. ddl-auto: none or update(개발서버)
+      2. sql:init:mode 
+         1. sql:init:mode: always(로컬 최초 실행 시에만)
+         2. sql:init:mode: none(로컬 최초 실행 후 수정 always -> none)
+      3. attach:path
+         1. 첨부파일 업로드 경로 설정(os 환경에 맞추어 생성 후 경로 입력)
+         2. delete:enabled
+            1. true일 경우 실제 파일 삭제
+            2. false일 경우 실체 파일 삭제 안함
+      4. contents:path
+         1. 콘텐츠 html 생성 경로 설정(os 환경에 맞추어 입력)
+         2. ex) {프로젝트 경로}/src/main/webapp/static/contents
+      5. aes
+         1. 실제 서버 적용할 경우
+            1. secret-key, iv-key, spec-name 값 수정 필수
+      6. database가 postgres가 아닐 경우
+         1. data.sql 수정해야함
