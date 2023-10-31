@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,6 +18,12 @@ import java.util.List;
 public class ContentsController {
 
     private final ContentsService contentsService;
+
+    @Auth(role = Auth.Role.ADMIN)
+    @GetMapping("/compare-history")
+    public ResponseEntity<Map<String, String>> getCompareHistory(@RequestParam("historyId") final Long historyId){
+        return ResponseEntity.ok(contentsService.getCompareHistory(historyId));
+    }
 
     @Auth(role = Auth.Role.ADMIN)
     @PutMapping("/save-attach-files")
@@ -29,4 +36,5 @@ public class ContentsController {
     public ResponseEntity<Boolean> changeVersion(@RequestParam("id") final Long id, @RequestParam("historyId") final Long historyId){
         return ResponseEntity.ok(contentsService.changeVersion(id, historyId));
     }
+
 }

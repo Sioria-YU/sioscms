@@ -502,37 +502,37 @@
                             <input type="hidden" name="codeGroupId" value="${codeGroupInfo.codeGroupId}">
 
                             <div class="row mb-3">
-                                <label for="codeLabel" class="col-sm-3 col-form-label">코드 명</label>
+                                <label for="modifyCodeLabel" class="col-sm-3 col-form-label">코드 명</label>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control-small" id="modifyCodeLabel" name="codeLabel" value="" placeholder="코드 명을 입력하세요." aria-label="코드 명을 입력하세요." maxlength="100">
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="codeId" class="col-sm-3 col-form-label">코드</label>
+                                <label for="modifyCodeId" class="col-sm-3 col-form-label">코드</label>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control form-control-small" id="modifyCodeId" name="codeId" value="" maxlength="100" readonly>
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="option1" class="col-sm-3 col-form-label">옵션1</label>
+                                <label for="modifyOption1" class="col-sm-3 col-form-label">옵션1</label>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control-small" id="modifyOption1" name="option1" value="" placeholder="옵션1을 입력하세요." aria-label="옵션1을 입력하세요." maxlength="100">
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="option2" class="col-sm-3 col-form-label">옵션2</label>
+                                <label for="modifyOption2" class="col-sm-3 col-form-label">옵션2</label>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control-small" id="modifyOption2" name="option2" value="" placeholder="옵션2를 입력하세요." aria-label="옵션2를 입력하세요." maxlength="100">
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="option3" class="col-sm-3 col-form-label">옵션3</label>
+                                <label for="modifyOption3" class="col-sm-3 col-form-label">옵션3</label>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control-small" id="modifyOption3" name="option3" value="" placeholder="옵션3을 입력하세요." aria-label="옵션3을 입력하세요." maxlength="100">
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="option4" class="col-sm-3 col-form-label">옵션4</label>
+                                <label for="modifyOption4" class="col-sm-3 col-form-label">옵션4</label>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control-small" id="modifyOption4" name="option4" value="" placeholder="옵션4를 입력하세요." aria-label="옵션4를 입력하세요." maxlength="100">
                                 </div>

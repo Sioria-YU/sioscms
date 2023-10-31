@@ -123,11 +123,6 @@
     }
 
     const onPreviewHistory = (historyId) => {
-        if($("#content").val().replace(" ", "") === ''){
-            alert("콘텐츠 내용을 입력하세요.");
-            return false;
-        }
-
         let form = document.previewHistoryForm;
         window.open('', 'previewHistoryPop','width=1920,height=1080');
 
@@ -135,6 +130,39 @@
         form.target = "previewHistoryPop";
         form.historyId.value = historyId;
         form.submit();
+    }
+
+    const onCompare = (historyId) => {
+        $("#selectedVersionContent").val('');
+        $("#nowVersionContent").val('');
+
+        $.ajax({
+            url: '/api/contents/compare-history',
+            type: 'GET',
+            async: false,
+            data: {
+                historyId: historyId
+            },
+            success: function (data) {
+                if(!!data){
+                    $("#selectedVersionContent").val(data?.selectedVersionContent);
+                    $("#nowVersionContent").val(data?.nowVersionContent);
+                    onModalOpen();
+                }
+            },
+            error: function (request, status, error) {
+                console.error(error);
+                alert("오류가 발생하였습니다.");
+            }
+        });
+    }
+
+    const onModalOpen = () => {
+        let contentsModal = new bootstrap.Modal(document.getElementById('contentsModal'), {
+            keyboard: false
+        });
+
+        contentsModal.show();
     }
 </script>
 
@@ -278,8 +306,16 @@
                                         onclick="onPreviewHistory(${history.id})"><i class="bi bi-cast"></i></button>
                             </td>
                             <td>
-                                <button type="button" class="btn btn-sm btn-success"
-                                        onclick="alert('비교하기')"><i class="bi bi-arrow-left-right"></i></button>
+                                <c:choose>
+                                    <c:when test="${history.isUsed}">
+                                        -
+                                    </c:when>
+                                    <c:otherwise>
+                                        <button type="button" class="btn btn-sm btn-success"
+                                                onclick="onCompare(${history.id});"><i class="bi bi-arrow-left-right"></i></button>
+                                    </c:otherwise>
+                                </c:choose>
+
                             </td>
                         </tr>
                     </c:forEach>
@@ -288,6 +324,7 @@
             </c:if>
         </div>
 
+        <%-- region preview form--%>
         <form id="previewForm" name="previewForm" method="post">
             <input type="hidden" id="previewContent" name="content">
         </form>
@@ -295,5 +332,37 @@
         <form id="previewHistoryForm" name="previewHistoryForm" method="post">
             <input type="hidden" id="historyId" name="historyId">
         </form>
+        <%-- endregion --%>
+
+        <%-- region layer pop --%>
+        <div class="modal fade" id="contentsModal" tabindex="-1" aria-labelledby="contentsModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="contentsModalTitle">콘텐츠 비교하기</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row mb-3">
+                            <div class="col-sm-5">
+                                <label for="selectedVersionContent" class="col-sm-12 col-form-label">선택 버전</label>
+                                <textarea class="col-sm-12" id="selectedVersionContent" rows="15" readonly></textarea>
+                            </div>
+                            <div class="col-sm-2 text-center m-auto">
+                                <button type="button" class="btn btn-lg btn-outline-dark"><i class="bi bi-arrow-left-right"></i></button>
+                            </div>
+                            <div class="col-sm-5">
+                                <label for="nowVersionContent" class="col-sm-12 col-form-label">현재 버전</label>
+                                <textarea class="col-sm-12" id="nowVersionContent" rows="15" readonly></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%-- endregion --%>
     </main>
 </div>

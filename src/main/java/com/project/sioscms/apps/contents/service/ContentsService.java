@@ -24,7 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -106,5 +108,20 @@ public class ContentsService extends EgovAbstractServiceImpl {
             }
         }
         return false;
+    }
+
+    public Map<String,String> getCompareHistory(final Long historyId){
+        if(!ObjectUtils.isEmpty(historyId)) {
+            ContentsHistory contentsHistory = contentsHistoryRepository.findById(historyId).orElse(null);
+            if (contentsHistory != null) {
+                Map<String, String> resultMap = new HashMap<>();
+                resultMap.put("selectedVersionContent", contentsHistory.getContent()); //선택 버전
+                contentsHistoryRepository.findFirstByContentsAndIsUsedAndIsDeleted(contentsHistory.getContents(), true, false)
+                        .ifPresent(nowContentsHistory -> resultMap.put("nowVersionContent", nowContentsHistory.getContent())); //현재 버전
+
+                return resultMap;
+            }
+        }
+        return null;
     }
 }
