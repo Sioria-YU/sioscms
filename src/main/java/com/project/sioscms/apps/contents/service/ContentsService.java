@@ -62,6 +62,10 @@ public class ContentsService extends EgovAbstractServiceImpl {
                 .stream().map(Contents::toResponse).collect(Collectors.toList());
     }
 
+    public Boolean duplicationCheckContentsName(final String contentsName){
+        return contentsRepository.countByContentsName(contentsName) == 0;
+    }
+
     @Transactional
     public List<AttachFileDto.Response> saveAttachFiles(ContentsDto.Request requestDto, List<MultipartFile> files){
         if(ObjectUtils.isEmpty(requestDto.getId())){

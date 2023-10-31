@@ -4,8 +4,56 @@
 
 <script>
     const formSubmitEvent = () => {
+        if($("#title").val() === ""){
+            alert("콘텐츠 제목을 입력하세요");
+            $("#title").focus();
+            return false;
+        }
+
+        if($("#contentsName").val() === ""){
+            alert("콘텐츠 파일명을 입력하세요");
+            $("#contentsName").focus();
+            return false;
+        }
+
+        if($("#isCheckedContentsName").val() === "F"){
+            alert("콘텐츠 파일 명 중복 검사를 실행해 주세요.");
+            $("#isCheckedContentsName").focus();
+            return false;
+        }
 
         $("#registForm").submit();
+    }
+
+    const onChangeContentsName = () => {
+        $("#isCheckedContentsName").val('F');
+        $("#contentsNameCheckButton").show();
+    }
+
+    const onCheckContentsName = () => {
+        $.ajax({
+            url: '/api/contents/contents-name-duplication-check',
+            type: 'GET',
+            async: false,
+            data: {
+                contentsName: $("#contentsName").val()
+            },
+            success: function (data) {
+                if(data){
+                    alert("사용 가능한 파일명입니다.");
+                    $("#isCheckedContentsName").val('T');
+                    $("#contentsNameCheckButton").hide();
+                }else{
+                    alert("이미 사용 중인 파일명입니다.");
+                    $("#isCheckedContentsName").val('F');
+                    $("#contentsNameCheckButton").show();
+                }
+            },
+            error: function (request, status, error) {
+                console.error(error);
+                alert("오류가 발생하였습니다.");
+            }
+        });
     }
 </script>
 
@@ -43,8 +91,18 @@
                     </tr>
                     <tr>
                         <th class="table-title"><label for="title">콘텐츠 파일명</label></th>
-                        <td><input type="text" class="form-control" id="contentsName" name="contentsName" value=""
-                                   aria-label="콘텐츠 파일명" placeholder="콘텐츠 파일명을 입력하세요."></td>
+                        <td>
+                            <div class="row">
+                            <div class="col-sm-5">
+                            <input type="text" class="form-control" id="contentsName" name="contentsName" value="" onchange="onChangeContentsName()"
+                                   aria-label="콘텐츠 파일명" placeholder="콘텐츠 파일명을 입력하세요.">
+                            </div>
+                            <div class="col-sm-2">
+                                <input type="hidden" id="isCheckedContentsName" value="F">
+                                <button type="button" class="btn btn-dark" id="contentsNameCheckButton" onclick="onCheckContentsName();">중복 검사</button>
+                            </div>
+                            </div>
+                        </td>
                     </tr>
                     <tr>
                         <th class="table-title"><label for="files">이미지 첨부</label></th>

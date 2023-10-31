@@ -7,6 +7,7 @@ import com.project.sioscms.common.domain.entity.CommonEntityWithIdAndDate;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.checkerframework.common.aliasing.qual.Unique;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
@@ -22,6 +23,7 @@ import javax.validation.constraints.NotNull;
 public class Contents extends CommonEntityWithIdAndDate {
 
     @NotNull
+    @Unique
     @Comment("콘텐츠명")
     private String contentsName;
 

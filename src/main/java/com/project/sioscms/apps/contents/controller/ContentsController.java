@@ -26,6 +26,12 @@ public class ContentsController {
     }
 
     @Auth(role = Auth.Role.ADMIN)
+    @GetMapping("/contents-name-duplication-check")
+    public ResponseEntity<Boolean> duplicationCheckContentsName(@RequestParam("contentsName") final String contentsName){
+        return ResponseEntity.ok(contentsService.duplicationCheckContentsName(contentsName));
+    }
+
+    @Auth(role = Auth.Role.ADMIN)
     @PutMapping("/save-attach-files")
     public ResponseEntity<List<AttachFileDto.Response>> saveAttachFiles(ContentsDto.Request requestDto, @RequestPart List<MultipartFile> files){
         return ResponseEntity.ok(contentsService.saveAttachFiles(requestDto, files));
