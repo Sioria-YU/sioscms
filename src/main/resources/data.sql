@@ -18,4 +18,9 @@ VALUES (1,1,CURRENT_TIMESTAMP,1,CURRENT_TIMESTAMP,false,true,'/cms/main','Root',
      ,(9,1,CURRENT_TIMESTAMP,1,CURRENT_TIMESTAMP,false,true,'','게시판 관리','LINK',4,false,8)
      ,(10,1,CURRENT_TIMESTAMP,1,CURRENT_TIMESTAMP,false,true,'','접속 통계 관리','LINK',5,false,10)
      ,(11,1,CURRENT_TIMESTAMP,1,CURRENT_TIMESTAMP,false,true,'/cms/code/code-group/list','공통코드관리','LINK',2,false,11)
-     ,(12,1,CURRENT_TIMESTAMP,1,CURRENT_TIMESTAMP,false,true,'/cms/board/list','게시글 관리','LINK',4,false,12);
+     ,(12,1,CURRENT_TIMESTAMP,1,CURRENT_TIMESTAMP,false,true,'/cms/contents-manage/list','콘텐츠 관리','LINK',4,false,12);
+
+/* 시퀀스 업데이트 */
+ALTER SEQUENCE account_id_seq restart with 2;
+ALTER SEQUENCE menu_id_seq restart with 13;
+
