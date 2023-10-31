@@ -25,9 +25,25 @@
         $("#registForm").submit();
     }
 
-    const onChangeContentsName = () => {
+    const onChangeContentsName = (obj) => {
+        obj.value = onReplaceSpecialChar(obj.value);
+
         $("#isCheckedContentsName").val('F');
         $("#contentsNameCheckButton").show();
+    }
+
+    /**
+     * 특수문자를 제거한다.
+     * @param {string} text
+     * @returns {string|*}
+     */
+    const onReplaceSpecialChar = (text) => {
+        if(!!text && text.length > 0) {
+            const reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
+            return text.replace(reg, "");
+        }else{
+            return "";
+        }
     }
 
     const onCheckContentsName = () => {
@@ -94,8 +110,13 @@
                         <td>
                             <div class="row">
                             <div class="col-sm-5">
-                            <input type="text" class="form-control" id="contentsName" name="contentsName" value="" onchange="onChangeContentsName()"
-                                   aria-label="콘텐츠 파일명" placeholder="콘텐츠 파일명을 입력하세요.">
+                            <input type="text" class="form-control" id="contentsName" name="contentsName" value=""
+                                   onchange="onChangeContentsName(this)"
+                                   onkeyup="onChangeContentsName(this)"
+                                   aria-label="콘텐츠 파일명"
+                                   placeholder="콘텐츠 파일명을 입력하세요.(.html 제외)"
+                                   maxlength="100"
+                            >
                             </div>
                             <div class="col-sm-2">
                                 <input type="hidden" id="isCheckedContentsName" value="F">
