@@ -55,13 +55,13 @@ dependencies {
     /*===========================  End of add Implementaions ===========================*/
 
     /*===============================  Add egovframe ===============================*/
-    compileOnly(group: 'org.egovframe.rte', name: 'org.egovframe.rte.ptl.mvc', version:'4.1.0')
-    compileOnly(group: 'org.egovframe.rte', name: 'org.egovframe.rte.psl.dataaccess', version:'4.1.0')
-    compileOnly(group: 'org.egovframe.rte', name: 'org.egovframe.rte.fdl.idgnr', version:'4.1.0')
-    compileOnly(group: 'org.egovframe.rte', name: 'org.egovframe.rte.fdl.property', version:'4.1.0')
-    compileOnly(group: 'org.egovframe.rte', name: 'org.egovframe.rte.fdl.string', version:'4.1.0')
-    compileOnly(group: 'org.egovframe.rte', name: 'org.egovframe.rte.fdl.cmmn', version:'4.1.0')
-    compileOnly(group: 'org.egovframe.rte', name: 'org.egovframe.rte.fdl.logging', version:'4.1.0')
+    implementation(group: 'org.egovframe.rte', name: 'org.egovframe.rte.ptl.mvc', version:'4.1.0')
+    implementation(group: 'org.egovframe.rte', name: 'org.egovframe.rte.psl.dataaccess', version:'4.1.0')
+    implementation(group: 'org.egovframe.rte', name: 'org.egovframe.rte.fdl.idgnr', version:'4.1.0')
+    implementation(group: 'org.egovframe.rte', name: 'org.egovframe.rte.fdl.property', version:'4.1.0')
+    implementation(group: 'org.egovframe.rte', name: 'org.egovframe.rte.fdl.string', version:'4.1.0')
+    implementation(group: 'org.egovframe.rte', name: 'org.egovframe.rte.fdl.cmmn', version:'4.1.0')
+    implementation(group: 'org.egovframe.rte', name: 'org.egovframe.rte.fdl.logging', version:'4.1.0')
     /*===============================  End of egovframe ===============================*/
 
     /*===============================  Add annotation ===============================*/
