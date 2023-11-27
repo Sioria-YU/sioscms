@@ -1,7 +1,12 @@
 package com.project.sioscms.secure.config;
 
+import com.project.sioscms.secure.handler.LoginFailureHandler;
+import com.project.sioscms.secure.handler.LoginSuccessHandler;
+import com.project.sioscms.secure.provider.CustomAuthenticationProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,7 +35,9 @@ public class SpringSecurityConfig {
                                 .loginProcessingUrl("/cms/auth/login-process")   //로그인 프로세스 페이지 설정
                                 .usernameParameter("userId")    //로그인 유저 id 파라미터명 설정(default : username)
                                 .passwordParameter("userPw")    //로그인 유저 pw 파라미터 설정(default : password)
-                                .defaultSuccessUrl("/cms/main", true) //로그인 성공 시 이동 페이지 설정
+                                .successHandler(new LoginSuccessHandler())
+                                .failureHandler(new LoginFailureHandler())
+//                                .defaultSuccessUrl("/cms/main", true) //로그인 성공 시 이동 페이지 설정
 //                                .failureForwardUrl("")    //로그인 실패 시 이동 페이지 설정
                                 .permitAll()    //성공 이동 페이지 권한 예외처리
                 ).logout(logout -> logout
@@ -43,5 +50,15 @@ public class SpringSecurityConfig {
 //        http.headers().xssProtection().and().contentSecurityPolicy("script-src 'self'"); //Xss 방지 옵션
 
         return http.build();
+    }
+
+    //커스텀 authenticationProvider 설정
+    protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception{
+        authenticationManagerBuilder.authenticationProvider(authenticationProvider());
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider(){
+        return new CustomAuthenticationProvider();
     }
 }

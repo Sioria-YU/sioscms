@@ -25,6 +25,11 @@
                     <label for="userPw" class="sr-only">비밀번호</label>
                     <input type="password" id="userPw" name="userPw" class="form-control" placeholder="Password" required="">
                 </p>
+                <c:if test="${not empty exceptionMsg}">
+                    <p style="color:red">
+                        ${exceptionMsg}
+                    </p>
+                </c:if>
 <%--                <input type="text" name="${_csrf.parameterName} " value="${_csrf.token}">--%>
                 <button type="submit" class="btn btn-lg btn-success btn-block">로그인</button>
                 <button type="button" class="btn btn-lg btn-info btn-block" onclick="moveToJoinpage()">회원가입</button>

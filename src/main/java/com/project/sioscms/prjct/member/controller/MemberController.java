@@ -26,6 +26,8 @@ public class MemberController {
     public ModelAndView memberJoinProc(AccountDto.Request dto){
 
         Account account = accountService.saveUser(dto);
+        //관리자 가입 방지를 위해 사용자 권한으로 고정
+        account.setRole(Account.Role_Type.USER);
 
         ModelAndView mav = new ModelAndView();
         if(account != null) {

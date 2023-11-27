@@ -4,7 +4,6 @@ import com.project.sioscms.apps.account.domain.entity.Account;
 import com.project.sioscms.apps.account.service.AccountService;
 import com.project.sioscms.secure.domain.UserAccount;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
