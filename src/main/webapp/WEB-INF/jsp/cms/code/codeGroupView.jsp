@@ -403,7 +403,7 @@
                                 <td>${result.option3}</td>
                                 <td>${result.option4}</td>
                                 <td>${result.isUsed eq 'TRUE'? '사용':'미사용'}</td>
-                                <td>${result.createdBy}</td>
+                                <td>${result.createdBy.name}</td>
                                 <td><fmt:formatDate value="${createdDateTime}" pattern="yyyy-MM-dd"/></td>
                             </tr>
                         </c:forEach>
