@@ -1,6 +1,8 @@
 package com.project.sioscms.apps.account.domain.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.project.sioscms.apps.account.domain.dto.AccountDto;
 import com.project.sioscms.apps.account.mapper.AccountMapper;
 import com.project.sioscms.common.domain.entity.CommonEntityWithIdAndDate;
@@ -23,6 +25,7 @@ import java.time.LocalDateTime;
 @Setter
 @DynamicInsert
 @DynamicUpdate
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Account extends CommonEntityWithIdAndDate {
 
     public enum Role_Type {
