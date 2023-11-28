@@ -11,9 +11,12 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -77,6 +80,18 @@ public class Account extends CommonEntityWithIdAndDate {
     @Size(max = 1)
     @Comment("유저 상태")
     private String state;
+
+    @ColumnDefault(value = "FALSE")
+    @Comment("계정 잠김 유무")
+    private Boolean isLocked = true;
+
+    @Comment("계정 잠금 일시")
+    @Convert(converter = Jsr310JpaConverters.LocalDateTimeConverter.class)
+    private LocalDateTime lockedDateTime = LocalDateTime.now();
+
+    @ColumnDefault(value = "0")
+    @Comment("로그인 실패 횟수")
+    private Long loginFailedCount = 0L;
 
     public AccountDto.Response toResponse(){
         return AccountMapper.mapper.toResponse(this);

@@ -7,10 +7,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.time.LocalDateTime;
 
 @Slf4j
 public class CustomAuthenticationProvider implements AuthenticationProvider {
@@ -30,6 +33,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         UserAccount userAccount = (UserAccount) userDetailService.loadUserByUsername(username);
         if (!passwordEncoder.matches(password, userAccount.getAccount().getUserPassword())) {
             throw new BadCredentialsException("BadCredentialsException");
+        }else if(userAccount.getAccount().getIsLocked() && LocalDateTime.now().minusMinutes(30).isAfter(userAccount.getAccount().getLockedDateTime())){
+            throw new DisabledException("DisabledException");
         }
 
         return new UsernamePasswordAuthenticationToken(

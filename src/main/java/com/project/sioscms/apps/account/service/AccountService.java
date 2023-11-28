@@ -66,6 +66,9 @@ public class AccountService extends EgovAbstractServiceImpl {
             account.setCreatedBy(account);
             account.setUpdatedBy(account);
             account.setState("T");
+            account.setLoginFailedCount(0L);
+            account.setIsLocked(false);
+            account.setLockedDateTime(null);
             return account;
         }else{
             log.error("회원가입 데이터 오류 발생!!!");
@@ -112,6 +115,26 @@ public class AccountService extends EgovAbstractServiceImpl {
         }else {
             return false;
         }
+    }
+
+    @Transactional
+    public void updateLoginSuccess(Account account){
+        account.setLoginFailedCount(0L);
+        account.setIsLocked(false);
+        account.setLockedDateTime(null);
+        accountRepository.save(account);
+        accountRepository.flush();
+    }
+
+    @Transactional
+    public void updateLoginFailed(Account account, long failedCnt, boolean isLocked){
+        account.setLoginFailedCount(failedCnt);
+        account.setIsLocked(isLocked);
+        if(isLocked && account.getLockedDateTime() == null){
+            account.setLockedDateTime(LocalDateTime.now());
+        }
+        accountRepository.save(account);
+        accountRepository.flush();
     }
 
 }

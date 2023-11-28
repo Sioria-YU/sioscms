@@ -3,6 +3,7 @@ package com.project.sioscms.secure.config;
 import com.project.sioscms.secure.handler.LoginFailureHandler;
 import com.project.sioscms.secure.handler.LoginSuccessHandler;
 import com.project.sioscms.secure.provider.CustomAuthenticationProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -14,6 +15,12 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SpringSecurityConfig {
+
+    @Autowired
+    LoginSuccessHandler loginSuccessHandler;
+
+    @Autowired
+    LoginFailureHandler loginFailureHandler;
 
     @Bean
     PasswordEncoder passwordEncoder() {
@@ -35,8 +42,8 @@ public class SpringSecurityConfig {
                                 .loginProcessingUrl("/cms/auth/login-process")   //로그인 프로세스 페이지 설정
                                 .usernameParameter("userId")    //로그인 유저 id 파라미터명 설정(default : username)
                                 .passwordParameter("userPw")    //로그인 유저 pw 파라미터 설정(default : password)
-                                .successHandler(new LoginSuccessHandler())
-                                .failureHandler(new LoginFailureHandler())
+                                .successHandler(loginSuccessHandler)
+                                .failureHandler(loginFailureHandler)
 //                                .defaultSuccessUrl("/cms/main", true) //로그인 성공 시 이동 페이지 설정
 //                                .failureForwardUrl("")    //로그인 실패 시 이동 페이지 설정
                                 .permitAll()    //성공 이동 페이지 권한 예외처리

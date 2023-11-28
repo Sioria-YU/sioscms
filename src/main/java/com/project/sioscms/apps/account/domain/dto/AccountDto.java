@@ -48,5 +48,8 @@ public class AccountDto {
         private Boolean isDelete;
         private Account.Role_Type role;
         private String state;
+        private Boolean isLocked;
+        private LocalDateTime lockedDateTime;
+        private Long loginFailedCount;
     }
 }
