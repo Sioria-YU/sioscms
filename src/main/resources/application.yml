@@ -68,10 +68,6 @@ spring:
     devtools:
         livereload:
             enabled: true
-    security:
-        user:
-            name: admin
-            password: 1234
 attach:
     path: /Users/sioria/project/sioscms/upload
     delete:
@@ -105,10 +101,6 @@ spring:
     devtools:
         livereload:
             enabled: true
-    security:
-        user:
-            name: admin
-            password: 1234
 attach:
     path: /data/www/xtencms/upload
     delete:
