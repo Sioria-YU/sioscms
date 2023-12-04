@@ -33,7 +33,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         UserAccount userAccount = (UserAccount) userDetailService.loadUserByUsername(username);
         if (!passwordEncoder.matches(password, userAccount.getAccount().getUserPassword())) {
             throw new BadCredentialsException("BadCredentialsException");
-        }else if(userAccount.getAccount().getIsLocked() && LocalDateTime.now().minusMinutes(30).isAfter(userAccount.getAccount().getLockedDateTime())){
+        }else if(userAccount.getAccount().getIsLocked() && LocalDateTime.now().minusMinutes(30).isBefore(userAccount.getAccount().getLockedDateTime())){
             throw new DisabledException("DisabledException");
         }
 
