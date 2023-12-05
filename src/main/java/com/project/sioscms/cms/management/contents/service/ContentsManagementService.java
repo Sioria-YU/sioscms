@@ -69,7 +69,7 @@ public class ContentsManagementService {
     @Transactional
     public ContentsDto.Response saveContents(ContentsDto.Request requestDto, List<MultipartFile> files){
         if(files != null && !files.isEmpty()) {
-            AttachFileGroupDto.Response attachFileGroupDto = attachFileService.multiUpload(files, null);
+            AttachFileGroupDto.Response attachFileGroupDto = attachFileService.multiUpload(files, null, "contents");
 
             if (attachFileGroupDto != null) {
                 requestDto.setAttachFileGroupId(attachFileGroupDto.getId());

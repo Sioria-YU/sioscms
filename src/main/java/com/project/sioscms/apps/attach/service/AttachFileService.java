@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -23,6 +24,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.time.LocalDate;
 import java.util.List;
 
 //TODO : 파일 디렉토리 년월, 프로그램 구분 등 구조 변경 해야함.
@@ -45,11 +48,16 @@ public class AttachFileService extends EgovAbstractServiceImpl {
     //region file upload
     @Transactional
     public ResponseEntity<?> upload(MultipartFile file) throws Exception {
-        return upload(file, null);
+        return upload(file, null, null);
     }
 
     @Transactional
     public ResponseEntity<?> upload(MultipartFile file, AttachFileGroup attachFileGroup) throws Exception {
+        return upload(file, attachFileGroup, null);
+    }
+
+    @Transactional
+    public ResponseEntity<?> upload(MultipartFile file, AttachFileGroup attachFileGroup, String programId) throws Exception {
         String originalFileName = file.getOriginalFilename();
         if(originalFileName == null || originalFileName.isEmpty()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(originalFileName);
@@ -66,13 +74,24 @@ public class AttachFileService extends EgovAbstractServiceImpl {
         //업로드 임시파일 생성
         file.transferTo(originFile);
 
-        //파일 저장 경로 세분화 로직 추가 필요
-        String filePath = ATTACH_PATH + File.separator;
+        //storage path / programId / year / month / day / file name
+        String programPath = "";
+        if(!ObjectUtils.isEmpty(programId)){
+            programPath = programId + File.separator;
+        }
+
+        LocalDate now = LocalDate.now();
+        String datePath = now.getYear() + File.separator + now.getMonthValue() + File.separator + now.getDayOfMonth() + File.separator;
+        String fileFullPath = ATTACH_PATH + File.separator + programPath + datePath;
+
+        //디렉토리 생성
+        File fileFullPathDir = new File(fileFullPath);
+        Files.createDirectories(fileFullPathDir.toPath());
 
         //암호화 하여 저장할 파일을 생성한다.
         String destinationFileName = System.nanoTime() + "_" + originalFileName;
         String encryptFileName = Base64.encodeBase64URLSafeString(destinationFileName.getBytes(StandardCharsets.UTF_8));
-        File destination = new File(filePath + encryptFileName);
+        File destination = new File(fileFullPath + encryptFileName);
         if(!destination.createNewFile()){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(originalFileName);
         }
@@ -98,7 +117,7 @@ public class AttachFileService extends EgovAbstractServiceImpl {
             attachFile.setFileName(encryptFileName);
             attachFile.setOriginFileName(originalFileName);
             attachFile.setFileExtension(originalFileName.substring(originalFileName.lastIndexOf(".")+1));
-            attachFile.setFilePath(filePath);
+            attachFile.setFilePath(fileFullPath);
             attachFile.setFileOrderNum(fileOrderNum);
             attachFile.setIsDeleted(false);
             attachFile.setIsUsed(true);
@@ -131,7 +150,7 @@ public class AttachFileService extends EgovAbstractServiceImpl {
 
     //region multiUpload
     @Transactional
-    public AttachFileGroupDto.Response multiUpload(List<MultipartFile> files, Long attachFileGroupId){
+    public AttachFileGroupDto.Response multiUpload(List<MultipartFile> files, Long attachFileGroupId, String programId){
         AttachFileGroup attachFileGroup = null;
         if(attachFileGroupId != null) {
             attachFileGroup = attachFileGroupRepository.findById(attachFileGroupId).orElse(null);
@@ -145,7 +164,7 @@ public class AttachFileService extends EgovAbstractServiceImpl {
         try {
             for (MultipartFile file : files) {
                 if (!file.isEmpty()) {
-                    upload(file, attachFileGroup);
+                    upload(file, attachFileGroup, programId);
                 }
             }
             return attachFileGroup.toResponse();
@@ -195,11 +214,16 @@ public class AttachFileService extends EgovAbstractServiceImpl {
 
     @Transactional
     public void delete(String fileName, String deleteMode) throws Exception{
+        AttachFile attachFile = attachFileRepository.findByFileName(fileName).orElse(null);
+        if(attachFile == null){
+            return;
+        }
+
         //deleteMode : 삭제 모드(N 안함, D 삭제)
         //attachDeleteEnabled : 삭제 허용 설정
         if(attachDeleteEnabled && "D".equals(deleteMode)) {
             //파일 삭제 처리
-            File originFile = new File(ATTACH_PATH + File.separator + fileName);
+            File originFile = new File(attachFile.getFilePath() + attachFile.getFileName());
             if(originFile.isFile()){
                 if(!originFile.delete()){
                     log.error("File delete failed!!!!!");
@@ -207,12 +231,9 @@ public class AttachFileService extends EgovAbstractServiceImpl {
             }
         }
         //db 파일 삭제처리
-        this.deleteAttachFile(fileName);
-    }
-
-    @Transactional
-    protected void deleteAttachFile(String fileName){
-        attachFileRepository.findByFileName(fileName).ifPresent(attachFile -> attachFile.setIsDeleted(true));
+        attachFile.setIsDeleted(true);
+        attachFile.setIsUsed(false);
+        attachFileRepository.save(attachFile);
     }
     //endregion
 

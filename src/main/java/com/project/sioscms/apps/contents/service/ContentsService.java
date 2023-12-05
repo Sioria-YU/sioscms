@@ -75,7 +75,7 @@ public class ContentsService extends EgovAbstractServiceImpl {
         Contents contents = contentsRepository.findById(requestDto.getId()).orElse(null);
 
         if(contents != null) {
-            AttachFileGroupDto.Response attachFileGroupResponse = attachFileService.multiUpload(files, requestDto.getAttachFileGroupId());
+            AttachFileGroupDto.Response attachFileGroupResponse = attachFileService.multiUpload(files, requestDto.getAttachFileGroupId(), "contents");
             AttachFileGroup attachFileGroup = attachFileGroupRepository.findById(attachFileGroupResponse.getId()).orElse(null);
             if(attachFileGroup == null){
                 return null;

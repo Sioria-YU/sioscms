@@ -103,14 +103,16 @@
                         <tr>
                             <th class="table-title"><label for="files">첨부파일</label></th>
                             <td>
-                                <c:if test="${not empty result.attachFileGroup and not empty result.attachFileGroup.attachFileList}">
+                                <c:if test="${not empty result.attachFileGroup}">
                                     <input type="hidden" name="attachFileGroupId" value="${result.attachFileGroup.id}">
-                                    <c:forEach var="attachfile" items="${result.attachFileGroup.attachFileList}" varStatus="status">
-                                        <div class="block mb-1" id="attachFileWrap_${status.count}">
-                                            <a href="#" class="me-1" onclick="attachFileDownload('${attachfile.fileName}');" aria-label="첨부파일${status.count} 다운로드">${attachfile.originFileName}</a>
-                                            <i class="bi bi-x-circle-fill" onclick="attachFileDelete('${attachfile.fileName}', 'attachFileWrap_${status.count}');" aria-label="첨부파일${status.count} 삭제"></i>
-                                        </div>
-                                    </c:forEach>
+                                    <c:if test="${not empty result.attachFileGroup.attachFileList}">
+                                        <c:forEach var="attachfile" items="${result.attachFileGroup.attachFileList}" varStatus="status">
+                                            <div class="block mb-1" id="attachFileWrap_${status.count}">
+                                                <a href="#" class="me-1" onclick="attachFileDownload('${attachfile.fileName}');" aria-label="첨부파일${status.count} 다운로드">${attachfile.originFileName}</a>
+                                                <i class="bi bi-x-circle-fill" onclick="attachFileDelete('${attachfile.fileName}', 'attachFileWrap_${status.count}');" aria-label="첨부파일${status.count} 삭제"></i>
+                                            </div>
+                                        </c:forEach>
+                                    </c:if>
                                 </c:if>
                                 <input type="file" class="form-control" id="files" name="files" multiple>
                             </td>

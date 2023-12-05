@@ -92,7 +92,7 @@ public class BoardManagementController {
     public void boardSave(HttpServletResponse response, BoardDto.Request requestDto, @RequestPart List<MultipartFile> files){
         //첨부파일을 등록하여 attachFileGroupId를 requestDto에 set하여 게시판 저장으로 넘긴다.
         //최초 저장이기 때문에 attachFileGroup = null
-        AttachFileGroupDto.Response attachFileGroupDto = attachFileService.multiUpload(files, null);
+        AttachFileGroupDto.Response attachFileGroupDto = attachFileService.multiUpload(files, null, "board");
 
         if(attachFileGroupDto != null){
             requestDto.setAttachFileGroupId(attachFileGroupDto.getId());
@@ -113,7 +113,7 @@ public class BoardManagementController {
     @RequestMapping("/update")
     public void boardUpdate(HttpServletResponse response, BoardDto.Request requsetDto, @RequestPart List<MultipartFile> files){
         //첨부파일을 등록하여 attachFileGroupId를 requestDto에 set하여 게시판 저장으로 넘긴다.
-        AttachFileGroupDto.Response attachFileGroupDto = attachFileService.multiUpload(files, requsetDto.getAttachFileGroupId());
+        AttachFileGroupDto.Response attachFileGroupDto = attachFileService.multiUpload(files, requsetDto.getAttachFileGroupId(), "board");
 
         //기존 첨부파일이 없었다면 등록, 있다면 파일 구성만 업데이트
         if(attachFileGroupDto != null && requsetDto.getAttachFileGroupId() == null){
