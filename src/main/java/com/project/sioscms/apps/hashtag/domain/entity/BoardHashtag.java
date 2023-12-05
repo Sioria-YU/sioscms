@@ -14,10 +14,10 @@ import javax.persistence.ManyToOne;
 @Setter
 public class BoardHashtag extends CommonEntityWithId {
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Board board;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Hashtag hashtag;
 
 }
