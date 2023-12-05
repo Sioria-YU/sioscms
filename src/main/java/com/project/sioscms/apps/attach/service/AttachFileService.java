@@ -8,6 +8,7 @@ import com.project.sioscms.apps.attach.domain.repository.AttachFileGroupReposito
 import com.project.sioscms.apps.attach.domain.repository.AttachFileRepository;
 import com.project.sioscms.common.service.AesCryptoService;
 import lombok.RequiredArgsConstructor;
+import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
@@ -57,6 +58,7 @@ public class AttachFileService extends EgovAbstractServiceImpl {
     }
 
     @Transactional
+    @Synchronized
     public ResponseEntity<?> upload(MultipartFile file, AttachFileGroup attachFileGroup, String programId) throws Exception {
         String originalFileName = file.getOriginalFilename();
         if(originalFileName == null || originalFileName.isEmpty()){
@@ -150,6 +152,7 @@ public class AttachFileService extends EgovAbstractServiceImpl {
 
     //region multiUpload
     @Transactional
+    @Synchronized
     public AttachFileGroupDto.Response multiUpload(List<MultipartFile> files, Long attachFileGroupId, String programId){
         AttachFileGroup attachFileGroup = null;
         if(attachFileGroupId != null) {
@@ -213,6 +216,7 @@ public class AttachFileService extends EgovAbstractServiceImpl {
     }
 
     @Transactional
+    @Synchronized
     public void delete(String fileName, String deleteMode) throws Exception{
         AttachFile attachFile = attachFileRepository.findByFileName(fileName).orElse(null);
         if(attachFile == null){

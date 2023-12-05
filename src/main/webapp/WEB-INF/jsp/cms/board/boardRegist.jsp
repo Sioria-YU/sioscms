@@ -51,6 +51,10 @@
         }
     }
 
+    const attachFileDownload = (fileName) => {
+        window.open("/api/attach/download/"+fileName);
+    }
+
 </script>
 <div id="layoutSidenav_content">
     <main>
