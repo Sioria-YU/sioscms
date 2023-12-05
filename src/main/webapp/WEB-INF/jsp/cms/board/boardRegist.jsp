@@ -96,10 +96,7 @@
                             <td>
                                 <input type="text" class="form-control" id="hashTagBoard" name="hashTagBoard" placeholder="#해시태그를 입력하세요.(최대 5개)"
                                     <c:if test="${not empty result.boardHashtagSet}">
-                                        value="<c:forEach var="boardHashtag" items="${result.boardHashtagSet}" varStatus="status">
-                                                    ${boardHashtag.hashtag.hashtagName}
-                                                    ${!status.last? ',':''}
-                                                </c:forEach>"
+                                        value="<c:forEach var="boardHashtag" items="${result.boardHashtagSet}" varStatus="status">${boardHashtag.hashtag.hashtagName}${!status.last? ',':''}</c:forEach>"
                                     </c:if>
                                 >
                             </td>

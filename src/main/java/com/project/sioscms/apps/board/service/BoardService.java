@@ -174,7 +174,7 @@ public class BoardService extends EgovAbstractServiceImpl {
      */
     @Transactional
     protected void hashtagUpdate(Board board, BoardDto.Request requestDto){
-        if(!ObjectUtils.isEmpty(board.getBoardHashtagSet()) && !ObjectUtils.isEmpty(requestDto.getHashtagList())) {
+        if(!ObjectUtils.isEmpty(board.getBoardHashtagSet()) && ObjectUtils.isEmpty(requestDto.getHashtagList())) {
             boardHashtagRepository.deleteAllByBoard(board);
             board.setBoardHashtagSet(null);
         }//입력한 해시태그가 있을 경우
