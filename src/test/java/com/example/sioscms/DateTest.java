@@ -8,7 +8,7 @@ public class DateTest {
 
     @Test
     public void dateTest(){
-        //웹훅테스트
+        //웹훅테스트2
         LocalDate now = LocalDate.now();
 
         System.out.println("year ::: " + now.getYear());
