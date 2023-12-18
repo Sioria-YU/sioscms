@@ -38,6 +38,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
         LoginLogDto.Request requestDto = new LoginLogDto.Request();
         requestDto.setUserId(userId);
         requestDto.setIsSuccess(false);
+        requestDto.setConnectedIp(HttpUtil.getClientIp(request));
         loginLogService.saveLoginLog(requestDto);
 
         long failCnt = 0L;

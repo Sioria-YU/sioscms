@@ -4,6 +4,7 @@ import com.project.sioscms.apps.account.domain.entity.Account;
 import com.project.sioscms.apps.account.service.AccountService;
 import com.project.sioscms.apps.log.domain.dto.LoginLogDto;
 import com.project.sioscms.apps.log.service.LoginLogService;
+import com.project.sioscms.common.utils.common.http.HttpUtil;
 import com.project.sioscms.secure.domain.UserAccount;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -37,6 +38,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         LoginLogDto.Request requestDto = new LoginLogDto.Request();
         requestDto.setUserId(userAccount.getAccount().getUserId());
         requestDto.setIsSuccess(true);
+        requestDto.setConnectedIp(HttpUtil.getClientIp(request));
         loginLogService.saveLoginLog(requestDto);
 
         //로그인 실패회수 초기화
