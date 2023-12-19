@@ -22,6 +22,8 @@ public class LoginLogService {
         LoginLog loginLog = LoginLogMapper.mapper.toEntity(requestDto);
         loginLogRepository.save(loginLog);
 
+        System.out.println("테스트");
+
         return loginLog.toResponse();
     }
 
