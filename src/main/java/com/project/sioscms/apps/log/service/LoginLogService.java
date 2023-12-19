@@ -23,6 +23,8 @@ public class LoginLogService {
         loginLogRepository.save(loginLog);
 
         System.out.println("테스트");
+        System.out.println("테스트");
+        System.out.println("테스트");
 
         return loginLog.toResponse();
     }
