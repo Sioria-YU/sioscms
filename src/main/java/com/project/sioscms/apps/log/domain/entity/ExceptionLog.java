@@ -41,6 +41,7 @@ public class ExceptionLog {
     private String exceptionName;
 
     @Comment("예외 기록")
+    @Column(columnDefinition = "TEXT")
     private String exceptionRecord;
 
     public ExceptionLogDto.Response toResponse() { return ExceptionLogMapper.mapper.toResponse(this);
