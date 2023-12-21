@@ -18,12 +18,8 @@ public class LoginLogService {
     private final LoginLogRepository loginLogRepository;
 
     @Transactional
-    public LoginLogDto.Response saveLoginLog(LoginLogDto.Request requestDto){
+    public void saveLoginLog(LoginLogDto.Request requestDto){
         LoginLog loginLog = LoginLogMapper.mapper.toEntity(requestDto);
         loginLogRepository.save(loginLog);
-
-        return loginLog.toResponse();
     }
-
-
 }
