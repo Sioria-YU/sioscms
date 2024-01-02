@@ -29,13 +29,13 @@ public class ContentsManagementController {
 
     @Auth(role = Auth.Role.ADMIN)
     @RequestMapping("/list")
-    public ModelAndView list(ContentsDto.Request requestDto){
+    public ModelAndView list(ContentsDto.Request requestDto) {
 
         SiosPage<ContentsDto.Response> siosPage = contentsManagementService.getContentsList(requestDto);
 
         ModelAndView mav = new ModelAndView("cms/contents/list");
 
-        if(siosPage != null && !siosPage.isEmpty()){
+        if (siosPage != null && !siosPage.isEmpty()) {
             mav.addObject("resultList", siosPage.getContents());
             mav.addObject("pageInfo", siosPage.getPageInfo());
         }
@@ -45,7 +45,7 @@ public class ContentsManagementController {
 
     @Auth(role = Auth.Role.ADMIN)
     @RequestMapping("/view/{id}")
-    public ModelAndView view(@PathVariable("id") Long id){
+    public ModelAndView view(@PathVariable("id") Long id) {
         ContentsDto.Response dto = contentsManagementService.getContents(id);
         List<ContentsHistoryDto.Response> contentsHistoryList = contentsHistoryService.getContentsHistoryList(id);
 
@@ -58,41 +58,38 @@ public class ContentsManagementController {
 
     @Auth(role = Auth.Role.ADMIN)
     @RequestMapping("/regist")
-    public ModelAndView regist(ContentsDto.Request requestDto){
+    public ModelAndView regist() {
         ModelAndView mav = new ModelAndView("cms/contents/regist");
         return mav;
     }
 
     @Auth(role = Auth.Role.ADMIN)
     @RequestMapping("/save")
-    public void save(HttpServletResponse response, ContentsDto.Request requestDto, @RequestPart List<MultipartFile> files){
+    public void save(HttpServletResponse response, ContentsDto.Request requestDto, @RequestPart List<MultipartFile> files) {
         ContentsDto.Response dto = contentsManagementService.saveContents(requestDto, files);
-
-        //파일 생성 로직
-
         HttpUtil.alertAndRedirect(response, "/cms/contents-manage/view/" + dto.getId(), "정상 처리 되었습니다.", null);
     }
 
     @Auth(role = Auth.Role.ADMIN)
     @RequestMapping("/save-new-version")
-    public void saveNewVersion(HttpServletResponse response, ContentsDto.Request requestDto){
+    public void saveNewVersion(HttpServletResponse response, ContentsDto.Request requestDto) {
         //히스토리 저장 후 콘텐츠 제목,내용 업데이트
-        if(contentsManagementService.saveNewVersion(requestDto)) {
+        if (contentsManagementService.saveNewVersion(requestDto)) {
             HttpUtil.alertAndRedirect(response, "/cms/contents-manage/view/" + requestDto.getId(), "정상 처리 되었습니다.", null);
-        }else{
+        } else {
             HttpUtil.alertAndRedirect(response, "/cms/contents-manage/view/" + requestDto.getId(), "처리 중 오류가 발생하였습니다.", null);
         }
     }
 
     @Auth(role = Auth.Role.ADMIN)
     @RequestMapping("/preview")
-    public void preView(HttpServletResponse response, @RequestParam("content") String content){
+    public void preView(HttpServletResponse response, @RequestParam("content") String content) {
         contentsManagementService.preView(response, content);
     }
 
     @Auth(role = Auth.Role.ADMIN)
     @RequestMapping("/preview-history")
-    public void preViewHistory(HttpServletResponse response, @RequestParam("historyId") Long historyId){
+    public void preViewHistory(HttpServletResponse response, @RequestParam("historyId") Long historyId) {
         contentsManagementService.preViewHistory(response, historyId);
     }
 }

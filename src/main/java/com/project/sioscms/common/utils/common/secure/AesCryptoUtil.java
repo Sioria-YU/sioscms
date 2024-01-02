@@ -85,7 +85,7 @@ public class AesCryptoUtil {
 
             return true;
         }catch (Exception e){
-            e.printStackTrace();
+            log.error(e.toString());
             return false;
         }
     }

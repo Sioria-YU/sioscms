@@ -167,7 +167,7 @@ public class ContentsService extends EgovAbstractServiceImpl {
                 writer.close();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.toString());
         }
 
     }
